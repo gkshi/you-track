@@ -1,0 +1,15 @@
+$error-color: red;
+
+.textarea-component {
+  textarea {
+    border: 1px solid #ccc;
+  }
+  .error {
+    color: $error-color;
+  }
+  &-error {
+    textarea {
+      border-color: $error-color;
+    }
+  }
+}

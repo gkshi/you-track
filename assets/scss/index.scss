@@ -1,0 +1,40 @@
+// core
+@import 'variables/index';
+@import 'reset';
+@import 'mixins';
+@import 'utils';
+
+// common components
+@import "@/components/common/button";
+@import "@/components/common/modal";
+@import "@/components/common/input";
+@import "@/components/common/textarea";
+
+// common styles
+body {
+  font-family: $font-family-default;
+  font-size: $font-size-default;
+  line-height: $line-height-default;
+  font-weight: $font-weight-normal;
+  color: $color-text-regular;
+}
+
+a {
+  color: $color-primary;
+  text-decoration: none;
+  &:hover {
+    text-decoration: underline;
+  }
+}
+
+.wrapper {
+  padding: 0 20px;
+}
+
+.buttons {
+  .button-component {
+    &:not(:last-child) {
+      margin-right: 10px;
+    }
+  }
+}

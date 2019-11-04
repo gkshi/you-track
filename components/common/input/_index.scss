@@ -1,0 +1,15 @@
+$error-color: red;
+
+.input-component {
+  input {
+    border: 1px solid #ccc;
+  }
+  .error {
+    color: $error-color;
+  }
+  &-error {
+    input {
+      border-color: $error-color;
+    }
+  }
+}
