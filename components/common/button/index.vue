@@ -70,6 +70,45 @@ export default {
 
 <style lang="scss" scoped>
   .button-component {
-    //
+    .button {
+      border-radius: 3px;
+      outline: none;
+      font-weight: $font-weight-semibold;
+      transition: $transition-button;
+
+      // types
+      &.button-type-ghost {
+        &:hover {
+          box-shadow: none;
+        }
+      }
+
+      // sizes
+      &.button-size-full {
+        width: 100%;
+        justify-content: center;
+      }
+      &.button-size-square {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 36px;
+        height: 36px;
+        color: rgba($color-text-light, .5);
+        svg {
+          width: 14px;
+          height: 14px;
+          margin: 0;
+        }
+        &:hover {
+          background: transparent;
+          color: $color-text-light;
+        }
+      }
+
+      &:hover {
+        box-shadow: $box-shadow-light-focus;
+      }
+    }
   }
 </style>

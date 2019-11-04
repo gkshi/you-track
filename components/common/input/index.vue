@@ -3,12 +3,14 @@
     label(v-if="$slots.default" :for="localId")
       slot
     input(
+      ref="input"
       :id="localId"
       :type="type"
       :value="value"
       :readonly="readonly"
       :disabled="disabled"
       :placeholder="placeholder"
+      :autofocus="autofocus"
       @input="$emit('input', $event.target.value)"
       @change="$emit('change', $event.target.value)"
       @focus="$emit('focus', $event.target.value)"
@@ -28,6 +30,7 @@ export default {
     value: [String, Number],
     error: [String, Boolean],
     placeholder: String,
+    autofocus: Boolean,
     readonly: Boolean,
     disabled: Boolean
   },
@@ -41,8 +44,18 @@ export default {
       return typeof this.error === 'string' ? this.error : 'Error'
     }
   },
+  methods: {
+    focus () {
+      this.$refs.input.focus()
+    }
+  },
   mounted () {
     this.localId = this.localId || Math.random().toFixed(7).slice(2)
+    if (this.autofocus) {
+      this.$nextTick(() => {
+        this.focus()
+      })
+    }
   }
 }
 </script>
@@ -54,6 +67,20 @@ export default {
     }
     input {
       display: block;
+      padding: 11px 20px 12px;
+      border: none;
+      border-radius: $border-radius-default;
+      font-family: $font-family-default;
+      font-size: $font-size-default;
+      line-height: $line-height-default;
+      font-weight: $font-weight-normal;
+      box-shadow: $box-shadow-light;
+      outline: none;
+      transition: $transition-field;
+
+      &:focus {
+        box-shadow: $box-shadow-light-focus;
+      }
     }
   }
 </style>

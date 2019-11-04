@@ -1,11 +1,9 @@
 <template lang="pug">
   .page.init
-    div
-      h1 Create your user at first
-    div
-      commonInput(v-model="user")
-    div
-      commonButton(@click="createUser" :disabled="!user") Continue
+    h1 Hello. What's your name?
+    form.flex.a-center(@submit.prevent="createUser")
+      commonInput.grow(v-model="user" placeholder="Jack" autofocus)
+      commonButton.shrink(native="submit" :disabled="!user") Next
 </template>
 
 <script>
@@ -31,6 +29,14 @@ export default {
 
 <style lang="scss" scoped>
   .page.init {
-    //
+    h1 {
+      margin-bottom: 24px;
+    }
+    .flex {
+      .grow {
+        width: 180px;
+        margin-right: 10px;
+      }
+    }
   }
 </style>

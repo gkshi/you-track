@@ -1,6 +1,7 @@
 import API from '@/api'
 
 export const actions = {
+  // users
   getUser () {
     return API.getUser()
   },
@@ -8,6 +9,7 @@ export const actions = {
     return API.createUser(data)
   },
 
+  // boards
   getBoards () {
     return API.getBoards()
   },
@@ -21,6 +23,7 @@ export const actions = {
     return API.removeBoard(id)
   },
 
+  // columns
   createColumn ({ dispatch }, payload) {
     return API.createColumn(payload.board, payload.data)
   },
@@ -28,8 +31,9 @@ export const actions = {
     return API.removeColumn(id)
   },
 
-  createTask ({ dispatch }, payload) {
-    return API.createTask(payload.column, payload.data)
+  // cards
+  createCard ({ dispatch }, payload) {
+    return API.createCard(payload.column, payload.data)
   }
 }
 

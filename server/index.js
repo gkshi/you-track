@@ -3,7 +3,6 @@ const MongoClient = require('mongodb').MongoClient
 const ObjectId = require('mongodb').ObjectId
 const bodyParser = require('body-parser')
 const router = express.Router()
-// const consola = require('consola')
 const { Nuxt, Builder } = require('nuxt')
 const app = express()
 
@@ -16,6 +15,7 @@ app.use(bodyParser.urlencoded({
   extended: true
 }))
 
+// eslint-disable-next-line no-path-concat
 app.use(express.static(__dirname + '/public'))
 
 /**
@@ -47,14 +47,15 @@ router.get('/user', (request, response) => {
     if (items[0]) {
       response.send(items[0])
     } else {
-      response.status(404).send(null)
+      response.status(404).send({})
     }
   })
 })
 router.post('/user', (request, response) => {
   const users = db.collection('users')
   users.insertOne({
-    name: request.body.name
+    name: request.body.name,
+    photo: request.body.photo
   }).then(res => {
     response.send(res.ops[0])
   })
@@ -75,10 +76,6 @@ router.get('/boards/:alias', async (request, response, next) => {
     alias: request.params.alias
   })
   if (!board) {
-    // return sendResponse(404, 'not found')
-    // return response.status(404)
-    // throw new Error('Not found')
-    // return next(new Error(404))
     return response.status(404).send()
   }
   const columns = await db.collection('columns').find({
@@ -87,10 +84,10 @@ router.get('/boards/:alias', async (request, response, next) => {
   const promises = []
   columns.forEach(column => {
     const promise = new Promise(async (resolve, reject) => {
-      const tasks = await db.collection('tasks').find({
+      const cards = await db.collection('cards').find({
         column: ObjectId(column._id)
       }).toArray()
-      column.tasks = tasks
+      column.cards = cards
       resolve()
     })
     promises.push(promise)
@@ -131,7 +128,7 @@ router.post('/boards/:alias/columns', async (request, response) => {
   columns.insertOne({
     title: request.body.title,
     board: board._id,
-    tasks: []
+    cards: []
   }).then(res => {
     response.send(res.ops[0])
   })
@@ -145,13 +142,9 @@ router.delete('/columns/:id', (request, response) => {
   })
 })
 
-router.post('/columns/:column/tasks', (request, response) => {
-  const tasks = db.collection('tasks')
-  // const column = await db.collection('columns').findOne({
-  //   _id: ObjectId(request.params.column)
-  // })
-  // console.log('column', column._id)
-  tasks.insertOne({
+router.post('/columns/:column/cards', (request, response) => {
+  const cards = db.collection('cards')
+  cards.insertOne({
     title: request.body.title,
     column: ObjectId(request.params.column)
   }).then(res => {
@@ -160,12 +153,6 @@ router.post('/columns/:column/tasks', (request, response) => {
 })
 
 app.use('/api', router)
-
-// app.use(function (err, req, res, next) {
-//   console.log('<<< err', err)
-//   // console.error(err.stack)
-//   res.status(err).send('Something broke!')
-// })
 
 async function start () {
   // Init Nuxt.js
@@ -186,9 +173,5 @@ async function start () {
 
   // Listen the server
   app.listen(port, host)
-  // consola.ready({
-  //   message: `Server listening on http://${host}:${port}`,
-  //   badge: true
-  // })
 }
 start()

@@ -12,6 +12,7 @@ module.exports = {
       { hid: 'description', name: 'description', content: process.env.npm_package_description || '' }
     ],
     link: [
+      { rel: 'stylesheet', href: 'https://fonts.googleapis.com/css?family=Open+Sans:400,600&display=swap&subset=cyrillic' },
       { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }
     ]
   },

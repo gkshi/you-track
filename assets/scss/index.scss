@@ -16,6 +16,7 @@ body {
   font-size: $font-size-default;
   line-height: $line-height-default;
   font-weight: $font-weight-normal;
+  background: $color-bg;
   color: $color-text-regular;
 }
 
@@ -27,8 +28,38 @@ a {
   }
 }
 
+input {
+  font-family: $font-family-default;
+  font-size: $font-size-default;
+  line-height: $line-height-default;
+  font-weight: $font-weight-normal;
+  &::-webkit-input-placeholder {
+    color: rgba($color-text-light, .5);
+  }
+  &:-ms-input-placeholder {
+    color: rgba($color-text-light, .5);
+  }
+  &::-ms-input-placeholder {
+    color: rgba($color-text-light, .5);
+  }
+  &::placeholder {
+    color: rgba($color-text-light, .5);
+  }
+}
+
+h1, .h1 {
+  font-size: $font-size-heading;
+  line-height: $line-height-heading;
+  font-weight: $font-weight-normal;
+  margin: 0 auto;
+}
+
+.page {
+  padding: 40px 0;
+}
+
 .wrapper {
-  padding: 0 20px;
+  padding: 0 40px;
 }
 
 .buttons {

@@ -6,13 +6,13 @@ export const modules = {
 }
 
 export const state = () => ({
-  user: null,
+  user: {},
   modals: [],
   activeBoard: null
 })
 
 export const actions = {
-  updateUser ({ commit }, user = null) {
+  updateUser ({ commit }, user = {}) {
     commit('USER_UPDATE', user)
   },
 
@@ -33,7 +33,7 @@ export const actions = {
 
 export const mutations = {
   USER_UPDATE (state, user) {
-    state.user = user.name
+    state.user = user
   },
 
   MODAL_ADD (state, id) {

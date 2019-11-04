@@ -26,9 +26,7 @@ export default {
   },
   methods: {
     create () {
-      console.log('create', this.board)
       this.$store.dispatch('api/createBoard', this.board).then(res => {
-        console.log('res', res)
         this.$emit('success', res)
       }).catch(err => {
         console.warn(err)

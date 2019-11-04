@@ -1,20 +1,19 @@
 <template lang="pug">
   .page.board
-    .wrapper.flex.column
-      .scroll-parent
-        .columns.flex.grow
-          boardColumn.column(
-            v-for="column in board.columns"
-            :data="column"
-            :key="column._id"
-            @remove="onColumnRemove")
-          .column
-            a(v-if="!columnCreationOpened" href="#" @click.prevent="toggleColumnCreation") +add column
-            div(v-else)
-              commonInput(v-model="columnTitle" placeholder="Column title")
-              .buttons
-                commonButton(@click="createColumn" :disabled="!columnTitle") Add
-                commonButton(type="light" @click="toggleColumnCreation") Cancel
+    .scroll-parent
+      .columns.flex.a-start.grow
+        boardColumn.column(
+          v-for="column in board.columns"
+          :data="column"
+          :key="column._id"
+          @remove="onColumnRemove")
+        .column
+          a(v-if="!columnCreationOpened" href="#" @click.prevent="toggleColumnCreation") +add column
+          div(v-else)
+            commonInput(v-model="columnTitle" placeholder="Column title")
+            .buttons
+              commonButton(@click="createColumn" :disabled="!columnTitle") Add
+              commonButton(type="light" @click="toggleColumnCreation") Cancel
 </template>
 
 <script>
@@ -76,15 +75,13 @@ export default {
 
 <style lang="scss" scoped>
   .page.board {
-    height: 100%;
-    .wrapper {
-      height: 100%;
-    }
+    height: calc(100vh - 60px);
     .scroll-parent {
       height: 100%;
+      padding: 0 40px;
     }
     .columns {
-      height: 100%;
+      max-height: 100%;
       .column {
         flex-shrink: 0;
         width: 300px;

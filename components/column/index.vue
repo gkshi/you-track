@@ -4,28 +4,35 @@
       div {{ data.title }}
       div
         a(href="#" @click.prevent="removeColumn") remove
-    .scroll-parent.grow
-      .tasks
-        boardTask.task(
-          v-for="task in data.tasks"
-          :data="task"
-          :key="task._id")
+    .scroll-parent
+      .cards
+        boardCard.card(
+          v-for="card in data.cards"
+          :data="card"
+          :key="card._id")
         div
-          a(v-if="!taskCreationOpened" href="#" @click.prevent="toggleTaskCreation") +add task
-          div(v-else)
-            commonInput(v-model="task.title" placeholder="Heading")
-            .buttons
-              commonButton(@click="createTask" :disabled="!task.title") Add
-              commonButton(type="light" @click="toggleTaskCreation") Cancel
+          commonButton.add-button(
+            v-if="!cardCreationOpened"
+            type="ghost"
+            size="full"
+            @click.prevent="toggleCardCreation") Add card
+          form.add-form(v-else @submit.prevent="createCard")
+            commonInput(ref="addCardTitle" v-model="card.title" placeholder="Enter a title for this card...")
+            .buttons.flex.a-center
+              commonButton(size="small" native="submit" :disabled="!card.title") Add card
+              commonButton(size="square" type="ghost" @click="toggleCardCreation")
+                iconCross
 </template>
 
 <script>
-import boardTask from '@/components/task'
+import boardCard from '@/components/card'
+import iconCross from '@/components/icons/cross'
 
 export default {
   name: 'column-component',
   components: {
-    boardTask
+    boardCard,
+    iconCross
   },
   props: {
     data: {
@@ -35,31 +42,40 @@ export default {
   },
   data () {
     return {
-      taskCreationOpened: false,
-      task: {
+      cardCreationOpened: false,
+      card: {
         title: ''
       }
     }
   },
   watch: {
-    taskCreationOpened () {
-      this.task.title = ''
+    cardCreationOpened () {
+      this.card.title = ''
+      if (this.cardCreationOpened) {
+        this.$nextTick(() => {
+          this.$refs.addCardTitle.focus()
+        })
+      }
     }
   },
   methods: {
-    toggleTaskCreation () {
-      console.log('toggle')
-      this.taskCreationOpened = !this.taskCreationOpened
+    toggleCardCreation () {
+      this.cardCreationOpened = !this.cardCreationOpened
     },
-    createTask () {
-      this.$store.dispatch('api/createTask', {
+    closeCardCreation (key) {
+      if (key === 'esc') {
+        this.cardCreationOpened = false
+      }
+    },
+    createCard () {
+      this.$store.dispatch('api/createCard', {
         column: this.data._id,
         data: {
-          title: this.task.title
+          title: this.card.title
         }
       }).then(res => {
-        this.data.tasks.push(res)
-        this.toggleTaskCreation()
+        this.data.cards.push(res)
+        this.toggleCardCreation()
       })
     },
     removeColumn () {
@@ -67,23 +83,52 @@ export default {
         this.$emit('remove', this.data._id)
       })
     }
+  },
+  mounted () {
+    this.$root.$on('keyup', this.closeCardCreation)
+  },
+  beforeDestroy () {
+    this.$root.$off('keyup', this.closeCardCreation)
   }
 }
 </script>
 
+<style lang="scss">
+  .column-component {
+    .add-form {
+      input {
+        &:focus {
+          box-shadow: $box-shadow-light-hover;
+        }
+      }
+    }
+  }
+</style>
+
 <style lang="scss" scoped>
   .column-component {
     padding: 10px;
-    background: #f8f8f8;
+    background: $color-light;
+    color: $color-text-regular;
+    border-radius: $border-radius-default;
+    box-shadow: $box-shadow-deep;
     .header {
       font-weight: $font-weight-bold;
       margin-bottom: 20px;
     }
-    .tasks {
-      .task {
+    .cards {
+      .card {
         &:not(:last-child) {
           margin-bottom: 10px;
         }
+      }
+    }
+    .add-button {
+      width: 100%;
+    }
+    .add-form {
+      .buttons {
+        margin-top: 10px;
       }
     }
   }

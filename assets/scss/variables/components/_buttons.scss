@@ -1,11 +1,14 @@
-$button-padding-default: 10px 20px;
-$button-padding-small: 5px 10px;
-$button-padding-large: 20px 40px;
+$button-padding-default: 11px 28px 13px;
+$button-padding-full: 14px 20px;
+$button-padding-small: 9px 16px 10px;
+$button-padding-square: 0;
 
 // $button-types: name background color background-hover color-hover
-$button-types: default $color-primary $color-text-light darken($color-primary, 4%) $color-text-light,
-               light $color-light $color-text-regular darken($color-light, 4%) $color-text-regular;
+$button-types: default $color-primary $color-light darken($color-primary, 4%) $color-light,
+               ghost transparent rgba($color-text-light, .5) $color-white $color-text-regular;
 
 // $button-sizes: name padding font-size line-height;
 $button-sizes: default $button-padding-default $font-size-default $line-height-default,
-               small $button-padding-default $font-size-default $line-height-default;
+               full $button-padding-full $font-size-default $line-height-default,
+               small $button-padding-small $font-size-small $line-height-small,
+               square $button-padding-square $font-size-default $line-height-default;

@@ -2,6 +2,8 @@ $error-color: red;
 
 .input-component {
   input {
+    display: block;
+    width: 100%;
     border: 1px solid #ccc;
   }
   .error {

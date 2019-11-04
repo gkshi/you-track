@@ -62,7 +62,7 @@ export default {
     return this.do('DELETE', `/columns/${id}`)
   },
 
-  createTask (column, data) {
-    return this.do('POST', `/columns/${column}/tasks`, data)
+  createCard (column, data) {
+    return this.do('POST', `/columns/${column}/cards`, data)
   }
 }

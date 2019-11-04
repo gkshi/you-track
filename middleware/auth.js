@@ -1,17 +1,35 @@
-export default async ({ store, route, redirect }) => {
-  if (!store.state.user) {
-    const user = await store.dispatch('api/getUser').catch(() => {
-      return null
+function isAuthed (store) {
+  return !!store.state.user.name
+}
+
+function getUser (store) {
+  return new Promise((resolve, reject) => {
+    store.dispatch('api/getUser').then(res => {
+      resolve(res)
+    }).catch(() => {
+      resolve({})
     })
-    if (user) {
-      store.dispatch('updateUser', user)
-      if (route.name === 'init') {
-        return redirect('/')
-      }
-    } else if (route.name !== 'init') {
-      return redirect('/init')
+  })
+}
+
+function next (user = {}, route, redirect) {
+  if (user.name) {
+    if (route.name === 'init') {
+      return redirect('/')
     }
-  } else if (route.name === 'init') {
-    return redirect('/')
+  } else if (route.name !== 'init') {
+    return redirect('/init')
+  }
+}
+
+export default async ({ store, route, redirect }) => {
+  if (!isAuthed(store)) {
+    const user = await getUser(store)
+    if (user.name) {
+      store.dispatch('updateUser', user)
+    }
+    next(user, route, redirect)
+  } else {
+    next(store.state.user, route, redirect)
   }
 }
