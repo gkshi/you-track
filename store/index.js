@@ -8,7 +8,8 @@ export const modules = {
 export const state = () => ({
   user: {},
   modals: [],
-  activeBoard: null
+  activeBoard: null,
+  activeCard: {}
 })
 
 export const actions = {
@@ -28,6 +29,26 @@ export const actions = {
 
   changeActiveBoard ({ commit }, board = null) {
     commit('ACTIVE_BOARD_UPDATE', board)
+  },
+  changeActiveCard ({ dispatch, commit }, card) {
+    if (!card) {
+      commit('ACTIVE_CARD_UPDATE', {})
+      this.$router.push({
+        query: {}
+      })
+      return
+    }
+    dispatch('api/getCard', card).then(res => {
+      commit('ACTIVE_CARD_UPDATE', res)
+      this.$router.push({
+        query: {
+          card: res._id
+        }
+      })
+    }).catch(err => {
+      console.log('changeActiveCard err', err)
+      commit('ACTIVE_CARD_UPDATE', {})
+    })
   }
 }
 
@@ -48,5 +69,8 @@ export const mutations = {
 
   ACTIVE_BOARD_UPDATE (state, board) {
     state.activeBoard = board
+  },
+  ACTIVE_CARD_UPDATE (state, card = {}) {
+    state.activeCard = card
   }
 }

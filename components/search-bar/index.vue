@@ -1,8 +1,8 @@
 <template lang="pug">
   .search-bar-component
     .input
-      input(v-model="query" type="search" placeholder="Search...")
-      iconSearch.icon(v-show="!query")
+      input(ref="field" v-model="query" type="search" placeholder="Search...")
+      iconSearch.icon(v-show="!query" @click.native="focus")
 </template>
 
 <script>
@@ -21,6 +21,11 @@ export default {
   watch: {
     query () {
       console.log('query', this.query)
+    }
+  },
+  methods: {
+    focus () {
+      this.$refs.field.focus()
     }
   }
 }
@@ -53,7 +58,8 @@ export default {
       top: 9px;
       right: 18px;
       height: 14px;
-      color: rgba($color-text-light, .5);
+      color: $color-text-ghost;
+      cursor: text;
     }
   }
 </style>

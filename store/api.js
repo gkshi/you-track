@@ -34,6 +34,9 @@ export const actions = {
   // cards
   createCard ({ dispatch }, payload) {
     return API.createCard(payload.column, payload.data)
+  },
+  getCard ({ dispatch }, id) {
+    return API.getCard(id)
   }
 }
 

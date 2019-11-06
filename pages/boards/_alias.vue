@@ -1,28 +1,47 @@
 <template lang="pug">
   .page.board
-    .scroll-parent
-      .columns.flex.a-start.grow
+    .scroll-parent(ref="scrollParent")
+      draggable.columns.flex.a-start.grow(
+        ref="columnParent"
+        :list="board.columns"
+        ghost-class="ghost-block"
+        @start="onDragStart")
         boardColumn.column(
           v-for="column in board.columns"
           :data="column"
           :key="column._id"
           @remove="onColumnRemove")
-        .column
-          a(v-if="!columnCreationOpened" href="#" @click.prevent="toggleColumnCreation") +add column
-          div(v-else)
+        .column.shrink
+          a.add-column-link.ghost-block(v-if="!columnCreationOpened" href="#" @click.prevent="toggleColumnCreation")
+            span Add column
+          addForm(
+            v-else
+            v-model="columnTitle"
+            placeholder="Enter a title for this column..."
+            @submit="createColumn"
+            @close="toggleColumnCreation") Add column
+          // div(v-else)
             commonInput(v-model="columnTitle" placeholder="Column title")
             .buttons
               commonButton(@click="createColumn" :disabled="!columnTitle") Add
               commonButton(type="light" @click="toggleColumnCreation") Cancel
+
+    cardModal
 </template>
 
 <script>
+import draggable from 'vuedraggable'
 import boardColumn from '@/components/column'
+import cardModal from '@/components/modals/card'
+import addForm from '@/components/add-form'
 
 export default {
   name: 'board-page',
   components: {
-    boardColumn
+    draggable,
+    boardColumn,
+    cardModal,
+    addForm
   },
   data () {
     return {
@@ -57,6 +76,23 @@ export default {
     },
     onColumnRemove (id) {
       this.board.columns = this.board.columns.filter(i => i._id !== id)
+    },
+    openCard (id) {
+      this.$store.dispatch('changeActiveCard', id)
+      this.openModal('card')
+    },
+    onDragStart (e) {
+      console.log('e', e)
+      this.$root.$emit('keyup-esc')
+    },
+    watchColumnHeight () {
+      this.$nextTick(() => {
+        try {
+          this.$refs.columnParent.$el.style.height = `${this.$refs.scrollParent.offsetHeight}px`
+        } catch (e) {
+          console.warn(e)
+        }
+      })
     }
   },
   created () {
@@ -67,8 +103,18 @@ export default {
       return this.$nuxt.error({ statusCode: 404, message: err.message })
     })
   },
+  mounted () {
+    // column height watcher
+    this.watchColumnHeight()
+    window.addEventListener('resize', this.watchColumnHeight)
+
+    // open card modal trigger
+    if (this.$route.query.card) {
+      this.openCard(this.$route.query.card)
+    }
+  },
   beforeDestroy () {
-    this.$store.dispatch('changeActiveBoard', null)
+    window.removeEventListener('resize', this.watchColumnHeight)
   }
 }
 </script>
@@ -88,6 +134,23 @@ export default {
         &:not(:last-child) {
           margin-right: 20px;
         }
+      }
+      &:after {
+        content: '';
+        display: flex;
+        width: 40px;
+        height: 100%;
+        flex-shrink: 0;
+      }
+    }
+    .add-column-link {
+      display: block;
+      padding: 10px 20px;
+      color: $color-text-light;
+      font-weight: $font-weight-semibold;
+      border-radius: $border-radius-default;
+      &:hover {
+        color: $color-text-regular;
       }
     }
   }

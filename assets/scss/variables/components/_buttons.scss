@@ -5,7 +5,7 @@ $button-padding-square: 0;
 
 // $button-types: name background color background-hover color-hover
 $button-types: default $color-primary $color-light darken($color-primary, 4%) $color-light,
-               ghost transparent rgba($color-text-light, .5) $color-white $color-text-regular;
+               ghost transparent $color-text-ghost $color-white $color-text-regular;
 
 // $button-sizes: name padding font-size line-height;
 $button-sizes: default $button-padding-default $font-size-default $line-height-default,

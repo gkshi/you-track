@@ -4,3 +4,4 @@ $function: ease;
 $transition-button: background $duration $function, color $duration $function, box-shadow $duration $function;
 $transition-field: background $duration $function, box-shadow $duration $function;
 $transition-card: background $duration $function, box-shadow $duration $function;
+$transition-context-menu: opacity .1s ease, transform $duration $function;

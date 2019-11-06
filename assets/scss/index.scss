@@ -34,16 +34,16 @@ input {
   line-height: $line-height-default;
   font-weight: $font-weight-normal;
   &::-webkit-input-placeholder {
-    color: rgba($color-text-light, .5);
+    color: $color-text-ghost;
   }
   &:-ms-input-placeholder {
-    color: rgba($color-text-light, .5);
+    color: $color-text-ghost;
   }
   &::-ms-input-placeholder {
-    color: rgba($color-text-light, .5);
+    color: $color-text-ghost;
   }
   &::placeholder {
-    color: rgba($color-text-light, .5);
+    color: $color-text-ghost;
   }
 }
 

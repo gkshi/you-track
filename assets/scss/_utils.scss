@@ -44,3 +44,8 @@
 .scroll-parent {
   overflow: auto;
 }
+
+.ghost-block {
+  background: $color-bg !important;
+  border: 2px dashed rgba($color-text-light, .3);
+}

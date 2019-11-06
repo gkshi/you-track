@@ -40,6 +40,7 @@
     "nodemon": "^1.19.4",
     "pug": "^2.0.4",
     "pug-plain-loader": "^1.0.0",
-    "sass-loader": "^8.0.0"
+    "sass-loader": "^8.0.0",
+    "vuedraggable": "^2.23.2"
   }
 }

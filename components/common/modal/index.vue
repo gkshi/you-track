@@ -48,6 +48,10 @@ export default {
 
 <style lang="scss" scoped>
   .modal-component {
-    // your custom styles here
+    background: rgba(40, 50, 60, 0.62);
+    dialog {
+      border-radius: $border-radius-default;
+      box-shadow: $box-shadow-deep;
+    }
   }
 </style>

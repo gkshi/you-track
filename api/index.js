@@ -62,6 +62,9 @@ export default {
     return this.do('DELETE', `/columns/${id}`)
   },
 
+  getCard (id) {
+    return this.do('GET', `/cards/${id}`)
+  },
   createCard (column, data) {
     return this.do('POST', `/columns/${column}/cards`, data)
   }

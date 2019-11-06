@@ -94,7 +94,7 @@ export default {
         align-items: center;
         width: 36px;
         height: 36px;
-        color: rgba($color-text-light, .5);
+        color: $color-text-ghost;
         svg {
           width: 14px;
           height: 14px;

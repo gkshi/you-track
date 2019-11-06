@@ -22,7 +22,7 @@ export default {
         isEscape = (evt.keyCode === 27)
       }
       if (isEscape) {
-        this.$root.$emit('keyup', 'esc')
+        this.$root.$emit('keyup-esc')
       }
     }
   },

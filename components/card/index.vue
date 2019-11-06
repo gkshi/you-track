@@ -1,22 +1,28 @@
 <template lang="pug">
-  .task-component
+  .card-component(@click="open")
     div {{ data.title }}
 </template>
 
 <script>
 export default {
-  name: 'task-component',
+  name: 'card-component',
   props: {
     data: {
       type: Object,
       required: true
+    }
+  },
+  methods: {
+    open () {
+      this.$store.dispatch('changeActiveCard', this.data._id)
+      this.openModal('card')
     }
   }
 }
 </script>
 
 <style lang="scss" scoped>
-  .task-component {
+  .card-component {
     padding: 10px 12px 20px;
     border-radius: $border-radius-default;
     background: $color-white;

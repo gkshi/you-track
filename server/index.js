@@ -142,6 +142,17 @@ router.delete('/columns/:id', (request, response) => {
   })
 })
 
+router.get('/cards/:id', (request, response) => {
+  const cards = db.collection('cards')
+  cards.findOne({
+    _id: ObjectId(request.params.id)
+  }).then(item => {
+    response.send(item)
+  }).catch(() => {
+    response.status(400).send()
+  })
+})
+
 router.post('/columns/:column/cards', (request, response) => {
   const cards = db.collection('cards')
   cards.insertOne({
