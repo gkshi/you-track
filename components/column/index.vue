@@ -20,6 +20,7 @@
       addForm(
         v-else
         v-model="card.title"
+        exception="add-button"
         placeholder="Enter a title for this card..."
         @submit="createCard"
         @close="closeCardCreation") Add card
@@ -66,9 +67,7 @@ export default {
       this.cardCreationOpened = !this.cardCreationOpened
     },
     closeCardCreation () {
-      if (this.cardCreationOpened) {
-        this.cardCreationOpened = false
-      }
+      this.cardCreationOpened = false
     },
     scrollColumn () {
       this.$nextTick(() => {

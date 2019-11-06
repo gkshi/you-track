@@ -1,5 +1,5 @@
 <template lang="pug">
-  form.add-form-component(@submit.prevent="$emit('submit', value)")
+  form.add-form-component(@submit.prevent="$emit('submit', value)" v-outside="tryToClose")
     commonInput(
       ref="field"
       :value="value"
@@ -22,9 +22,23 @@ export default {
   },
   props: {
     value: String,
-    placeholder: String
+    placeholder: String,
+    exception: String
   },
   methods: {
+    tryToClose (e) {
+      if (this.exception) {
+        let parent = e.target.parentNode
+        while (parent && parent.tagName.toLowerCase() !== 'body' && !parent.classList.contains(this.exception)) {
+          parent = parent.parentNode
+        }
+        if (parent && parent.tagName.toLowerCase() === 'body') {
+          this.close()
+        }
+      } else {
+        this.close()
+      }
+    },
     close () {
       this.$emit('close')
     }

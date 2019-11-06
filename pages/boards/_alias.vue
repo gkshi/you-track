@@ -18,13 +18,9 @@
             v-else
             v-model="columnTitle"
             placeholder="Enter a title for this column..."
+            exception="add-column-link"
             @submit="createColumn"
             @close="toggleColumnCreation") Add column
-          // div(v-else)
-            commonInput(v-model="columnTitle" placeholder="Column title")
-            .buttons
-              commonButton(@click="createColumn" :disabled="!columnTitle") Add
-              commonButton(type="light" @click="toggleColumnCreation") Cancel
 
     cardModal
 </template>
