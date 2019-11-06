@@ -12,7 +12,7 @@
           v-if="!columnCreationOpened"
           href="#"
           @click.prevent="toggleColumnCreation")
-          span Add column
+          span + Add column
         addForm(
           v-else
           v-model="columnTitle"
@@ -80,7 +80,7 @@ export default {
       this.$store.dispatch('changeActiveCard', id)
       this.openModal('card')
     },
-    onDragStart () {
+    beforeDragStart () {
       this.$root.$emit('keyup-esc')
     },
     watchColumnHeight () {
@@ -110,9 +110,10 @@ export default {
       bubbleScroll: true,
       forceFallback: true,
       fallbackTolerance: 10,
+      animation: 150,
       handle: '.column .header',
-      // draggable: '.column-original',
-      filter: '.non-draggable'
+      filter: '.non-draggable',
+      onChoose: this.beforeDragStart
     })
 
     // Column height watcher
@@ -133,6 +134,7 @@ export default {
 <style lang="scss" scoped>
   .page.board {
     height: calc(100vh - 60px);
+    user-select: none;
     .scroll-parent {
       height: 100%;
       padding: 0 40px;
@@ -154,6 +156,7 @@ export default {
     .add-column-link {
       display: block;
       padding: 10px 10px 10px 20px;
+      border-radius: $border-radius-default;
       background: rgba($color-light, .5);
       color: $color-text-regular;
       box-shadow: $box-shadow-light;

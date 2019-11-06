@@ -33,5 +33,16 @@ export default {
       background: darken($color-white, 1%);
       box-shadow: $box-shadow-light-hover;
     }
+
+    &.sortable-ghost {
+      background: $color-bg;
+      box-shadow: none;
+      & > * {
+        opacity: 0;
+      }
+    }
+    &.sortable-drag {
+      transform: rotate(4deg);
+    }
   }
 </style>

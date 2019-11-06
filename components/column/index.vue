@@ -7,7 +7,7 @@
           a(href="#" @click.prevent) Rename
           a(href="#" @click.prevent="removeColumn") Remove
       .scroll-parent.grow(ref="scrollParent")
-        .cards(v-if="data.cards.length")
+        .cards(ref="cards")
           boardCard.card(
             v-for="card in data.cards"
             :data="card"
@@ -28,9 +28,12 @@
 </template>
 
 <script>
+import { Sortable, AutoScroll } from 'sortablejs/modular/sortable.core.esm.js'
 import contextMenu from '@/components/context-menu'
 import boardCard from '@/components/card'
 import addForm from '@/components/add-form'
+
+Sortable.mount(new AutoScroll())
 
 export default {
   name: 'column-component',
@@ -47,6 +50,7 @@ export default {
   },
   data () {
     return {
+      sortable: null,
       cardCreationOpened: false,
       card: {
         title: ''
@@ -56,11 +60,6 @@ export default {
   watch: {
     cardCreationOpened () {
       this.card.title = ''
-      // if (this.cardCreationOpened) {
-      //   this.$nextTick(() => {
-      //     this.$refs.addCardTitle.focus()
-      //   })
-      // }
     }
   },
   methods: {
@@ -74,6 +73,9 @@ export default {
       this.$nextTick(() => {
         this.$refs.scrollParent.scrollTop = this.$refs.scrollParent.scrollHeight
       })
+    },
+    beforeDragStart () {
+      this.$root.$emit('keyup-esc')
     },
     createCard () {
       this.$store.dispatch('api/createCard', {
@@ -92,6 +94,21 @@ export default {
         this.$emit('remove', this.data._id)
       })
     }
+  },
+  mounted () {
+    // Sortable init
+    this.sortable = new Sortable(this.$refs.cards, {
+      scroll: true,
+      scrollSensitivity: 100,
+      scrollSpeed: 12,
+      bubbleScroll: true,
+      forceFallback: true,
+      fallbackTolerance: 10,
+      animation: 150,
+      group: 'cards',
+      handle: '.card',
+      onChoose: this.beforeDragStart
+    })
   }
 }
 </script>
@@ -114,11 +131,10 @@ export default {
       cursor: pointer;
     }
     .cards {
-      padding: $padding;
+      overflow-x: hidden;
+      padding: $padding $padding 0;
       .card {
-        &:not(:last-child) {
-          margin-bottom: 10px;
-        }
+        margin-bottom: 10px;
       }
     }
     .footer {
@@ -130,7 +146,7 @@ export default {
 
     &.sortable-ghost {
       .column-original {
-        background: $color-bg !important;
+        background: $color-bg;
         border: 2px dashed rgba($color-text-light, .3);
         box-shadow: none;
         & > * {
