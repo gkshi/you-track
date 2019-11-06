@@ -46,7 +46,7 @@ export const actions = {
         }
       })
     }).catch(err => {
-      console.log('changeActiveCard err', err)
+      console.warn('changeActiveCard err', err)
       commit('ACTIVE_CARD_UPDATE', {})
     })
   }

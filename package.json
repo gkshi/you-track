@@ -41,6 +41,6 @@
     "pug": "^2.0.4",
     "pug-plain-loader": "^1.0.0",
     "sass-loader": "^8.0.0",
-    "vuedraggable": "^2.23.2"
+    "sortablejs": "^1.10.1"
   }
 }

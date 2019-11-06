@@ -1,18 +1,17 @@
 <template lang="pug">
   .page.board
     .scroll-parent(ref="scrollParent")
-      draggable.columns.flex.a-start.grow(
-        ref="columnParent"
-        :list="board.columns"
-        ghost-class="ghost-block"
-        @start="onDragStart")
+      .columns.flex.a-start.grow(ref="columnParent")
         boardColumn.column(
           v-for="column in board.columns"
           :data="column"
           :key="column._id"
           @remove="onColumnRemove")
-        .column.shrink
-          a.add-column-link.ghost-block(v-if="!columnCreationOpened" href="#" @click.prevent="toggleColumnCreation")
+        .column.non-draggable.shrink
+          a.add-column-link.ghost-block(
+            v-if="!columnCreationOpened"
+            href="#"
+            @click.prevent="toggleColumnCreation")
             span Add column
           addForm(
             v-else
@@ -26,15 +25,16 @@
 </template>
 
 <script>
-import draggable from 'vuedraggable'
+import { Sortable, AutoScroll } from 'sortablejs/modular/sortable.core.esm.js'
 import boardColumn from '@/components/column'
 import cardModal from '@/components/modals/card'
 import addForm from '@/components/add-form'
 
+Sortable.mount(new AutoScroll())
+
 export default {
   name: 'board-page',
   components: {
-    draggable,
     boardColumn,
     cardModal,
     addForm
@@ -44,6 +44,9 @@ export default {
       board: {
         columns: []
       },
+
+      // sortable
+      sortable: null,
 
       // column creation
       columnCreationOpened: false,
@@ -77,14 +80,13 @@ export default {
       this.$store.dispatch('changeActiveCard', id)
       this.openModal('card')
     },
-    onDragStart (e) {
-      console.log('e', e)
+    onDragStart () {
       this.$root.$emit('keyup-esc')
     },
     watchColumnHeight () {
       this.$nextTick(() => {
         try {
-          this.$refs.columnParent.$el.style.height = `${this.$refs.scrollParent.offsetHeight}px`
+          this.$refs.columnParent.style.height = `${this.$refs.scrollParent.offsetHeight}px`
         } catch (e) {
           console.warn(e)
         }
@@ -100,11 +102,23 @@ export default {
     })
   },
   mounted () {
-    // column height watcher
+    // Sortable init
+    this.sortable = new Sortable(this.$refs.columnParent, {
+      scroll: true,
+      scrollSensitivity: 300,
+      scrollSpeed: 14,
+      bubbleScroll: true,
+      forceFallback: true,
+      handle: '.column:not(.non-draggable)',
+      draggable: '.column:not(.non-draggable)',
+      filter: '.non-draggable'
+    })
+
+    // Column height watcher
     this.watchColumnHeight()
     window.addEventListener('resize', this.watchColumnHeight)
 
-    // open card modal trigger
+    // Open card modal trigger
     if (this.$route.query.card) {
       this.openCard(this.$route.query.card)
     }
