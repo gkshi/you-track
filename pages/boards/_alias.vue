@@ -1,9 +1,10 @@
 <template lang="pug">
   .page.board
     .scroll-parent.flex.a-start(ref="scrollParent")
-      .columns.flex.a-start.grow(ref="columnParent")
+      .columns.flex.a-start.shrink(ref="columnParent")
         boardColumn.column(
           v-for="column in board.columns"
+          :board="board"
           :data="column"
           :key="column._id"
           @remove="onColumnRemove")
@@ -41,9 +42,7 @@ export default {
   },
   data () {
     return {
-      board: {
-        columns: []
-      },
+      board: {},
 
       // sortable
       sortable: null,
@@ -64,11 +63,12 @@ export default {
     },
     createColumn () {
       this.$store.dispatch('api/createColumn', {
-        board: this.$route.params.alias,
+        board: this.board,
         data: {
           title: this.columnTitle
         }
       }).then(res => {
+        console.log('res', res)
         this.board.columns.push(res)
         this.toggleColumnCreation()
       })
@@ -113,6 +113,7 @@ export default {
       animation: 150,
       handle: '.column .header',
       filter: '.non-draggable',
+      direction: 'horizontal',
       onChoose: this.beforeDragStart
     })
 
@@ -155,7 +156,7 @@ export default {
     }
     .add-column-link {
       display: block;
-      padding: 10px 10px 10px 20px;
+      padding: 12px 10px 12px 20px;
       border-radius: $border-radius-default;
       background: rgba($color-light, .5);
       color: $color-text-regular;

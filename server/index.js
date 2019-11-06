@@ -5,6 +5,7 @@ const bodyParser = require('body-parser')
 const router = express.Router()
 const { Nuxt, Builder } = require('nuxt')
 const app = express()
+const Helpers = require('./helpers')
 
 // Import and Set Nuxt.js options
 const config = require('../nuxt.config.js')
@@ -41,6 +42,8 @@ mongoClient.connect((err, client) => {
 /**
  * Routes
  */
+
+// get user
 router.get('/user', (request, response) => {
   const users = db.collection('users')
   users.find().toArray().then(items => {
@@ -51,6 +54,7 @@ router.get('/user', (request, response) => {
     }
   })
 })
+// create user
 router.post('/user', (request, response) => {
   const users = db.collection('users')
   users.insertOne({
@@ -61,6 +65,7 @@ router.post('/user', (request, response) => {
   })
 })
 
+// get boards
 router.get('/boards', (req, res) => {
   const boards = db.collection('boards')
   boards.find({}).toArray((err, items) => {
@@ -71,16 +76,20 @@ router.get('/boards', (req, res) => {
   })
 })
 
-router.get('/boards/:alias', async (request, response, next) => {
+// get board
+router.get('/boards/:alias', async (request, response) => {
+  // find board
   const board = await db.collection('boards').findOne({
     alias: request.params.alias
   })
   if (!board) {
     return response.status(404).send()
   }
-  const columns = await db.collection('columns').find({
+  // find board columns
+  let columns = await db.collection('columns').find({
     board: board._id
   }).toArray()
+  columns = Helpers.sort(columns, board.order)
   const promises = []
   columns.forEach(column => {
     const promise = new Promise(async (resolve, reject) => {
@@ -98,6 +107,7 @@ router.get('/boards/:alias', async (request, response, next) => {
   })
 })
 
+// create board
 router.post('/boards', (request, response) => {
   if (!request.body.title || !request.body.alias) {
     return response.status(452).send('POST board error')
@@ -106,11 +116,38 @@ router.post('/boards', (request, response) => {
   boards.insertOne({
     title: request.body.title,
     alias: request.body.alias,
-    description: request.body.description
+    description: request.body.description,
+    columns: [],
+    order: []
   }).then(res => {
     response.send(res.ops[0])
   })
 })
+
+// update board
+router.put('/boards/:id', (request, response) => {
+  const boards = db.collection('boards')
+  boards.updateOne({
+    _id: ObjectId(request.params.id)
+  }, {
+    $set: {
+      ...request.body
+    },
+    $currentDate: {
+      lastModified: true
+    }
+  }).then(async () => {
+    const board = await boards.findOne({
+      _id: ObjectId(request.params.id)
+    })
+    response.send(board)
+  }).catch(err => {
+    console.warn(err)
+    response.status(501).send()
+  })
+})
+
+// remove board
 router.delete('/boards/:id', (request, response) => {
   const boards = db.collection('boards')
   boards.deleteOne({
@@ -120,10 +157,11 @@ router.delete('/boards/:id', (request, response) => {
   })
 })
 
-router.post('/boards/:alias/columns', async (request, response) => {
+// create column
+router.post('/boards/:id/columns', async (request, response) => {
   const columns = db.collection('columns')
   const board = await db.collection('boards').findOne({
-    alias: request.params.alias
+    _id: ObjectId(request.params.id)
   })
   columns.insertOne({
     title: request.body.title,
@@ -133,6 +171,8 @@ router.post('/boards/:alias/columns', async (request, response) => {
     response.send(res.ops[0])
   })
 })
+
+// remove column
 router.delete('/columns/:id', (request, response) => {
   const columns = db.collection('columns')
   columns.deleteOne({

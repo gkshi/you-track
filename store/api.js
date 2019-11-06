@@ -19,6 +19,9 @@ export const actions = {
   createBoard ({ dispatch }, data) {
     return API.createBoard(data)
   },
+  updateBoard ({ dispatch }, payload) {
+    return API.updateBoard(payload)
+  },
   removeBoard ({ dispatch }, id) {
     return API.removeBoard(id)
   },
@@ -27,8 +30,8 @@ export const actions = {
   createColumn ({ dispatch }, payload) {
     return API.createColumn(payload.board, payload.data)
   },
-  removeColumn ({ dispatch }, id) {
-    return API.removeColumn(id)
+  removeColumn ({ dispatch }, payload) {
+    return API.removeColumn(payload)
   },
 
   // cards

@@ -46,6 +46,10 @@ export default {
     data: {
       type: Object,
       required: true
+    },
+    board: {
+      type: Object,
+      required: true
     }
   },
   data () {
@@ -90,7 +94,10 @@ export default {
       })
     },
     removeColumn () {
-      this.$store.dispatch('api/removeColumn', this.data._id).then(() => {
+      this.$store.dispatch('api/removeColumn', {
+        board: this.board,
+        id: this.data._id
+      }).then(() => {
         this.$emit('remove', this.data._id)
       })
     }
@@ -107,6 +114,7 @@ export default {
       animation: 150,
       group: 'cards',
       handle: '.card',
+      direction: 'vertical',
       onChoose: this.beforeDragStart
     })
   }
@@ -138,7 +146,10 @@ export default {
       }
     }
     .footer {
+      position: relative;
       padding: $padding;
+      margin-top: -$padding;
+      background: $color-light;
     }
     .add-button {
       width: 100%;

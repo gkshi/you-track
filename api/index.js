@@ -51,15 +51,55 @@ export default {
   createBoard (data) {
     return this.do('POST', '/boards', data)
   },
+  updateBoard (payload) {
+    return this.do('PUT', `/boards/${payload.board}`, payload.data)
+  },
   removeBoard (id) {
     return this.do('DELETE', `/boards/${id}`)
   },
 
   createColumn (board, data) {
-    return this.do('POST', `/boards/${board}/columns`, data)
+    return new Promise(async (resolve, reject) => {
+      // create column
+      const column = await this.do('POST', `/boards/${board._id}/columns`, data).then(res => {
+        return res
+      }).catch(err => {
+        console.warn(err)
+        return null
+      })
+      if (column) {
+        // update columns order in board
+        this.updateBoard({
+          board: board._id,
+          data: {
+            order: [...board.order, column._id]
+          }
+        }).then(res => {
+          console.log('store res', res)
+          resolve(column)
+        }).catch(err => {
+          console.warn(err)
+          reject(err)
+        })
+      }
+    })
   },
-  removeColumn (id) {
-    return this.do('DELETE', `/columns/${id}`)
+  removeColumn (payload) {
+    return new Promise(async (resolve, reject) => {
+      // remove column
+      await this.do('DELETE', `/columns/${payload.id}`)
+      // update columns order in board
+      await this.updateBoard({
+        board: payload.board._id,
+        data: {
+          order: [...payload.board.order].filter(i => i !== payload.id)
+        }
+      }).then(() => {
+        resolve()
+      }).catch(err => {
+        reject(err)
+      })
+    })
   },
 
   getCard (id) {
