@@ -5,7 +5,7 @@
       contextMenu
         a(href="#" @click.prevent) Rename
         a(href="#" @click.prevent="removeColumn") Remove
-    .scroll-parent.grow
+    .scroll-parent.grow(ref="scrollParent")
       .cards
         boardCard.card(
           v-for="card in data.cards"
@@ -70,6 +70,11 @@ export default {
         this.cardCreationOpened = false
       }
     },
+    scrollColumn () {
+      this.$nextTick(() => {
+        this.$refs.scrollParent.scrollTop = this.$refs.scrollParent.scrollHeight
+      })
+    },
     createCard () {
       this.$store.dispatch('api/createCard', {
         column: this.data._id,
@@ -79,6 +84,7 @@ export default {
       }).then(res => {
         this.data.cards.push(res)
         this.card.title = ''
+        this.scrollColumn()
       })
     },
     removeColumn () {
