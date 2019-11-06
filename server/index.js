@@ -5,7 +5,6 @@ const bodyParser = require('body-parser')
 const router = express.Router()
 const { Nuxt, Builder } = require('nuxt')
 const app = express()
-const Helpers = require('./helpers')
 
 // Import and Set Nuxt.js options
 const config = require('../nuxt.config.js')
@@ -93,10 +92,9 @@ router.get('/boards/:alias', async (request, response) => {
   const promises = []
   columns.forEach(column => {
     const promise = new Promise(async (resolve, reject) => {
-      const cards = await db.collection('cards').find({
+      column.cards = await db.collection('cards').find({
         column: ObjectId(column._id)
       }).toArray()
-      column.cards = cards
       resolve()
     })
     promises.push(promise)
@@ -226,3 +224,15 @@ async function start () {
   app.listen(port, host)
 }
 start()
+
+const Helpers = {
+  sort: (items, ids) => {
+    const sorted = []
+    ids.forEach(id => {
+      const item = items.find(i => ObjectId(i._id).equals(id))
+      sorted.push(item)
+    })
+    console.log('sorted', sorted)
+    return sorted
+  }
+}

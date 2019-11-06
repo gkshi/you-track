@@ -3,8 +3,8 @@
     commonInput(
       ref="field"
       :value="value"
-      @input="$emit('input', $event)"
-      placeholder="Enter a title for this card...")
+      :placeholder="placeholder"
+      @input="$emit('input', $event)")
     .buttons.flex.a-center
       commonButton(size="small" native="submit" :disabled="!value")
         slot

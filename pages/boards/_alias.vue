@@ -6,6 +6,7 @@
           v-for="column in board.columns"
           :board="board"
           :data="column"
+          :data-id="column._id"
           :key="column._id"
           @remove="onColumnRemove")
       .column.non-draggable.shrink
@@ -70,7 +71,7 @@ export default {
       }).then(res => {
         console.log('res', res)
         this.board.columns.push(res)
-        this.toggleColumnCreation()
+        this.columnTitle = ''
       })
     },
     onColumnRemove (id) {
@@ -79,6 +80,39 @@ export default {
     openCard (id) {
       this.$store.dispatch('changeActiveCard', id)
       this.openModal('card')
+    },
+    initSortable () {
+      this.sortable = new Sortable(this.$refs.columnParent, {
+        group: 'columns',
+        store: {
+          get: () => {
+            console.log('get order', this.board.order)
+            return this.board.order
+          },
+          set: sortable => {
+            // if order has changed, update board order
+            if (JSON.stringify(sortable.toArray()) !== JSON.stringify(this.board.order)) {
+              this.$store.dispatch('api/updateBoard', {
+                board: this.board._id,
+                data: {
+                  order: sortable.toArray()
+                }
+              })
+            }
+          }
+        },
+        scroll: true,
+        scrollSensitivity: 300,
+        scrollSpeed: 16,
+        bubbleScroll: true,
+        forceFallback: true,
+        fallbackTolerance: 10,
+        animation: 150,
+        handle: '.column .header',
+        filter: '.non-draggable',
+        direction: 'horizontal',
+        onChoose: this.beforeDragStart
+      })
     },
     beforeDragStart () {
       this.$root.$emit('keyup-esc')
@@ -93,28 +127,16 @@ export default {
       })
     }
   },
-  created () {
+  mounted () {
     this.$store.dispatch('api/getBoard', this.$route.params.alias).then(res => {
       this.board = { ...this.board, ...res }
       this.$store.dispatch('changeActiveBoard', res.title)
+      this.initSortable()
+      if (!this.board.columns.length) {
+        this.toggleColumnCreation()
+      }
     }).catch(err => {
       return this.$nuxt.error({ statusCode: 404, message: err.message })
-    })
-  },
-  mounted () {
-    // Sortable init
-    this.sortable = new Sortable(this.$refs.columnParent, {
-      scroll: true,
-      scrollSensitivity: 300,
-      scrollSpeed: 16,
-      bubbleScroll: true,
-      forceFallback: true,
-      fallbackTolerance: 10,
-      animation: 150,
-      handle: '.column .header',
-      filter: '.non-draggable',
-      direction: 'horizontal',
-      onChoose: this.beforeDragStart
     })
 
     // Column height watcher
