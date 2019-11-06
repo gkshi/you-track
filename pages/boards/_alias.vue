@@ -1,25 +1,25 @@
 <template lang="pug">
   .page.board
-    .scroll-parent(ref="scrollParent")
+    .scroll-parent.flex.a-start(ref="scrollParent")
       .columns.flex.a-start.grow(ref="columnParent")
         boardColumn.column(
           v-for="column in board.columns"
           :data="column"
           :key="column._id"
           @remove="onColumnRemove")
-        .column.non-draggable.shrink
-          a.add-column-link.ghost-block(
-            v-if="!columnCreationOpened"
-            href="#"
-            @click.prevent="toggleColumnCreation")
-            span Add column
-          addForm(
-            v-else
-            v-model="columnTitle"
-            placeholder="Enter a title for this column..."
-            exception="add-column-link"
-            @submit="createColumn"
-            @close="toggleColumnCreation") Add column
+      .column.non-draggable.shrink
+        a.add-column-link.ghost-block(
+          v-if="!columnCreationOpened"
+          href="#"
+          @click.prevent="toggleColumnCreation")
+          span Add column
+        addForm(
+          v-else
+          v-model="columnTitle"
+          placeholder="Enter a title for this column..."
+          exception="add-column-link"
+          @submit="createColumn"
+          @close="toggleColumnCreation") Add column
 
     cardModal
 </template>
@@ -106,11 +106,12 @@ export default {
     this.sortable = new Sortable(this.$refs.columnParent, {
       scroll: true,
       scrollSensitivity: 300,
-      scrollSpeed: 14,
+      scrollSpeed: 16,
       bubbleScroll: true,
       forceFallback: true,
-      handle: '.column:not(.non-draggable)',
-      draggable: '.column:not(.non-draggable)',
+      fallbackTolerance: 10,
+      handle: '.column .header',
+      // draggable: '.column-original',
       filter: '.non-draggable'
     })
 
@@ -135,31 +136,32 @@ export default {
     .scroll-parent {
       height: 100%;
       padding: 0 40px;
+      & > .column {
+        &:last-child {
+          width: 340px;
+          padding-right: 40px;
+        }
+      }
     }
     .columns {
       max-height: 100%;
       .column {
         flex-shrink: 0;
         width: 300px;
-        &:not(:last-child) {
-          margin-right: 20px;
-        }
-      }
-      &:after {
-        content: '';
-        display: flex;
-        width: 40px;
-        height: 100%;
-        flex-shrink: 0;
+        margin-right: 20px;
       }
     }
     .add-column-link {
       display: block;
-      padding: 10px 20px;
-      color: $color-text-light;
+      padding: 10px 10px 10px 20px;
+      background: rgba($color-light, .5);
+      color: $color-text-regular;
+      box-shadow: $box-shadow-light;
       font-weight: $font-weight-semibold;
-      border-radius: $border-radius-default;
+      transition: $transition-button;
       &:hover {
+        text-decoration: none;
+        background: $color-light;
         color: $color-text-regular;
       }
     }

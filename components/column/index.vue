@@ -1,29 +1,30 @@
 <template lang="pug">
-  .column-component.flex
-    .header.flex.a-center.j-between.shrink
-      div {{ data.title }}
-      contextMenu
-        a(href="#" @click.prevent) Rename
-        a(href="#" @click.prevent="removeColumn") Remove
-    .scroll-parent.grow(ref="scrollParent")
-      .cards
-        boardCard.card(
-          v-for="card in data.cards"
-          :data="card"
-          :key="card._id")
-    .footer.shrink
-      commonButton.add-button(
-        v-if="!cardCreationOpened"
-        type="ghost"
-        size="full"
-        @click.prevent="toggleCardCreation") Add card
-      addForm(
-        v-else
-        v-model="card.title"
-        exception="add-button"
-        placeholder="Enter a title for this card..."
-        @submit="createCard"
-        @close="closeCardCreation") Add card
+  .column-component
+    .column-original.flex.column
+      .header.flex.a-center.j-between.shrink
+        div {{ data.title }}
+        contextMenu
+          a(href="#" @click.prevent) Rename
+          a(href="#" @click.prevent="removeColumn") Remove
+      .scroll-parent.grow(ref="scrollParent")
+        .cards(v-if="data.cards.length")
+          boardCard.card(
+            v-for="card in data.cards"
+            :data="card"
+            :key="card._id")
+      .footer.shrink
+        commonButton.add-button(
+          v-if="!cardCreationOpened"
+          type="ghost"
+          size="full"
+          @click.prevent="toggleCardCreation") Add card
+        addForm(
+          v-else
+          v-model="card.title"
+          exception="add-button"
+          placeholder="Enter a title for this card..."
+          @submit="createCard"
+          @close="closeCardCreation") Add card
 </template>
 
 <script>
@@ -96,20 +97,24 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+  $padding: 10px;
   .column-component {
-    max-height: 100%;
-    padding: 10px;
-    background: $color-light;
-    color: $color-text-regular;
-    border-radius: $border-radius-default;
-    box-shadow: $box-shadow-deep;
-    cursor: pointer;
+    height: 100%;
+    .column-original {
+      max-height: 100%;
+      background: $color-light;
+      color: $color-text-regular;
+      border-radius: $border-radius-default;
+      box-shadow: $box-shadow-deep;
+      cursor: default;
+    }
     .header {
       font-weight: $font-weight-bold;
-      margin-bottom: 20px;
-      padding-left: 10px;
+      padding: $padding $padding $padding 20px;
+      cursor: pointer;
     }
     .cards {
+      padding: $padding;
       .card {
         &:not(:last-child) {
           margin-bottom: 10px;
@@ -117,16 +122,24 @@ export default {
       }
     }
     .footer {
-      padding-top: 10px;
+      padding: $padding;
     }
     .add-button {
       width: 100%;
     }
 
-    &.ghost-block {
-      & > * {
-        opacity: 0;
+    &.sortable-ghost {
+      .column-original {
+        background: $color-bg !important;
+        border: 2px dashed rgba($color-text-light, .3);
+        box-shadow: none;
+        & > * {
+          opacity: 0;
+        }
       }
+    }
+    &.sortable-drag {
+      transform: rotate(4deg);
     }
   }
 </style>
