@@ -5,11 +5,14 @@
         .close(@click="close")
           div X
 
-        .title(v-if="$slots.title")
+        .h2(v-if="$slots.title")
           slot(name="title")
 
         .content
           slot Modal default content
+
+        .actions(v-if="$slots.actions")
+          slot(name="actions")
 </template>
 
 <script>
@@ -52,6 +55,7 @@ export default {
     dialog {
       border-radius: $border-radius-default;
       box-shadow: $box-shadow-deep;
+      user-select: text;
     }
   }
 </style>

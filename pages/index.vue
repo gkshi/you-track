@@ -9,7 +9,7 @@
               div {{ board.title }}
             .actions
               span (
-              a(href="#" @click.prevent="removeBoard(board)") remove
+              a(href="#" @click.prevent="requestBoardRemoving(board)") remove
               span )
       div(v-if="!boards.length")
         div No boards yet.
@@ -17,15 +17,18 @@
       commonButton(@click="openModal('create_board')") Create
 
     modalCreateBoard(@success="onBoardCreate")
+    modalRemoveBoard(@submit="removeBoard" @close="activeBoard = null")
 </template>
 
 <script>
 import modalCreateBoard from '@/components/modals/create-board'
+import modalRemoveBoard from '@/components/modals/remove-board'
 
 export default {
   name: 'index-page',
   components: {
-    modalCreateBoard
+    modalCreateBoard,
+    modalRemoveBoard
   },
   data () {
     return {
@@ -36,9 +39,14 @@ export default {
     onBoardCreate (board) {
       this.boards.push(board)
     },
-    removeBoard (board) {
+    requestBoardRemoving (board) {
+      this.activeBoard = board
+      this.openModal('remove_board')
+    },
+    removeBoard (board = this.activeBoard) {
       this.$store.dispatch('api/removeBoard', board._id).then(() => {
         this.boards = this.boards.filter(i => i._id !== board._id)
+        this.closeModal('remove_board')
       })
     }
   },

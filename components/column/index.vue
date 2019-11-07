@@ -5,7 +5,7 @@
         div {{ data.title }}
         contextMenu
           a(href="#" @click.prevent) Rename
-          a(href="#" @click.prevent="removeColumn") Remove
+          a(href="#" @click.prevent="tryToRemoveColumn") Remove
       .scroll-parent.grow(ref="scrollParent")
         .cards(ref="cards")
           boardCard.card(
@@ -25,6 +25,11 @@
           placeholder="Enter a title for this card..."
           @submit="createCard"
           @close="closeCardCreation") Add card
+
+    removeColumnModal(
+      :id="`remove_column_${data._id}`"
+      :data="data"
+      @submit="removeColumn")
 </template>
 
 <script>
@@ -32,6 +37,7 @@ import { Sortable, AutoScroll } from 'sortablejs/modular/sortable.core.esm.js'
 import contextMenu from '@/components/context-menu'
 import boardCard from '@/components/card'
 import addForm from '@/components/add-form'
+import removeColumnModal from '@/components/modals/remove-column'
 
 Sortable.mount(new AutoScroll())
 
@@ -40,7 +46,8 @@ export default {
   components: {
     contextMenu,
     boardCard,
-    addForm
+    addForm,
+    removeColumnModal
   },
   props: {
     data: {
@@ -92,6 +99,13 @@ export default {
         this.card.title = ''
         this.scrollColumn()
       })
+    },
+    tryToRemoveColumn () {
+      if (this.data.cards.length) {
+        this.openModal(`remove_column_${this.data._id}`)
+      } else {
+        this.removeColumn()
+      }
     },
     removeColumn () {
       this.$store.dispatch('api/removeColumn', {
