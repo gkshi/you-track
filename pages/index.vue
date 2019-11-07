@@ -2,16 +2,15 @@
   .page.index
     .wrapper
       template(v-if="boards.length")
-        div My boards:
+        h2 My boards:
         .boards.flex.column.a-start
-          .board.flex(v-for="board in boards" :key="board.id")
+          .board.flex.j-between.a-start(v-for="board in boards" :key="board.id")
             nuxt-link(:to="`/boards/${board.alias}`")
               div {{ board.title }}
-            .actions
-              span (
-              a(href="#" @click.prevent="requestBoardRemoving(board)") remove
-              span )
-      div(v-if="!boards.length")
+            contextMenu.options
+              a(href="#" @click.prevent) Rename
+              a(href="#" @click.prevent="requestBoardRemoving(board)") Remove
+      .boards(v-if="!boards.length")
         div No boards yet.
 
       commonButton(@click="openModal('create_board')") Create board
@@ -21,12 +20,14 @@
 </template>
 
 <script>
+import contextMenu from '@/components/context-menu'
 import modalCreateBoard from '@/components/modals/create-board'
 import modalRemoveBoard from '@/components/modals/remove-board'
 
 export default {
   name: 'index-page',
   components: {
+    contextMenu,
     modalCreateBoard,
     modalRemoveBoard
   },
@@ -67,6 +68,7 @@ export default {
       width: 300px;
       background: #f8f8f8;
       padding: 20px 20px;
+      box-shadow: $box-shadow-light;
       &:not(:last-child) {
         margin-bottom: 20px;
       }

@@ -7,7 +7,7 @@
           a(href="#" @click.prevent) Rename
           a(href="#" @click.prevent="tryToRemoveColumn") Remove
       .scroll-parent.grow(ref="scrollParent")
-        .cards(ref="cards")
+        .cards(ref="cards" :class="{ empty: !data.cards.length }")
           boardCard.card(
             v-for="card in data.cards"
             :data="card"
@@ -114,6 +114,12 @@ export default {
       }).then(() => {
         this.$emit('remove', this.data._id)
       })
+    },
+    onDragStart () {
+      document.body.classList.add('drag-mode')
+    },
+    onDragEnd () {
+      document.body.classList.remove('drag-mode')
     }
   },
   mounted () {
@@ -129,17 +135,41 @@ export default {
       group: 'cards',
       handle: '.card',
       direction: 'vertical',
-      onChoose: this.beforeDragStart
+      onChoose: this.beforeDragStart,
+      onStart: this.onDragStart,
+      onEnd: this.onDragEnd
     })
   }
 }
 </script>
+
+<style lang="scss">
+  body {
+    &.drag-mode {
+      .column-component {
+        .cards.empty {
+          &:after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            z-index: 10;
+            width: 100%;
+            height: 100%;
+            background: transparent;
+          }
+        }
+      }
+    }
+  }
+</style>
 
 <style lang="scss" scoped>
   $padding: 10px;
   .column-component {
     height: 100%;
     .column-original {
+      position: relative;
       max-height: 100%;
       background: $color-light;
       color: $color-text-regular;
@@ -164,6 +194,7 @@ export default {
       padding: $padding;
       margin-top: -$padding;
       background: $color-light;
+      border-radius: 0 0 $border-radius-default $border-radius-default;
     }
     .add-button {
       width: 100%;

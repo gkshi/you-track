@@ -28,7 +28,8 @@ a {
   }
 }
 
-input {
+input,
+textarea {
   font-family: $font-family-default;
   font-size: $font-size-default;
   line-height: $line-height-default;
@@ -50,6 +51,13 @@ input {
 h1, .h1 {
   font-size: $font-size-heading;
   line-height: $line-height-heading;
+  font-weight: $font-weight-normal;
+  margin: 0 auto;
+}
+
+h2, .h2 {
+  font-size: $font-size-subheading;
+  line-height: $line-height-subheading;
   font-weight: $font-weight-normal;
   margin: 0 auto;
 }

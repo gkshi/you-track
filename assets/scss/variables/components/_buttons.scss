@@ -4,8 +4,8 @@ $button-padding-small: 9px 16px 10px;
 $button-padding-square: 0;
 
 // $button-types: name background color background-hover color-hover
-$button-types: default $color-primary $color-light darken($color-primary, 4%) $color-light,
-               light $color-light $color-text-regular $color-light $color-text-regular,
+$button-types: default $color-primary $color-light darken($color-primary, 5%) $color-light,
+               light $color-light $color-text-regular darken($color-light, 3%) $color-text-regular,
                ghost transparent $color-text-ghost $color-white $color-text-regular;
 
 // $button-sizes: name padding font-size line-height;

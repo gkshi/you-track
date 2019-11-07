@@ -3,7 +3,7 @@
     div(slot="title") Board deletion
     div Are you sure you want to delete this board?
     .buttons(slot="actions")
-      commonButton(@click="$emit('submit')") Delete board
+      commonButton(@click="$emit('submit')") Delete
       commonButton(type="light" @click="closeModal('remove_board')") Cancel
 </template>
 

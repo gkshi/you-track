@@ -21,6 +21,7 @@
       v-else
       :class="classList"
       role="button"
+      :form="form"
       :type="native"
       @focus="$emit('focus')"
       @blur="$emit('blur')"
@@ -44,6 +45,7 @@ export default {
       type: String,
       default: 'button' // native button type (submit, confirm)
     },
+    form: String,
     href: String,
     to: String,
     target: {
@@ -77,9 +79,9 @@ export default {
       transition: $transition-button;
 
       // types
-      &.button-type-ghost {
+      &.button-type-default {
         &:hover {
-          box-shadow: none;
+          box-shadow: $box-shadow-light-focus;
         }
       }
 
@@ -104,10 +106,6 @@ export default {
           background: transparent;
           color: $color-text-light;
         }
-      }
-
-      &:hover {
-        box-shadow: $box-shadow-light-focus;
       }
     }
   }

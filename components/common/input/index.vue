@@ -70,10 +70,6 @@ export default {
       padding: 11px 20px 12px;
       border: none;
       border-radius: $border-radius-default;
-      font-family: $font-family-default;
-      font-size: $font-size-default;
-      line-height: $line-height-default;
-      font-weight: $font-weight-normal;
       box-shadow: $box-shadow-light;
       outline: none;
       transition: $transition-field;

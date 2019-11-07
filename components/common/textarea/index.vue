@@ -58,7 +58,17 @@ export default {
     }
     textarea {
       display: block;
-      max-width: 100%;
+      width: 100%;
+      padding: 11px 20px 12px;
+      border: none;
+      border-radius: $border-radius-default;
+      box-shadow: $box-shadow-light;
+      outline: none;
+      transition: $transition-field;
+
+      &:focus {
+        box-shadow: $box-shadow-light-focus;
+      }
     }
   }
 </style>

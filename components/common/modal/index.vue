@@ -5,7 +5,7 @@
         .close(@click="close")
           div X
 
-        .h2(v-if="$slots.title")
+        .title.h2(v-if="$slots.title")
           slot(name="title")
 
         .content
@@ -56,6 +56,12 @@ export default {
       border-radius: $border-radius-default;
       box-shadow: $box-shadow-deep;
       user-select: text;
+      .title {
+        margin-bottom: 10px;
+      }
+      .actions {
+        margin-top: 30px;
+      }
     }
   }
 </style>

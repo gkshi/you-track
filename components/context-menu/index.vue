@@ -1,6 +1,6 @@
 <template lang="pug">
-  .context-menu-component.shrink(v-outside="close")
-    .button.flex.center(:class="{ active: isOpened }" @click="toggle")
+  .context-menu-component.shrink(@click="toggle" v-outside="close")
+    .button.flex.center(:class="{ active: isOpened }")
       iconDots
     transition
       .list(v-if="isOpened")
@@ -51,6 +51,7 @@ export default {
 <style lang="scss" scoped>
   .context-menu-component {
     position: relative;
+    user-select: none;
     .button {
       width: 24px;
       height: 24px;

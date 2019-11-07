@@ -44,3 +44,11 @@
 .scroll-parent {
   overflow: auto;
 }
+
+.form {
+  .row {
+    &:not(:last-child) {
+      margin-bottom: 10px;
+    }
+  }
+}

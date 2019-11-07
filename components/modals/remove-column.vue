@@ -4,7 +4,7 @@
     div The column contains one or more cards inside.
     div Are you sure you want to delete this column?
     .buttons(slot="actions")
-      commonButton(@click="$emit('submit')") Delete column
+      commonButton(@click="$emit('submit')") Delete
       commonButton(type="light" @click="closeModal(id)") Cancel
 </template>
 
