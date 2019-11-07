@@ -14,7 +14,7 @@
       div(v-if="!boards.length")
         div No boards yet.
 
-      commonButton(@click="openModal('create_board')") Create
+      commonButton(@click="openModal('create_board')") Create board
 
     modalCreateBoard(@success="onBoardCreate")
     modalRemoveBoard(@submit="removeBoard" @close="activeBoard = null")

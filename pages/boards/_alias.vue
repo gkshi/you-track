@@ -41,6 +41,11 @@ export default {
     cardModal,
     addForm
   },
+  head () {
+    return {
+      title: `${this.board.title} - YouTrack`
+    }
+  },
   data () {
     return {
       board: {},
