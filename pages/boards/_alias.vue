@@ -149,6 +149,7 @@ export default {
     }
   },
   beforeDestroy () {
+    this.$store.dispatch('changeActiveBoard', null)
     window.removeEventListener('resize', this.watchColumnHeight)
   }
 }
