@@ -11,6 +11,7 @@
           boardCard.card(
             v-for="card in data.cards"
             :data="card"
+            @remove="onCardRemove"
             :key="card._id")
       .footer.shrink
         commonButton.add-button(
@@ -100,6 +101,19 @@ export default {
         this.scrollColumn()
       })
     },
+    moveCard (id, to) {
+      console.log('moveCard', id, 'to', to)
+      // const card = await this.$store.dispatch('api/moveCard', {
+      //   id
+      // })
+    },
+    async updateColumnOrder (order) {
+      const column = await this.$store.dispatch('api/updateColumn', {
+        id: this.data._id,
+        data: { order }
+      })
+      this.$emit('update', column)
+    },
     tryToRemoveColumn () {
       if (this.data.cards.length) {
         this.openModal(`remove_column_${this.data._id}`)
@@ -115,6 +129,9 @@ export default {
         this.$emit('remove', this.data._id)
       })
     },
+    onCardRemove (card) {
+      this.data.cards = this.data.cards.filter(i => i._id !== card)
+    },
     onDragStart () {
       document.body.classList.add('drag-mode')
     },
@@ -125,6 +142,33 @@ export default {
   mounted () {
     // Sortable init
     this.sortable = new Sortable(this.$refs.cards, {
+      group: 'cards',
+      store: {
+        get: () => {
+          // return []
+          return this.data.cards
+        },
+        set: sortable => {
+          const cardIds = this.data.cards.map(i => i._id)
+          if (sortable.toArray().length !== cardIds.length) {
+            // if card moved to other column
+            // update card
+            // update both columns order
+            console.log('Moving between columns detected.')
+            console.log('Need to update card.')
+            console.log('Need to update both columns order.')
+            this.moveCard()
+            this.updateColumnOrder(sortable.toArray())
+          } else if (JSON.stringify(sortable.toArray()) !== JSON.stringify(cardIds)) {
+            // if order has changed, update column order
+            console.log('Card order changing detected.')
+            console.log('Need to update column order.')
+            this.updateColumnOrder(sortable.toArray())
+          }
+        }
+      },
+      handle: '.card',
+      direction: 'vertical',
       scroll: true,
       scrollSensitivity: 100,
       scrollSpeed: 12,
@@ -132,9 +176,6 @@ export default {
       forceFallback: true,
       fallbackTolerance: 10,
       animation: 150,
-      group: 'cards',
-      handle: '.card',
-      direction: 'vertical',
       onChoose: this.beforeDragStart,
       onStart: this.onDragStart,
       onEnd: this.onDragEnd
@@ -156,7 +197,7 @@ export default {
             z-index: 10;
             width: 100%;
             height: 100%;
-            background: transparent;
+            background: rgba(red, .1);
           }
         }
       }

@@ -53,6 +53,7 @@ router.get('/user', (request, response) => {
     }
   })
 })
+
 // create user
 router.post('/user', (request, response) => {
   const users = db.collection('users')
@@ -86,7 +87,7 @@ router.get('/boards/:alias', async (request, response) => {
   }
   // find board columns
   let columns = await db.collection('columns').find({
-    board: board._id
+    board: ObjectId(board._id)
   }).toArray()
   columns = Helpers.sort(columns, board.order)
   const promises = []
@@ -157,19 +158,49 @@ router.delete('/boards/:id', (request, response) => {
 
 // create column
 router.post('/boards/:id/columns', async (request, response) => {
-  const columns = db.collection('columns')
   const board = await db.collection('boards').findOne({
     _id: ObjectId(request.params.id)
   })
-  columns.insertOne({
+  const column = await db.collection('columns').insertOne({
     title: request.body.title,
     board: board._id,
-    cards: []
+    cards: [],
+    order: []
   }).then(res => {
-    response.send(res.ops[0])
+    return res.ops[0]
   })
-})
 
+  // Update board columns order
+  await db.collection('boards').updateOne({
+    _id: ObjectId(request.params.id)
+  }, {
+    $set: {
+      order: [...board.order, column._id]
+    },
+    $currentDate: {
+      lastModified: true
+    }
+  })
+
+  response.send(column)
+})
+// update column
+router.put('/columns/:id', async (request, response) => {
+  await db.collection('columns').updateOne({
+    _id: ObjectId(request.params.id)
+  }, {
+    $set: {
+      ...request.body
+    },
+    $currentDate: {
+      lastModified: true
+    }
+  })
+  const column = db.collection('columns').findOne({
+    _id: ObjectId(request.params.id)
+  })
+  response.send(column)
+})
 // remove column
 router.delete('/columns/:id', (request, response) => {
   const columns = db.collection('columns')
@@ -180,6 +211,7 @@ router.delete('/columns/:id', (request, response) => {
   })
 })
 
+// get card
 router.get('/cards/:id', (request, response) => {
   const cards = db.collection('cards')
   cards.findOne({
@@ -191,13 +223,39 @@ router.get('/cards/:id', (request, response) => {
   })
 })
 
-router.post('/columns/:column/cards', (request, response) => {
-  const cards = db.collection('cards')
-  cards.insertOne({
+// create card
+router.post('/columns/:column/cards', async (request, response) => {
+  const card = await db.collection('cards').insertOne({
     title: request.body.title,
     column: ObjectId(request.params.column)
   }).then(res => {
-    response.send(res.ops[0])
+    return res.ops[0]
+  }).catch(err => {
+    response.status(500).send(err)
+  })
+
+  await db.collection('columns').updateOne({
+    _id: ObjectId(request.params.column)
+  }, {
+    $set: {
+      order: [card._id]
+    },
+    $currentDate: {
+      lastModified: true
+    }
+  })
+
+  response.send(card)
+})
+
+router.delete('/cards/:id', (request, response) => {
+  const cards = db.collection('cards')
+  cards.deleteOne({
+    _id: ObjectId(request.params.id)
+  }).then(() => {
+    response.send('ok')
+  }).catch(err => {
+    response.status(501).send(err)
   })
 })
 
@@ -232,7 +290,6 @@ const Helpers = {
       const item = items.find(i => ObjectId(i._id).equals(id))
       sorted.push(item)
     })
-    console.log('sorted', sorted)
     return sorted
   }
 }

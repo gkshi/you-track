@@ -59,29 +59,13 @@ export default {
   },
 
   createColumn (board, data) {
-    return new Promise(async (resolve, reject) => {
+    return new Promise((resolve, reject) => {
       // create column
-      const column = await this.do('POST', `/boards/${board._id}/columns`, data).then(res => {
-        return res
+      this.do('POST', `/boards/${board._id}/columns`, data).then(res => {
+        resolve(res)
       }).catch(err => {
-        console.warn(err)
-        return null
+        reject(err)
       })
-      if (column) {
-        // update columns order in board
-        this.updateBoard({
-          board: board._id,
-          data: {
-            order: [...board.order, column._id]
-          }
-        }).then(res => {
-          console.log('store res', res)
-          resolve(column)
-        }).catch(err => {
-          console.warn(err)
-          reject(err)
-        })
-      }
     })
   },
   removeColumn (payload) {

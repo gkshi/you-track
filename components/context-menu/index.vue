@@ -1,5 +1,5 @@
 <template lang="pug">
-  .context-menu-component.shrink(@click="toggle" v-outside="close")
+  .context-menu-component.inline-flex.shrink(@click="toggle" v-outside="close")
     .button.flex.center(:class="{ active: isOpened }")
       iconDots
     transition
@@ -18,6 +18,11 @@ export default {
   data () {
     return {
       isOpened: false
+    }
+  },
+  watch: {
+    isOpened () {
+      this.$emit(this.isOpened ? 'open' : 'close')
     }
   },
   methods: {

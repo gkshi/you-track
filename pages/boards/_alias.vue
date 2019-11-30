@@ -91,7 +91,6 @@ export default {
         group: 'columns',
         store: {
           get: () => {
-            console.log('get order', this.board.order)
             return this.board.order
           },
           set: sortable => {
@@ -102,6 +101,8 @@ export default {
                 data: {
                   order: sortable.toArray()
                 }
+              }).then(board => {
+                this.board.order = board.order
               })
             }
           }
