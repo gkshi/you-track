@@ -4,10 +4,10 @@
       .columns.flex.a-start.shrink(ref="columnParent")
         boardColumn.column(
           v-for="column in board.columns"
-          :board="board"
           :data="column"
-          :data-id="column._id"
           :key="column._id"
+          @update="onColumnUpdate"
+          @remove-request="onColumnRemoveRequest"
           @remove="onColumnRemove")
       .column.non-draggable.shrink
         a.add-column-link.ghost-block(
@@ -24,12 +24,14 @@
           @close="toggleColumnCreation") Add column
 
     cardModal
+    columnRemoveModal(:data="activeColumn" @submit="onColumnRemove")
 </template>
 
 <script>
 import { Sortable, AutoScroll } from 'sortablejs/modular/sortable.core.esm.js'
 import boardColumn from '@/components/column'
 import cardModal from '@/components/modals/card'
+import columnRemoveModal from '@/components/modals/remove-column'
 import addForm from '@/components/add-form'
 
 Sortable.mount(new AutoScroll())
@@ -39,6 +41,7 @@ export default {
   components: {
     boardColumn,
     cardModal,
+    columnRemoveModal,
     addForm
   },
   head () {
@@ -55,7 +58,10 @@ export default {
 
       // column creation
       columnCreationOpened: false,
-      columnTitle: ''
+      columnTitle: '',
+
+      // Column to remove
+      activeColumn: {}
     }
   },
   watch: {
@@ -69,18 +75,28 @@ export default {
     },
     createColumn () {
       this.$store.dispatch('api/createColumn', {
-        board: this.board,
+        board: this.board._id,
         data: {
           title: this.columnTitle
         }
       }).then(res => {
-        console.log('res', res)
         this.board.columns.push(res)
         this.columnTitle = ''
       })
     },
-    onColumnRemove (id) {
+    onColumnUpdate (column) {
+      const target = this.board.columns.find(i => i._id === column._id)
+      Object.assign(target, column)
+    },
+    onColumnRemoveRequest (id) {
+      this.activeColumn = this.board.columns.find(i => i._id === id)
+      this.openModal('column_remove')
+    },
+    async onColumnRemove (id = this.activeColumn._id) {
+      await this.$store.dispatch('api/removeColumn', id)
       this.board.columns = this.board.columns.filter(i => i._id !== id)
+      this.activeColumn = {}
+      this.closeModal('column_remove')
     },
     openCard (id) {
       this.$store.dispatch('changeActiveCard', id)

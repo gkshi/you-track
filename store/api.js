@@ -5,7 +5,7 @@ export const actions = {
   getUser () {
     return API.getUser()
   },
-  createUser ({ dispatch }, data) {
+  createUser (context, data) {
     return API.createUser(data)
   },
 
@@ -13,13 +13,13 @@ export const actions = {
   getBoards () {
     return API.getBoards()
   },
-  getBoard ({ dispatch }, alias) {
+  getBoard (context, alias) {
     return API.getBoard(alias)
   },
-  createBoard ({ dispatch }, data) {
+  createBoard (context, data) {
     return API.createBoard(data)
   },
-  updateBoard ({ dispatch }, payload) {
+  updateBoard (context, payload) {
     return API.updateBoard(payload)
   },
   removeBoard ({ dispatch }, id) {
@@ -27,19 +27,28 @@ export const actions = {
   },
 
   // columns
-  createColumn ({ dispatch }, payload) {
+  createColumn (context, payload) {
     return API.createColumn(payload.board, payload.data)
   },
-  removeColumn ({ dispatch }, payload) {
-    return API.removeColumn(payload)
+  updateColumn (context, payload) {
+    return API.updateColumn(payload)
+  },
+  removeColumn (context, id) {
+    return API.removeColumn(id)
   },
 
   // cards
-  createCard ({ dispatch }, payload) {
-    return API.createCard(payload.column, payload.data)
+  createCard (context, data) {
+    return API.createCard(data)
   },
-  getCard ({ dispatch }, id) {
+  getCard (payload, id) {
     return API.getCard(id)
+  },
+  moveCard (context, payload) {
+    return API.moveCard(payload)
+  },
+  removeCard (context, id) {
+    return API.removeCard(id)
   }
 }
 

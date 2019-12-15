@@ -1,18 +1,19 @@
 <template lang="pug">
-  .column-component
+  .column-component(:data-id="column._id")
     .column-original.flex.column
       .header.flex.a-center.j-between.shrink
-        div {{ data.title }}
+        div {{ column.title }}
         contextMenu
           a(href="#" @click.prevent) Rename
           a(href="#" @click.prevent="tryToRemoveColumn") Remove
+
       .scroll-parent.grow(ref="scrollParent")
-        .cards(ref="cards" :class="{ empty: !data.cards.length }")
-          boardCard.card(
-            v-for="card in data.cards"
-            :data="card"
-            @remove="onCardRemove"
-            :key="card._id")
+        cardList(
+          :data="column.cards"
+          :column="column._id"
+          @order-update="onOrderUpdate"
+          @add="onCardAdd")
+
       .footer.shrink
         commonButton.add-button(
           v-if="!cardCreationOpened"
@@ -26,52 +27,38 @@
           placeholder="Enter a title for this card..."
           @submit="createCard"
           @close="closeCardCreation") Add card
-
-    removeColumnModal(
-      :id="`remove_column_${data._id}`"
-      :data="data"
-      @submit="removeColumn")
 </template>
 
 <script>
-import { Sortable, AutoScroll } from 'sortablejs/modular/sortable.core.esm.js'
 import contextMenu from '@/components/context-menu'
-import boardCard from '@/components/card'
+import cardList from './card-list'
 import addForm from '@/components/add-form'
-import removeColumnModal from '@/components/modals/remove-column'
-
-Sortable.mount(new AutoScroll())
 
 export default {
   name: 'column-component',
   components: {
     contextMenu,
-    boardCard,
-    addForm,
-    removeColumnModal
+    cardList,
+    addForm
   },
   props: {
     data: {
-      type: Object,
-      required: true
-    },
-    board: {
       type: Object,
       required: true
     }
   },
   data () {
     return {
-      sortable: null,
+      // Component local data
       cardCreationOpened: false,
+
+      // Column data
+      column: this.data,
+
+      // Data for card creation
       card: {
         title: ''
       }
-    }
-  },
-  watch: {
-    cardCreationOpened () {
-      this.card.title = ''
     }
   },
   methods: {
@@ -81,105 +68,43 @@ export default {
     closeCardCreation () {
       this.cardCreationOpened = false
     },
-    scrollColumn () {
+    scrollListToBottom () {
       this.$nextTick(() => {
         this.$refs.scrollParent.scrollTop = this.$refs.scrollParent.scrollHeight
       })
     },
-    beforeDragStart () {
-      this.$root.$emit('keyup-esc')
+    onOrderUpdate (order) {
+      this.column.order = order
+      this.column.cards = this.column.cards.filter(i => this.column.order.includes(i._id))
+    },
+    onCardAdd (card) {
+      const ordered = []
+      this.column.order.forEach(i => {
+        if (card._id === i) {
+          ordered.push(card)
+        } else {
+          ordered.push(this.column.cards.find(j => j._id === i))
+        }
+      })
+      this.column.cards = ordered
     },
     createCard () {
       this.$store.dispatch('api/createCard', {
-        column: this.data._id,
-        data: {
-          title: this.card.title
-        }
+        title: this.card.title,
+        column: this.column._id
       }).then(res => {
-        this.data.cards.push(res)
+        this.column.cards.push(res)
         this.card.title = ''
-        this.scrollColumn()
+        this.scrollListToBottom()
       })
-    },
-    moveCard (id, to) {
-      console.log('moveCard', id, 'to', to)
-      // const card = await this.$store.dispatch('api/moveCard', {
-      //   id
-      // })
-    },
-    async updateColumnOrder (order) {
-      const column = await this.$store.dispatch('api/updateColumn', {
-        id: this.data._id,
-        data: { order }
-      })
-      this.$emit('update', column)
     },
     tryToRemoveColumn () {
-      if (this.data.cards.length) {
-        this.openModal(`remove_column_${this.data._id}`)
+      if (this.column.cards.length) {
+        this.$emit('remove-request', this.column._id)
       } else {
-        this.removeColumn()
+        this.$emit('remove', this.column._id)
       }
-    },
-    removeColumn () {
-      this.$store.dispatch('api/removeColumn', {
-        board: this.board,
-        id: this.data._id
-      }).then(() => {
-        this.$emit('remove', this.data._id)
-      })
-    },
-    onCardRemove (card) {
-      this.data.cards = this.data.cards.filter(i => i._id !== card)
-    },
-    onDragStart () {
-      document.body.classList.add('drag-mode')
-    },
-    onDragEnd () {
-      document.body.classList.remove('drag-mode')
     }
-  },
-  mounted () {
-    // Sortable init
-    this.sortable = new Sortable(this.$refs.cards, {
-      group: 'cards',
-      store: {
-        get: () => {
-          // return []
-          return this.data.cards
-        },
-        set: sortable => {
-          const cardIds = this.data.cards.map(i => i._id)
-          if (sortable.toArray().length !== cardIds.length) {
-            // if card moved to other column
-            // update card
-            // update both columns order
-            console.log('Moving between columns detected.')
-            console.log('Need to update card.')
-            console.log('Need to update both columns order.')
-            this.moveCard()
-            this.updateColumnOrder(sortable.toArray())
-          } else if (JSON.stringify(sortable.toArray()) !== JSON.stringify(cardIds)) {
-            // if order has changed, update column order
-            console.log('Card order changing detected.')
-            console.log('Need to update column order.')
-            this.updateColumnOrder(sortable.toArray())
-          }
-        }
-      },
-      handle: '.card',
-      direction: 'vertical',
-      scroll: true,
-      scrollSensitivity: 100,
-      scrollSpeed: 12,
-      bubbleScroll: true,
-      forceFallback: true,
-      fallbackTolerance: 10,
-      animation: 150,
-      onChoose: this.beforeDragStart,
-      onStart: this.onDragStart,
-      onEnd: this.onDragEnd
-    })
   }
 }
 </script>

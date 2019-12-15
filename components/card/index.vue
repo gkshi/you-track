@@ -39,8 +39,6 @@ export default {
     remove () {
       this.$store.dispatch('api/removeCard', this.data._id).then(() => {
         this.$emit('remove', this.data._id)
-      }).catch(err => {
-        console.warn(err)
       })
     }
   }

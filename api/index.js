@@ -59,37 +59,25 @@ export default {
   },
 
   createColumn (board, data) {
-    return new Promise((resolve, reject) => {
-      // create column
-      this.do('POST', `/boards/${board._id}/columns`, data).then(res => {
-        resolve(res)
-      }).catch(err => {
-        reject(err)
-      })
-    })
+    return this.do('POST', '/columns', { board, data })
   },
-  removeColumn (payload) {
-    return new Promise(async (resolve, reject) => {
-      // remove column
-      await this.do('DELETE', `/columns/${payload.id}`)
-      // update columns order in board
-      await this.updateBoard({
-        board: payload.board._id,
-        data: {
-          order: [...payload.board.order].filter(i => i !== payload.id)
-        }
-      }).then(() => {
-        resolve()
-      }).catch(err => {
-        reject(err)
-      })
-    })
+  updateColumn (payload) {
+    return this.do('PUT', `/columns/${payload.id}`, payload.data)
+  },
+  removeColumn (id) {
+    return this.do('DELETE', `/columns/${id}`)
   },
 
   getCard (id) {
     return this.do('GET', `/cards/${id}`)
   },
-  createCard (column, data) {
-    return this.do('POST', `/columns/${column}/cards`, data)
+  createCard (data) {
+    return this.do('POST', '/cards', data)
+  },
+  moveCard (payload) {
+    return this.do('POST', '/cards/move', payload)
+  },
+  removeCard (id) {
+    return this.do('DELETE', `/cards/${id}`)
   }
 }
