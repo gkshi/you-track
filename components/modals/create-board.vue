@@ -34,12 +34,19 @@ export default {
     create () {
       this.$store.dispatch('api/createBoard', this.board).then(res => {
         this.$emit('success', res)
-      }).catch(err => {
-        console.warn(err)
-        this.$emit('error', err)
+        this.reset()
+      }).catch(error => {
+        this.$store.dispatch('showMessage', {
+          type: 'error',
+          error
+        })
+        this.$emit('error', error)
       }).then(() => {
         this.closeModal('create_board')
       })
+    },
+    reset () {
+      Object.assign(this.board, this.$options.data().board)
     }
   }
 }

@@ -9,7 +9,10 @@ export const state = () => ({
   user: {},
   modals: [],
   activeBoard: null,
-  activeCard: {}
+  activeCard: {},
+
+  // information messages, network status, api errors
+  messages: []
 })
 
 export const actions = {
@@ -49,6 +52,11 @@ export const actions = {
       console.warn('changeActiveCard err', err)
       commit('ACTIVE_CARD_UPDATE', {})
     })
+  },
+
+  showMessage ({ commit }, data) {
+    data.id = Math.random().toFixed(7).slice(2)
+    commit('MESSAGES_ADD', data)
   }
 }
 
@@ -72,5 +80,9 @@ export const mutations = {
   },
   ACTIVE_CARD_UPDATE (state, card = {}) {
     state.activeCard = card
+  },
+
+  MESSAGES_ADD (state, message) {
+    state.messages.push(message)
   }
 }

@@ -3,14 +3,17 @@
     vHeader
     main.grow
       nuxt
+    vMessages
 </template>
 
 <script>
 import vHeader from '@/components/header'
+import vMessages from '@/components/messages'
 
 export default {
   components: {
-    vHeader
+    vHeader,
+    vMessages
   },
   methods: {
     watchKeypress (evt) {
