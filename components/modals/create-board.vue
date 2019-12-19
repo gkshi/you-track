@@ -9,7 +9,7 @@
       .row
         commonTextarea(v-model="board.description" placeholder="Description")
     .buttons(slot="actions")
-      commonButton(native="submit" form="create_board_form" :disabled="!board.title || !board.alias") Create
+      commonButton(native="submit" form="create_board_form" :disabled="!board.validation") Create
       commonButton(type="light" @click="closeModal('create_board')") Cancel
 </template>
 
@@ -18,11 +18,7 @@ export default {
   name: 'create-board-modal',
   data () {
     return {
-      board: {
-        title: '',
-        alias: '',
-        description: ''
-      }
+      board: this.$models.create('board')
     }
   },
   methods: {

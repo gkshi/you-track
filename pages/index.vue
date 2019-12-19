@@ -53,7 +53,10 @@ export default {
   },
   created () {
     this.$store.dispatch('api/getBoards').then(res => {
-      this.boards = res
+      res.forEach(item => {
+        const board = this.$models.create('board', item)
+        this.boards.push(board)
+      })
     })
   }
 }
