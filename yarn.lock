@@ -6476,10 +6476,10 @@ number-is-nan@^1.0.0:
   resolved "https://registry.yarnpkg.com/number-is-nan/-/number-is-nan-1.0.1.tgz#097b602b53422a522c1afb8790318336941a011d"
   integrity sha1-CXtgK1NCKlIsGvuHkDGDNpQaAR0=
 
-nuxt-models@^0.0.1:
-  version "0.0.1"
-  resolved "https://registry.yarnpkg.com/nuxt-models/-/nuxt-models-0.0.1.tgz#de8d5f3ca4858bf8f6085e22a46dcce6a82f5b5d"
-  integrity sha512-D15bA8BlydF9WxqMUV4O/MPloqLDpk0yK9EjrK7aroklKigMTOzjDfFFLuoPym8RQFRiTMMnXKX27EITR0S4sw==
+nuxt-models@^0.0.2:
+  version "0.0.2"
+  resolved "https://registry.yarnpkg.com/nuxt-models/-/nuxt-models-0.0.2.tgz#ff59d15581cf0c73dc5d7abbf17ed8abcc63b698"
+  integrity sha512-6+LXHEPllUSZs8gJmlgczzn6X0MnAw3QT2mO3vuUEuI5sPuO02SN0jexDUZedy1w12DAtIYMIB6X9gPPH1e79g==
 
 nuxt@^2.10.2:
   version "2.10.2"

@@ -1,5 +1,13 @@
+/**
+ * Information message, network status, api errors
+ */
+
 export default {
-  // type of message
+  id: {
+    type: String,
+    default: () => Math.random().toFixed(7).slice(2)
+  },
+
   type: {
     type: String,
     default: 'info',
@@ -7,15 +15,15 @@ export default {
     required: true
   },
 
-  // error object (if type === 'error')
   error: {
     type: Object,
-    default: null
+    default: null,
+    validation: value => typeof value === 'object' || value === null
   },
 
-  // data field (if type !== 'error')
   data: {
     type: Object,
-    default: null
+    default: null,
+    validation: value => typeof value === 'object' || value === null
   }
 }

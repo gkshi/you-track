@@ -55,8 +55,11 @@ export const actions = {
   },
 
   showMessage ({ commit }, data) {
-    data.id = Math.random().toFixed(7).slice(2)
-    commit('MESSAGES_ADD', data)
+    const message = this.app.$models.create('message', data)
+    commit('MESSAGES_ADD', message)
+  },
+  hideMessage ({ commit }, id) {
+    commit('MESSAGES_REMOVE', id)
   }
 }
 
@@ -84,5 +87,8 @@ export const mutations = {
 
   MESSAGES_ADD (state, message) {
     state.messages.push(message)
+  },
+  MESSAGES_REMOVE (state, id) {
+    state.messages = state.messages.filter(i => i.id !== id)
   }
 }

@@ -1,6 +1,6 @@
 <template lang="pug">
   .context-menu-component.inline-flex.shrink(@click="toggle" v-outside="close")
-    .button.flex.center(:class="{ active: isOpened }")
+    .button.flex.center(ref="dots" :class="{ active: isOpened }")
       iconDots
     transition
       .list(v-if="isOpened")
@@ -22,6 +22,7 @@ export default {
   },
   watch: {
     isOpened () {
+      this.setPosition()
       this.$emit(this.isOpened ? 'open' : 'close')
     }
   },
@@ -31,6 +32,16 @@ export default {
     },
     close () {
       this.isOpened = false
+    },
+    setPosition () {
+      if (this.isOpened) {
+        this.$nextTick(() => {
+          const list = this.$el.querySelector('.list')
+          const dotsRect = this.$refs.dots.getBoundingClientRect()
+          list.style.top = `${dotsRect.height + dotsRect.y + 10}px`
+          list.style.left = `${dotsRect.x}px`
+        })
+      }
     }
   },
   mounted () {
@@ -76,10 +87,8 @@ export default {
       }
     }
     .list {
-      position: absolute;
-      top: calc(100% + 10px);
-      right: 0;
-      z-index: 100;
+      position: fixed;
+      z-index: 1000;
       background: $color-white;
       border-radius: $border-radius-default;
       transition: $transition-context-menu;
