@@ -51,7 +51,7 @@ export default {
   },
   data () {
     return {
-      board: {},
+      board: this.$models.create('board'),
 
       // sortable
       sortable: null,
@@ -61,7 +61,7 @@ export default {
       columnTitle: '',
 
       // Column to remove
-      activeColumn: {}
+      activeColumn: this.$models.create('column')
     }
   },
   watch: {
@@ -80,22 +80,23 @@ export default {
           title: this.columnTitle
         }
       }).then(res => {
-        this.board.columns.push(res)
+        const column = this.$models.create('column', res)
+        this.board.columns.push(column)
         this.columnTitle = ''
       })
     },
     onColumnUpdate (column) {
       const target = this.board.columns.find(i => i._id === column._id)
-      Object.assign(target, column)
+      target.update(column)
     },
     onColumnRemoveRequest (id) {
-      this.activeColumn = this.board.columns.find(i => i._id === id)
+      this.activeColumn.update(this.board.columns.find(i => i._id === id))
       this.openModal('column_remove')
     },
     async onColumnRemove (id = this.activeColumn._id) {
       await this.$store.dispatch('api/removeColumn', id)
       this.board.columns = this.board.columns.filter(i => i._id !== id)
-      this.activeColumn = {}
+      this.activeColumn.reset()
       this.closeModal('column_remove')
     },
     openCard (id) {
@@ -151,8 +152,9 @@ export default {
   },
   mounted () {
     this.$store.dispatch('api/getBoard', this.$route.params.alias).then(res => {
-      this.board = { ...this.board, ...res }
-      this.$store.dispatch('changeActiveBoard', res.title)
+      this.board.update(res)
+      // this.board.columns = this.board.columns.map(i => this.$models.create('column', i))
+      this.$store.dispatch('changeActiveBoard', this.board.title)
       this.initSortable()
       if (!this.board.columns.length) {
         this.toggleColumnCreation()

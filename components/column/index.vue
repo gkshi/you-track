@@ -12,7 +12,8 @@
           :data="column.cards"
           :column="column._id"
           @order-update="onOrderUpdate"
-          @add="onCardAdd")
+          @add="onCardAdd"
+          @remove="onCardRemove")
 
       .footer.shrink
         commonButton.add-button(
@@ -22,7 +23,7 @@
           @click.prevent="toggleCardCreation") Add card
         addForm(
           v-else
-          v-model="card.title"
+          v-model="newCard.title"
           exception="add-button"
           placeholder="Enter a title for this card..."
           @submit="createCard"
@@ -53,12 +54,10 @@ export default {
       cardCreationOpened: false,
 
       // Column data
-      column: this.data,
+      column: this.$models.create('column', this.data),
 
       // Data for card creation
-      card: {
-        title: ''
-      }
+      newCard: this.$models.create('card')
     }
   },
   methods: {
@@ -88,13 +87,17 @@ export default {
       })
       this.column.cards = ordered
     },
+    onCardRemove (id) {
+      this.column.cards = this.column.cards.filter(i => i._id !== id)
+    },
     createCard () {
       this.$store.dispatch('api/createCard', {
-        title: this.card.title,
+        title: this.newCard.title,
         column: this.column._id
       }).then(res => {
-        this.column.cards.push(res)
-        this.card.title = ''
+        const card = this.$models.create('card', res)
+        this.column.cards.push(card)
+        this.newCard.reset()
         this.scrollListToBottom()
       })
     },
@@ -105,6 +108,9 @@ export default {
         this.$emit('remove', this.column._id)
       }
     }
+  },
+  created () {
+    this.column.cards = this.column.cards.map(i => this.$models.create('card', i))
   }
 }
 </script>

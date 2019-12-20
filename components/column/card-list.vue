@@ -4,7 +4,8 @@
       boardCard.card(
         v-for="card in data"
         :data="card"
-        :key="card._id")
+        :key="card._id"
+        @remove="$emit('remove', card._id)")
 </template>
 
 <script>
@@ -33,8 +34,6 @@ export default {
   data () {
     return {
       sortable: null,
-      // cards: this.data,
-
       lastCardAdded: null
     }
   },

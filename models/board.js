@@ -14,5 +14,11 @@ export default {
     required: true
   },
 
-  description: String
+  description: String,
+
+  // Column list
+  columns: Array,
+
+  // Column order in board
+  order: Array
 }

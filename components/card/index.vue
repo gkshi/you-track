@@ -85,7 +85,8 @@ export default {
     &.sortable-drag {
       transform: rotate(4deg);
     }
-    &[class*="sortable"] {
+    &[class*="sortable-ghost"],
+    &[class*="sortable-drag"] {
       .options {
         display: none;
       }
