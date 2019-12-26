@@ -1,5 +1,5 @@
 <template lang="pug">
-  .textarea-component(:class="{ 'textarea-component-error': error }")
+  .textarea-component(:class="[{ 'textarea-component-error': error }, `textarea-color-${color}`]")
     label(v-if="$slots.default" :for="localId")
       slot
     textarea(
@@ -21,6 +21,10 @@ export default {
   name: 'textarea-component',
   props: {
     id: String,
+    color: {
+      type: String,
+      default: 'default'
+    },
     value: [String, Number],
     error: [String, Boolean],
     placeholder: String,
@@ -62,13 +66,8 @@ export default {
       padding: 11px 20px 12px;
       border: none;
       border-radius: $border-radius-default;
-      box-shadow: $box-shadow-light;
       outline: none;
       transition: $transition-field;
-
-      &:focus {
-        box-shadow: $box-shadow-light-focus;
-      }
     }
   }
 </style>

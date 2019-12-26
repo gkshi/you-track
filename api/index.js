@@ -61,8 +61,8 @@ export default {
   createColumn (board, data) {
     return this.do('POST', '/columns', { board, data })
   },
-  updateColumn (payload) {
-    return this.do('PUT', `/columns/${payload.id}`, payload.data)
+  updateColumn (id, data) {
+    return this.do('PUT', `/columns/${id}`, data)
   },
   removeColumn (id) {
     return this.do('DELETE', `/columns/${id}`)

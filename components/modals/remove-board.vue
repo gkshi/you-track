@@ -1,5 +1,5 @@
 <template lang="pug">
-  commonModal.remove-column-modal(id="remove_board")
+  commonModal.remove-column-modal(id="remove_board" size="narrow")
     div(slot="title") Board deletion
     div Are you sure you want to delete this board?
     .buttons(slot="actions")

@@ -2,9 +2,9 @@
   .column-component(:data-id="column._id")
     .column-original.flex.column
       .header.flex.a-center.j-between.shrink
-        div {{ column.title }}
+        editableArea.title.grow(ref="title" :value="column.title" @change="onColumnTitleChange")
         contextMenu
-          a(href="#" @click.prevent) Rename
+          a(href="#" @click.prevent="rename") Rename
           a(href="#" @click.prevent="tryToRemoveColumn") Remove
 
       .scroll-parent.grow(ref="scrollParent")
@@ -25,13 +25,14 @@
           v-else
           v-model="newCard.title"
           exception="add-button"
-          placeholder="Enter a title for this card..."
+          placeholder="Enter a title for new card..."
           @submit="createCard"
           @close="closeCardCreation") Add card
 </template>
 
 <script>
 import contextMenu from '@/components/context-menu'
+import editableArea from '@/components/editable-area'
 import cardList from './card-list'
 import addForm from '@/components/add-form'
 
@@ -39,6 +40,7 @@ export default {
   name: 'column-component',
   components: {
     contextMenu,
+    editableArea,
     cardList,
     addForm
   },
@@ -70,6 +72,23 @@ export default {
     scrollListToBottom () {
       this.$nextTick(() => {
         this.$refs.scrollParent.scrollTop = this.$refs.scrollParent.scrollHeight
+      })
+    },
+    rename () {
+      this.$refs.title.changeMode('edit')
+    },
+    onColumnTitleChange (title) {
+      this.column.update({
+        title
+      })
+      this.$store.dispatch('api/updateColumn', {
+        id: this.column._id,
+        data: { title }
+      }).catch(error => {
+        this.$store.dispatch('showMessage', {
+          type: 'error',
+          error
+        })
       })
     },
     onOrderUpdate (order) {
@@ -151,8 +170,11 @@ export default {
     }
     .header {
       font-weight: $font-weight-bold;
-      padding: $padding $padding $padding 20px;
+      padding: 0 $padding 0 20px;
       cursor: pointer;
+    }
+    .title {
+      padding: 12px 0;
     }
     .cards {
       overflow-x: hidden;

@@ -1,7 +1,14 @@
 <template lang="pug">
   commonModal.card-modal(id="card" @close="onClose")
-    div card modal
-    div {{ activeCard.title }}
+    .h1 {{ activeCard.title }}
+
+    div
+      div Labels:
+      div labels
+
+    div
+      div Description:
+      div description
 </template>
 
 <script>

@@ -40,7 +40,7 @@ export default {
       user: state => state.user
     }),
     activePage () {
-      return this.activeBoard || 'Home page'
+      return this.activeBoard ? `${this.activeBoard} board` : 'Home page'
     }
   }
 }

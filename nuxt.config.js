@@ -40,7 +40,8 @@ module.exports = {
   ** Plugins to load before mounting the App
   */
   plugins: [
-    'node_modules/nuxt-models',
+    // 'node_modules/nuxt-models',
+    '@/plugins/nuxt-models',
     '@/plugins/common-components',
     '@/plugins/modal',
     '@/directives/outside'

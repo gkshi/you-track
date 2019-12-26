@@ -48,7 +48,6 @@ export default {
 <style lang="scss" scoped>
   .card-component {
     position: relative;
-    padding: 10px 12px 20px;
     border-radius: $border-radius-default;
     background: $color-white;
     box-shadow: $box-shadow-light;
@@ -57,6 +56,10 @@ export default {
     &:hover {
       background: darken($color-white, 1%);
       box-shadow: $box-shadow-light-hover;
+    }
+
+    .intro {
+      padding: 10px 12px 20px;
     }
 
     .options {

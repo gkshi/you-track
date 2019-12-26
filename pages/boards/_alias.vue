@@ -18,7 +18,7 @@
         addForm(
           v-else
           v-model="columnTitle"
-          placeholder="Enter a title for this column..."
+          placeholder="Enter a title for new column..."
           exception="add-column-link"
           @submit="createColumn"
           @close="toggleColumnCreation") Add column
@@ -46,7 +46,7 @@ export default {
   },
   head () {
     return {
-      title: `${this.board.title} - YouTrack`
+      title: `${this.board.title} board - YouTrack`
     }
   },
   data () {
@@ -133,6 +133,7 @@ export default {
         animation: 150,
         handle: '.column .header',
         filter: '.non-draggable',
+        preventOnFilter: false,
         direction: 'horizontal',
         onChoose: this.beforeDragStart
       })

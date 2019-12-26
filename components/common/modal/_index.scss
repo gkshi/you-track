@@ -25,7 +25,6 @@ $transition-modal: opacity 0.25s ease, transform 0.25s ease;
 
   dialog {
     position: relative;
-    width: 600px;
     max-width: 100%;
     max-height: 100%;
     border: none;
@@ -50,5 +49,18 @@ $transition-modal: opacity 0.25s ease, transform 0.25s ease;
   }
   &.modal-leave-active {
     opacity: 0;
+  }
+
+  &.modal-size {
+    &-default {
+      dialog {
+        width: 760px;
+      }
+    }
+    &-narrow {
+      dialog {
+        width: 400px;
+      }
+    }
   }
 }

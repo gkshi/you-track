@@ -31,7 +31,7 @@ export const actions = {
     return API.createColumn(payload.board, payload.data)
   },
   updateColumn (context, payload) {
-    return API.updateColumn(payload)
+    return API.updateColumn(payload.id, payload.data)
   },
   removeColumn (context, id) {
     return API.removeColumn(id)

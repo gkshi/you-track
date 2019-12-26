@@ -67,6 +67,7 @@ export default {
 <style lang="scss" scoped>
   .context-menu-component {
     position: relative;
+    font-weight: $font-weight-normal;
     user-select: none;
     .button {
       width: 24px;

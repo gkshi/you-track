@@ -1,13 +1,13 @@
 <template lang="pug">
-  commonModal.create-board-modal(id="create_board" @open="focus")
+  commonModal.create-board-modal(id="create_board" size="narrow" @open="focus")
     template(slot="title") Board creation
     form.form(id="create_board_form" @submit.prevent="create")
       .row
-        commonInput(ref="firstField" v-model="board.title" placeholder="Title")
+        commonInput(color="gray" ref="firstField" v-model="board.title" placeholder="Title")
       .row
-        commonInput(v-model="board.alias" placeholder="Alias")
+        commonInput(color="gray" v-model="board.alias" placeholder="Alias")
       .row
-        commonTextarea(v-model="board.description" placeholder="Description")
+        commonTextarea(color="gray" v-model="board.description" placeholder="Description")
     .buttons(slot="actions")
       commonButton(native="submit" form="create_board_form" :disabled="!board.validation") Create
       commonButton(type="light" @click="closeModal('create_board')") Cancel

@@ -1,5 +1,5 @@
 <template lang="pug">
-  .input-component(:class="{ 'input-component-error': error }")
+  .input-component(:class="[{ 'input-component-error': error }, `input-color-${color}`]")
     label(v-if="$slots.default" :for="localId")
       slot
     input(
@@ -26,6 +26,10 @@ export default {
     type: {
       type: String,
       default: 'text'
+    },
+    color: {
+      type: String,
+      default: 'default'
     },
     value: [String, Number],
     error: [String, Boolean],
@@ -70,13 +74,8 @@ export default {
       padding: 11px 20px 12px;
       border: none;
       border-radius: $border-radius-default;
-      box-shadow: $box-shadow-light;
       outline: none;
       transition: $transition-field;
-
-      &:focus {
-        box-shadow: $box-shadow-light-focus;
-      }
     }
   }
 </style>

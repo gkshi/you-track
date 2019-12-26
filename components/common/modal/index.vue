@@ -1,9 +1,9 @@
 <template lang="pug">
   transition(name="modal")
-    .modal-component(v-if="show" @click.self="close")
+    .modal-component(v-if="show" :class="`modal-size-${size}`" @click.self="close")
       dialog(:open="show")
-        .close(@click="close")
-          div X
+        .close.flex.center(@click="close")
+          iconCross
 
         .title.h2(v-if="$slots.title")
           slot(name="title")
@@ -17,13 +17,21 @@
 
 <script>
 import { mapState } from 'vuex'
+import iconCross from '@/components/icons/cross'
 
 export default {
   name: 'modal-component',
+  components: {
+    iconCross
+  },
   props: {
     id: {
       type: String,
       required: true
+    },
+    size: {
+      type: String,
+      default: 'default'
     }
   },
   computed: {
@@ -56,6 +64,18 @@ export default {
       border-radius: $border-radius-default;
       box-shadow: $box-shadow-deep;
       user-select: text;
+      .close {
+        width: 24px;
+        height: 24px;
+        opacity: .5;
+        transition: $transition-default;
+        &:hover {
+          opacity: 1;
+        }
+        svg {
+          width: 12px;
+        }
+      }
       .title {
         margin-bottom: 10px;
       }

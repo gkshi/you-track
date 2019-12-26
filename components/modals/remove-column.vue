@@ -1,8 +1,7 @@
 <template lang="pug">
-  commonModal.remove-column-modal(:id="id")
+  commonModal.remove-column-modal(:id="id" size="narrow")
     div(slot="title") Column deletion
-    div Column {{ data.title }} includes one or more cards.
-    div Are you sure you want to delete this column with all cards inside?
+    div Warning: all cards in the column will be deleted.
     .buttons(slot="actions")
       commonButton(@click="$emit('submit')") Delete
       commonButton(type="light" @click="closeModal(id)") Cancel
