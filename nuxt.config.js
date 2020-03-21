@@ -1,6 +1,14 @@
+require('dotenv').config()
 
 module.exports = {
   mode: 'spa', // universal, spa
+  /*
+  ** Environment variables
+  */
+  env: {
+    DB_USERNAME: process.env.DB_USERNAME,
+    DB_PASSWORD: process.env.DB_PASSWORD
+  },
   /*
   ** Headers of the page
   */

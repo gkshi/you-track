@@ -63,7 +63,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-  .index {
+  .page.index {
     .boards {
       margin: 10px auto 30px;
     }

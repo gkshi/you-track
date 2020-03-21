@@ -9,7 +9,7 @@ const ObjectId = require('mongodb').ObjectId
  */
 let db
 const dbName = 'youtrack'
-const url = 'mongodb://localhost:27017/'
+const url = `mongodb+srv://${process.env.DB_USERNAME}:${process.env.DB_PASSWORD}@cluster0-pampp.mongodb.net/test?retryWrites=true&w=majority`
 const mongoClient = new MongoClient(url, {
   useUnifiedTopology: true,
   useNewUrlParser: true
