@@ -58,6 +58,10 @@ export default {
         this.boards.push(board)
       })
     })
+  },
+  mounted () {
+    console.log('process.env.DB_USERNAME', process.env.DB_USERNAME)
+    console.log('process.env.DB_PASSWORD', process.env.DB_PASSWORD)
   }
 }
 </script>
