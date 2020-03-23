@@ -1,6 +1,6 @@
 import axios from 'axios'
 
-const urlPrefix = '/api'
+const urlPrefix = '/server'
 
 export default {
 

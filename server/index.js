@@ -18,7 +18,7 @@ app.use(express.static(__dirname + '/public'))
 /**
  * Routes
  */
-app.use('/api', require('./router'))
+app.use('/server', require('./router'))
 
 async function start () {
   // Init Nuxt.js
