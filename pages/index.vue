@@ -62,6 +62,9 @@ export default {
   mounted () {
     console.log('db_username', process.env.db_username)
     console.log('db_password', process.env.db_password)
+    console.log('secret1', process.env.secret1)
+    console.log('secret2', process.env.secret2)
+    console.log('secret3', process.env.secret3)
   }
 }
 </script>

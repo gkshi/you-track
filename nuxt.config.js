@@ -5,9 +5,12 @@ module.exports = {
   /*
   ** Environment variables
   */
-  env: {
-    DB_USERNAME: process.env.DB_USERNAME,
-    DB_PASSWORD: process.env.DB_PASSWORD
+  env: process.env.NODE_ENV !== 'production' ? {
+    db_username: process.env.db_username,
+    db_password: process.env.db_password,
+    secret2: 'value2'
+  } : {
+    secret3: 'value3'
   },
   /*
   ** Headers of the page
