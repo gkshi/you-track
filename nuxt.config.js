@@ -1,10 +1,16 @@
-// require('dotenv').config()
+require('dotenv').config()
 
 module.exports = {
   mode: 'spa', // universal, spa
   /*
   ** Environment variables
   */
+  env: {
+    db_username: process.env.db_username,
+    db_password: process.env.db_password,
+    secret1: process.env.secret1,
+    secret3: 'value3'
+  },
   // env: process.env.NODE_ENV !== 'production' ? {
   //   db_username: process.env.db_username,
   //   db_password: process.env.db_password,
