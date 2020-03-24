@@ -25,8 +25,8 @@ export default {
     }
   },
   mounted () {
-    console.log('DB_USERNAME', process.env.DB_USERNAME)
-    console.log('DB_PASSWORD', process.env.DB_PASSWORD)
+    console.log('db_username', process.env.db_username)
+    console.log('db_password', process.env.db_password)
   }
 }
 </script>
