@@ -20,6 +20,9 @@
       "pre-commit": "lint-staged"
     }
   },
+  "engines": {
+    "node": "12.x"
+  },
   "dependencies": {
     "@nuxtjs/axios": "^5.9.5",
     "body-parser": "^1.19.0",
