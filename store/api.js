@@ -1,6 +1,10 @@
 import API from '@/api'
 
 export const actions = {
+  check () {
+    return API.check()
+  },
+
   // users
   getUser () {
     return API.getUser()

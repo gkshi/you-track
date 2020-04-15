@@ -1,6 +1,6 @@
 const express = require('express')
 const router = express.Router()
-
+const API_VERSION = '0.0.1'
 const MongoClient = require('mongodb').MongoClient
 const ObjectId = require('mongodb').ObjectId
 
@@ -21,6 +21,15 @@ mongoClient.connect((err, client) => {
   }
   db = client.db(dbName)
   // app.listen(3000)
+})
+
+/**
+ * API ping
+ */
+router.get('/', (request, response) => {
+  response.send({
+    version: API_VERSION
+  })
 })
 
 /**

@@ -35,6 +35,10 @@ export default {
     })
   },
 
+  check () {
+    return this.do('GET', '/')
+  },
+
   getUser () {
     return this.do('GET', '/user')
   },

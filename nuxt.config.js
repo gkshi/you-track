@@ -3,6 +3,14 @@ require('dotenv').config()
 module.exports = {
   mode: 'spa', // universal, spa
   /*
+  ** Server config
+  */
+  // server: {
+  //   port: process.env.NODE_ENV !== 'production' ? 80 : 3000, // default: 3000
+  //   host: process.env.NODE_ENV !== 'production' ? '167.71.75.50' : 'localhost', // default: localhost,
+  //   timing: false
+  // },
+  /*
   ** Environment variables
   */
   env: {
