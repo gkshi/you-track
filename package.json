@@ -24,14 +24,15 @@
     "node": "12.x"
   },
   "dependencies": {
-    "@nuxtjs/axios": "^5.9.5",
+    "@nuxtjs/axios": "^5.9.7",
     "body-parser": "^1.19.0",
     "cross-env": "^7.0.2",
     "express": "^4.17.1",
-    "mongodb": "^3.5.5",
-    "nuxt": "^2.12.0"
+    "mongodb": "^3.5.6",
+    "nuxt": "^2.12.2"
   },
   "devDependencies": {
+    "@now/node": "^1.5.1",
     "@nuxtjs/dotenv": "^1.4.1",
     "@nuxtjs/eslint-config": "^2.0.2",
     "@nuxtjs/eslint-module": "^1.1.0",
@@ -39,10 +40,10 @@
     "babel-eslint": "^10.1.0",
     "eslint": "^6.8.0",
     "eslint-plugin-nuxt": ">=0.5.2",
-    "husky": "^4.2.3",
-    "lint-staged": "^10.0.9",
+    "husky": "^4.2.5",
+    "lint-staged": "^10.1.3",
     "node-sass": "^4.13.1",
-    "nodemon": "^2.0.2",
+    "nodemon": "^2.0.3",
     "nuxt-models": "^0.0.9",
     "pug": "^2.0.4",
     "pug-plain-loader": "^1.0.0",

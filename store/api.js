@@ -1,4 +1,4 @@
-import API from '@/api'
+import API from '@/common-api'
 
 export const actions = {
   check () {
