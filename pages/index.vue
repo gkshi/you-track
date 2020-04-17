@@ -60,8 +60,8 @@ export default {
     })
   },
   mounted () {
-    console.log('db_username', process.env.DB_USERNAME)
-    console.log('db_password', process.env.DB_PASSWORD)
+    console.log('DB_USERNAME', process.env.DB_USERNAME)
+    console.log('DB_PASSWORD', process.env.DB_PASSWORD)
     this.$store.dispatch('api/check')
   }
 }
