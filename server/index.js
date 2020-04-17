@@ -39,5 +39,6 @@ async function start () {
 
   // Listen the server
   app.listen(port, host)
+  console.log(host, port)
 }
 start()

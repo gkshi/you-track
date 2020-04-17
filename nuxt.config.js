@@ -5,17 +5,17 @@ module.exports = {
   /*
   ** Server config
   */
-  // server: {
-  //   port: process.env.NODE_ENV !== 'production' ? 80 : 3000, // default: 3000
-  //   host: process.env.NODE_ENV !== 'production' ? '167.71.75.50' : 'localhost', // default: localhost,
-  //   timing: false
-  // },
+  server: {
+    port: process.env.NODE_ENV === 'production' ? 80 : 3000, // default: 3000
+    host: process.env.NODE_ENV === 'production' ? '167.71.75.50' : 'localhost', // default: localhost,
+    timing: false
+  },
   /*
   ** Environment variables
   */
   env: {
-    db_username: process.env.db_username,
-    db_password: process.env.db_password,
+    DB_USERNAME: process.env.DB_USERNAME,
+    DB_PASSWORD: process.env.DB_PASSWORD,
     secret1: process.env.secret1,
     secret3: 'value3'
   },
