@@ -1,6 +1,6 @@
 {
   "name": "youtrack",
-  "version": "1.0.0",
+  "version": "0.0.1",
   "description": "Personal drag'n'drop task tracker",
   "author": "George Shinkarev <gkshi@ya.ru>",
   "private": true,
@@ -32,7 +32,6 @@
     "nuxt": "^2.12.2"
   },
   "devDependencies": {
-    "@now/node": "^1.5.1",
     "@nuxtjs/dotenv": "^1.4.1",
     "@nuxtjs/eslint-config": "^2.0.2",
     "@nuxtjs/eslint-module": "^1.1.0",

@@ -1,6 +1,6 @@
 const express = require('express')
 const router = express.Router()
-const API_VERSION = '0.0.1'
+const appVersion = require('../package.json').version
 const MongoClient = require('mongodb').MongoClient
 const ObjectId = require('mongodb').ObjectId
 
@@ -9,8 +9,10 @@ const ObjectId = require('mongodb').ObjectId
  */
 let db
 const dbName = 'youtrack'
-const url = `mongodb+srv://${process.env.DB_USERNAME}:${process.env.DB_PASSWORD}@cluster0-pampp.mongodb.net/test?retryWrites=true&w=majority`
-const mongoClient = new MongoClient(url, {
+const dbUrl = process.env.NODE_ENV === 'production'
+  ? `mongodb+srv://${process.env.DB_USERNAME}:${process.env.DB_PASSWORD}@cluster0-pampp.mongodb.net/test?retryWrites=true&w=majority`
+  : 'mongodb://localhost:27017'
+const mongoClient = new MongoClient(dbUrl, {
   useUnifiedTopology: true,
   useNewUrlParser: true
 })
@@ -28,7 +30,7 @@ mongoClient.connect((err, client) => {
  */
 router.get('/', (request, response) => {
   response.send({
-    version: API_VERSION
+    version: appVersion
   })
 })
 

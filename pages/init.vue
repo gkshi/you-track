@@ -23,13 +23,6 @@ export default {
         this.$router.push('/')
       })
     }
-  },
-  mounted () {
-    console.log('DB_USERNAME', process.env.DB_USERNAME)
-    console.log('DB_PASSWORD', process.env.DB_PASSWORD)
-    console.log('process.env.secret1', process.env.secret1)
-    console.log('process.env.secret3', process.env.secret3)
-    this.$store.dispatch('api/check')
   }
 }
 </script>
