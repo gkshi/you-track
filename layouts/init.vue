@@ -1,5 +1,5 @@
 <template lang="pug">
-  .layout.init.flex.column.center
+  .init.flex.column.center
     main
       nuxt
 </template>
@@ -11,7 +11,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-  .layout.init {
+  .init {
     height: 100vh;
   }
 </style>

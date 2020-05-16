@@ -19,7 +19,7 @@ module.exports = {
     'semi': ['error', 'never'],
     'space-before-function-paren': ['warn', 'always'],
     'vue/name-property-casing': ['warn', 'kebab-case'],
-    'no-console': 'off',
+    'no-console': ['warn', { allow: ['warn', 'error'] }],
     'vue/require-default-prop': 'off',
     'vue/order-in-components': 'off',
     'arrow-parens': ['warn', 'as-needed'],

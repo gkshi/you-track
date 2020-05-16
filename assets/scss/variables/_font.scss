@@ -1,18 +1,17 @@
-$font-family-default: 'Open Sans', Tahoma, Arial, sans-serif;
+$font-family-default: 'SF UI Display', Tahoma, Arial, sans-serif;
 $font-family-secondary: '';
 
 $font-size-default-value: 15; // for font size mixins in /assets/scss/mixins.scss
 
-$font-size-heading: 24px;
-$font-size-subheading: 19px;
+$font-size-heading: 17px;
 $font-size-default: #{$font-size-default-value}px;
 $font-size-small: 13px;
+$font-size-extrasmall: 11px;
 
-$line-height-heading: 33px;
-$line-height-subheading: 27px;
+$line-height-heading: 23px;
 $line-height-default: 20px;
-$line-height-small: 17px;
+$line-height-small: 15px;
+$line-height-extrasmall: 13px;
 
 $font-weight-normal: 400;
 $font-weight-semibold: 600;
-$font-weight-bold: 700;

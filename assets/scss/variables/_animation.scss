@@ -2,8 +2,5 @@ $duration: .2s;
 $function: ease;
 
 $transition-default: all $duration $function;
-$transition-button: background $duration $function, color $duration $function, box-shadow $duration $function;
-$transition-field: background $duration $function, box-shadow $duration $function;
-$transition-card: background $duration $function, box-shadow $duration $function;
-$transition-context-menu: opacity .1s ease, transform $duration $function;
-$transition-message: opacity $duration $function, transform $duration $function;
+$transition-button: $transition-default;
+$transition-card: box-shadow $duration $function;

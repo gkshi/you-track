@@ -21,14 +21,13 @@ module.exports = {
   ** Headers of the page
   */
   head: {
-    title: 'YouTrack - personal task tracker',
+    title: process.env.npm_package_name || '',
     meta: [
       { charset: 'utf-8' },
       { name: 'viewport', content: 'width=device-width, initial-scale=1' },
       { hid: 'description', name: 'description', content: process.env.npm_package_description || '' }
     ],
     link: [
-      { rel: 'stylesheet', href: 'https://fonts.googleapis.com/css?family=Open+Sans:400,600&display=swap&subset=cyrillic' },
       { rel: 'icon', type: 'image/png', sizes: '16x16', href: '/favicon-16x16.png' },
       { rel: 'icon', type: 'image/png', sizes: '32x32', href: '/favicon-32x32.png' }
     ]
@@ -43,7 +42,8 @@ module.exports = {
   styleResources: {
     scss: [
       '@/assets/scss/variables/_index.scss',
-      '@/assets/scss/_mixins.scss'
+      '@/assets/scss/_mixins.scss',
+      '@/assets/scss/_extends.scss'
     ]
   },
   /*
@@ -56,10 +56,9 @@ module.exports = {
   ** Plugins to load before mounting the App
   */
   plugins: [
-    // 'node_modules/nuxt-models',
-    '@/plugins/nuxt-models',
+    'node_modules/nuxt-models',
     '@/plugins/common-components',
-    '@/plugins/modal',
+    '@/mixins/modal',
     '@/directives/outside'
   ],
   /*
@@ -75,19 +74,21 @@ module.exports = {
   */
   modules: [
     // Doc: https://axios.nuxtjs.org/usage
-    '@nuxtjs/axios'
+    '@nuxtjs/axios',
+    // Doc: https://github.com/nuxt-community/dotenv-module
+    '@nuxtjs/dotenv'
   ],
+  /*
+  ** Router options
+  */
+  router: {
+    middleware: ['connection']
+  },
   /*
   ** Axios module configuration
   ** See https://axios.nuxtjs.org/options
   */
   axios: {
-  },
-  /*
-  ** Router options
-  */
-  router: {
-    middleware: ['auth']
   },
   /*
   ** Build configuration

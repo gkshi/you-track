@@ -1,46 +1,51 @@
 <template lang="pug">
-  header.header-component.shrink
-    .flex.a-center
-      nuxt-link.button.flex.center(to="/")
-        iconHome.icon
-      .delimiter
-      .grow
-        span {{ activePage }}
-      searchBar
-      .delimiter
-      .user.flex.a-center
-        .photo
-          img.object(v-if="user.photo" :src="user.photo")
-          .thumb.flex.center(v-else)
-            iconUser
-        .name {{ user.name }}
-      .delimiter
-      .button.flex.center
-        iconMoon.icon
+  header.header-component.flex.a-center
+    .wrapper.flex.a-center.j-between
+      .side.flex.a-center
+        .buttons
+          commonButton(type="transparent" size="icon" @click="toggleMenu")
+            iconMenu
+          commonButton(to="/" type="transparent" size="icon")
+            iconHome
+        h1 {{ pageTitle }}
+      .side.flex.a-center
+        searchBar
+        themeToggler
+        userBar
 </template>
 
 <script>
 import { mapState } from 'vuex'
-import searchBar from '@/components/search-bar'
+import iconMenu from '@/components/icons/menu'
 import iconHome from '@/components/icons/home'
-import iconUser from '@/components/icons/user'
-import iconMoon from '@/components/icons/moon'
+import searchBar from '@/components/search-bar'
+import themeToggler from '@/components/theme-toggler'
+import userBar from '@/components/user-bar'
 
 export default {
-  name: 'header-component',
   components: {
-    searchBar,
+    iconMenu,
     iconHome,
-    iconUser,
-    iconMoon
+    searchBar,
+    themeToggler,
+    userBar
+  },
+  data () {
+    return {
+      isMenuOpened: false
+    }
   },
   computed: {
     ...mapState({
-      activeBoard: state => state.activeBoard,
-      user: state => state.user
+      activeBoard: state => state.activeBoard
     }),
-    activePage () {
-      return this.activeBoard ? `${this.activeBoard} board` : 'Home page'
+    pageTitle () {
+      return this.activeBoard ? `${this.activeBoard} board` : this.$route.path === '/' ? 'Main page' : 'Loading...'
+    }
+  },
+  methods: {
+    toggleMenu () {
+      this.isMenuOpened = !this.isMenuOpened
     }
   }
 }
@@ -49,56 +54,19 @@ export default {
 <style lang="scss" scoped>
   .header-component {
     height: 60px;
-    background: $color-light;
+    background: $color-dark;
     color: $color-text-light;
-
-    & > .flex {
-      height: 100%;
-    }
-
-    .button {
-      width: 60px;
-      height: 60px;
-      color: $color-text-light;
-      cursor: pointer;
-      &:hover {
-        color: $color-primary;
-      }
-      & + .delimiter {
-        margin-left: 0;
-      }
-    }
-    .icon {
-      height: 20px;
-    }
-
-    .thumb {
+    & > * {
       width: 100%;
-      height: 100%;
-      background-image: linear-gradient(-45deg,#fab66f,#db237c);
-      color: $color-bg;
-      svg {
-        height: 14px;
+    }
+    .side {
+      & > *:not(:last-child) {
+        margin-right: 24px;
       }
     }
-
-    .user {
-      .photo {
-        width: 32px;
-        height: 32px;
-        margin-right: 10px;
-        border-radius: 50%;
-        overflow: hidden;
-      }
-    }
-
-    .delimiter {
-      width: 1px;
-      height: 100%;
-      margin: 0 20px;
-      background: $color-bg;
-      & + .button {
-        margin-left: -20px;
+    .buttons {
+      & > *:not(:last-child) {
+        margin-right: 16px;
       }
     }
   }

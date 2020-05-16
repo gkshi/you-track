@@ -1,17 +1,17 @@
 <template lang="pug">
-  .context-menu-component.inline-flex.shrink(@click="toggle" v-outside="close")
-    .button.flex.center(ref="dots" :class="{ active: isOpened }")
+  .context-menu-component(:class="{ opened: isOpened }" v-outside="close")
+    .icon.flex.center(ref="icon" @click="toggle")
       iconDots
-    transition
-      .list(v-if="isOpened")
+    //- .dropdown(v-if="isOpened")
+      .list
         slot
 </template>
 
 <script>
+import Vue from 'vue'
 import iconDots from '@/components/icons/dots'
 
 export default {
-  name: 'context-menu-component',
   components: {
     iconDots
   },
@@ -22,9 +22,11 @@ export default {
   },
   watch: {
     isOpened () {
-      this.setPosition()
-      this.$emit(this.isOpened ? 'open' : 'close')
+      this.isOpened ? this.create() : this.destroy()
     }
+  },
+  mounted () {
+    console.log(this.$slots.default)
   },
   methods: {
     toggle () {
@@ -33,72 +35,92 @@ export default {
     close () {
       this.isOpened = false
     },
-    setPosition () {
-      if (this.isOpened) {
-        this.$nextTick(() => {
-          const list = this.$el.querySelector('.list')
-          const dotsRect = this.$refs.dots.getBoundingClientRect()
-          list.style.top = `${dotsRect.height + dotsRect.y + 10}px`
-          list.style.left = `${dotsRect.x}px`
-        })
-      }
+    create () {
+      // generate DOM
+      const dropdown = document.createElement('div')
+      dropdown.classList.add('dropdown')
+      const menu = document.createElement('div')
+      menu.classList.add('menu')
+      dropdown.appendChild(menu)
+
+      // create child items
+      // this.$slots.default.forEach(i => {
+      //   console.log('i', i)
+      //   window.asd = i
+      // })
+
+      const el = this.$createElement('div', {}, this.$slots.default)
+      console.log('el', el)
+
+      const Com = Vue.component('manual-menu', {
+        render (createElement) {
+          return createElement(
+            'div', // tag name
+            this.$slots.default // array of children
+          )
+        }
+      })
+      console.log('Com', Com)
+      const comf = new Com().$mount()
+      console.log('comf', comf.$el)
+      document.body.appendChild(comf.$el)
+
+      // const Extender = Vue.extend({
+      //   template: '<div><slot /></div>'
+      //   render (createElement) {
+      //     return createElement(el)
+      //   }
+      // })
+      // const component = new Extender().$mount()
+      // console.log('component', component)
+
+      // detect position
+      const position = this.$refs.icon.getBoundingClientRect()
+      dropdown.style.top = `${position.y}px`
+      dropdown.style.left = `${position.x}px`
+
+      document.body.appendChild(dropdown)
+    },
+    destroy () {
+      console.log('destroy')
     }
-  },
-  mounted () {
-    this.$root.$on('keyup-esc', this.close)
-  },
-  beforeDestroy () {
-    this.$root.$off('keyup-esc', this.close)
   }
 }
 </script>
 
-<style lang="scss">
-  .context-menu-component {
-    .list {
-      & > * {
-        display: block;
-        padding: 10px 20px;
-      }
-    }
-  }
-</style>
-
 <style lang="scss" scoped>
   .context-menu-component {
     position: relative;
-    font-weight: $font-weight-normal;
     user-select: none;
-    .button {
+    .icon {
+      position: relative;
+      z-index: 3;
       width: 24px;
       height: 24px;
-      border-radius: $border-radius-default;
-      color: $color-text-ghost;
-      transition: $transition-button;
       cursor: pointer;
+      border-radius: $border-radius-small;
       &:hover {
-        color: $color-text-regular;
-      }
-      &.active {
         background: $color-bg;
         color: $color-text-regular;
       }
-      svg {
-        height: 12px;
-      }
+    }
+    .dropdown {
+      position: absolute;
+      top: 0;
+      right: 0;
+      z-index: 2;
     }
     .list {
-      position: fixed;
-      z-index: 1000;
-      background: $color-white;
+      min-width: 120px;
+      background: $color-content-bg;
       border-radius: $border-radius-default;
-      transition: $transition-context-menu;
-      white-space: nowrap;
-      box-shadow: $box-shadow-deep;
-      &.v-enter,
-      &.v-leave-active {
-        opacity: 0;
-        transform: translate(0, -5px);
+      box-shadow: $box-shadow-ghost;
+    }
+
+    &.opened {
+      .icon {
+        background: transparent;
+        color: $color-text-regular;
       }
     }
   }

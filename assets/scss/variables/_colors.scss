@@ -1,12 +1,13 @@
 // primary
-$color-primary: #3F81ED;
-$color-light: #f5f7f9;
-$color-white: #FFF;
+$color-primary: #317EF6;
 
-// text
-$color-text-regular: #37455D;
-$color-text-light: #777D86;
-$color-text-ghost: rgba($color-text-light, .5);
+$color-dark: #282C31;
+$color-dark-highlight: #2F343A;
 
-// advanced
-$color-bg: #ECEEF0;
+$color-content-bg: #fff;
+$color-bg: #FAF9FC;
+$color-bg-highlight: darken($color-bg, 3%);
+
+$color-text-regular: #323232;
+$color-text-light: #8C939F;
+$color-text-white: #fff;

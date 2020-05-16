@@ -41,14 +41,10 @@
   display: inline-flex;
 }
 
-.scroll-parent {
-  overflow: auto;
-}
-
-.form {
-  .row {
+.buttons {
+  & > * {
     &:not(:last-child) {
-      margin-bottom: 10px;
+      margin-right: 8px;
     }
   }
 }

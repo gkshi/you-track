@@ -8,6 +8,7 @@
       :readonly="readonly"
       :disabled="disabled"
       :placeholder="placeholder"
+      :rows="rows"
       @input="$emit('input', $event.target.value)"
       @change="$emit('change', $event.target.value)"
       @focus="$emit('focus', $event.target.value)"
@@ -27,6 +28,10 @@ export default {
     },
     value: [String, Number],
     error: [String, Boolean],
+    rows: {
+      type: [String, Number],
+      default: 4
+    },
     placeholder: String,
     readonly: Boolean,
     disabled: Boolean
@@ -63,11 +68,6 @@ export default {
     textarea {
       display: block;
       width: 100%;
-      padding: 11px 20px 12px;
-      border: none;
-      border-radius: $border-radius-default;
-      outline: none;
-      transition: $transition-field;
     }
   }
 </style>

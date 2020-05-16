@@ -1,8 +1,15 @@
-$error-color: red;
+  $error-color: red;
 
 .textarea-component {
   textarea {
-    border: 1px solid #ccc;
+    background: $color-bg;
+    border: 2px solid $color-bg;
+    padding: 8px 16px;
+    border-radius: $border-radius-default;
+    outline: none;
+    &:focus {
+      border-color: darken($color-bg, 4%);
+    }
   }
   .error {
     color: $error-color;
@@ -10,25 +17,6 @@ $error-color: red;
   &-error {
     textarea {
       border-color: $error-color;
-    }
-  }
-
-  &.textarea-color-default {
-    textarea {
-      box-shadow: $box-shadow-light;
-      &:focus {
-        box-shadow: $box-shadow-light-focus;
-      }
-    }
-  }
-
-  &.textarea-color-gray {
-    textarea {
-      background: $color-light;
-      box-shadow: none;
-      &:focus {
-        box-shadow: none;
-      }
     }
   }
 }
