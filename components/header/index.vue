@@ -53,7 +53,12 @@ export default {
 
 <style lang="scss" scoped>
   .header-component {
-    height: 60px;
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 1000;
+    width: 100%;
+    height: $header-height;
     background: $color-dark;
     color: $color-text-light;
     & > * {

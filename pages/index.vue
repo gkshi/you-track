@@ -20,7 +20,7 @@
 </template>
 
 <script>
-import newsList from '@/news'
+import newsList from '@/updates'
 import vBoard from '@/components/board'
 import contentBlock from '@/components/content-block'
 import modalCreateBoard from '@/components/modals/board-create'

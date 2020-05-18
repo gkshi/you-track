@@ -45,8 +45,11 @@ export const actions = {
   createCard (context, data) {
     return API.createCard(data)
   },
-  getCard (payload, id) {
+  getCard (context, id) {
     return API.getCard(id)
+  },
+  updateCard (context, data) {
+    return API.updateCard(data)
   },
   moveCard (context, payload) {
     return API.moveCard(payload)

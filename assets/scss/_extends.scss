@@ -16,3 +16,11 @@
     box-shadow: $box-shadow-default-hover;
   }
 }
+
+%icon-block {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 24px;
+  height: 24px;
+}

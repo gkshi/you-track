@@ -9,7 +9,7 @@ $transition-modal-wrapper: opacity 0.25s ease;
 $transition-modal: opacity 0.25s ease, transform 0.25s ease;
 
 .modal-component {
-  z-index: 2000;
+  z-index: 10000;
   position: fixed;
   top: 0;
   left: 0;

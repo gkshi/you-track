@@ -3,11 +3,11 @@
     nuxt-link(:to="`/boards/${data.alias}`")
       .title {{ data.title }}
       div {{ data.description }}
-      div {{ data.columns.length }} lists
+      div {{ data.order.length }} lists
     contextMenu.menu
-      nuxt-link(to="/") Open
-      a(href="#" @click.prevent) Edit
-      a(href="#" @click.prevent) Delete
+      nuxt-link(:to="`/boards/${data.alias}`") Open board
+      a(href="#" @click.prevent) Edit board
+      a(href="#" @click.prevent) Delete board
 </template>
 
 <script>
@@ -42,7 +42,6 @@ export default {
       position: absolute;
       top: 8px;
       right: 8px;
-      z-index: 1000;
     }
   }
 </style>

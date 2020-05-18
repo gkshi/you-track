@@ -1,0 +1,71 @@
+<template lang="pug">
+  form.add-form-component(@submit.prevent="$emit('submit', value)" v-outside="tryToClose")
+    commonInput(
+      ref="field"
+      :value="value"
+      :placeholder="placeholder"
+      @input="$emit('input', $event)")
+    .buttons.flex.a-center
+      commonButton(size="small" native="submit" :disabled="!value")
+        slot
+      commonButton.close(size="icon" type="icon" @click="close")
+        iconCross
+</template>
+
+<script>
+import iconCross from '@/components/icons/cross'
+
+export default {
+  name: 'add-form-component',
+  components: {
+    iconCross
+  },
+  props: {
+    value: String,
+    placeholder: String,
+    exception: String
+  },
+  methods: {
+    tryToClose (e) {
+      if (this.exception) {
+        let parent = e.target.parentNode
+        while (parent && parent.tagName.toLowerCase() !== 'body' && !parent.classList.contains(this.exception)) {
+          parent = parent.parentNode
+        }
+        if (parent && parent.tagName.toLowerCase() === 'body') {
+          this.close()
+        }
+      } else {
+        this.close()
+      }
+    },
+    close () {
+      this.$emit('close')
+    }
+  },
+  mounted () {
+    this.$nextTick(() => {
+      this.$refs.field.focus()
+    })
+    this.$root.$on('keyup-esc', this.close)
+  },
+  beforeDestroy () {
+    this.$root.$off('keyup-esc', this.close)
+  }
+}
+</script>
+
+<style lang="scss" scoped>
+  .add-form-component {
+    @extend %content-block;
+    .buttons {
+      margin-top: 10px;
+    }
+    .close {
+      color: $color-text-light;
+      &:hover {
+        color: $color-text-regular;
+      }
+    }
+  }
+</style>

@@ -6,8 +6,24 @@
 @import 'utils';
 
 // fonts
-@include font-face('SF UI Dipslay', '~assets/fonts/sf_ui_display/SFUIDisplay-Medium', 400);
-@include font-face('SF UI Dipslay', '~assets/fonts/sf_ui_display/SFUIDisplay-Semibold', 600);
+@font-face {
+  font-family: 'SF UI Display';
+  font-weight: 400;
+  font-style: normal;
+  src: url('../fonts/sf_ui_display/SFUIDisplay-Regular.woff2') format('woff2'), url('../fonts/sf_ui_display/SFUIDisplay-Regular.woff') format('woff'), url('../fonts/sf_ui_display/SFUIDisplay-Regular.svg#SFUIDisplay-Regular') format('svg');
+}
+@font-face {
+  font-family: 'SF UI Display';
+  font-weight: 500;
+  font-style: normal;
+  src: url('../fonts/sf_ui_display/SFUIDisplay-Medium.woff2') format('woff2'), url('../fonts/sf_ui_display/SFUIDisplay-Medium.woff') format('woff'), url('../fonts/sf_ui_display/SFUIDisplay-Medium.svg#SFUIDisplay-Medium') format('svg');
+}
+@font-face {
+  font-family: 'SF UI Display';
+  font-weight: 600;
+  font-style: normal;
+  src: url('../fonts/sf_ui_display/SFUIDisplay-Semibold.woff2') format('woff2'), url('../fonts/sf_ui_display/SFUIDisplay-Semibold.woff') format('woff'), url('../fonts/sf_ui_display/SFUIDisplay-Semibold.svg#SFUIDisplay-Semibold') format('svg');
+}
 
 // common styles
 body {
@@ -31,6 +47,10 @@ h1 {
   font-size: $font-size-heading;
   line-height: $line-height-heading;
   font-weight: $font-weight-semibold;
+}
+
+.page {
+  padding-top: 32px;
 }
 
 .wrapper {

@@ -19,7 +19,8 @@ export default {
   #app {
     height: 100vh;
     main {
-      margin-top: 64px;
+      height: 100%;
+      padding-top: $header-height;
     }
   }
 </style>

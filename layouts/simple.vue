@@ -13,5 +13,6 @@ export default {
 <style lang="scss" scoped>
   .init {
     height: 100vh;
+    background: $color-content-bg;
   }
 </style>

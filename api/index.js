@@ -78,6 +78,9 @@ export default {
   createCard (data) {
     return this.do('POST', '/cards', data)
   },
+  updateCard (data) {
+    return this.do('PUT', `/cards/${data._id}`, data)
+  },
   moveCard (payload) {
     return this.do('POST', '/cards/move', payload)
   },

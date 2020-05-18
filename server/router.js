@@ -214,7 +214,12 @@ router.delete('/columns/:id', async (request, response) => {
  */
 router.get('/cards/:id', async (request, response) => {
   const card = await _getOne('cards', request.params.id)
-  response.send(card)
+  console.log('card', card)
+  if (card) {
+    response.send(card)
+  } else {
+    response.status(404).send({})
+  }
 })
 
 /**
@@ -315,11 +320,13 @@ function sortById (items, ids = []) {
 }
 
 async function _get (from, query = {}) {
+  console.log('query', query, typeof query)
   if (typeof query !== 'object') {
     query = {
       _id: ObjectId(query)
     }
   }
+  console.log('query', query)
   const result = await db.collection(from).find({
     ...query
   }).toArray()
@@ -332,6 +339,9 @@ async function _getOne (from, query) {
 }
 
 async function _add (to, data = {}) {
+  if (!data._id) {
+    delete data._id
+  }
   let result = null
   if (Array.isArray(data)) {
     result = await db.collection(to).insertMany(data).then(res => {
