@@ -67,6 +67,14 @@ export default {
       newCard: this.$models.create('card')
     }
   },
+  watch: {
+    data: {
+      handler () {
+        this.column.update(this.data)
+      },
+      deep: true
+    }
+  },
   methods: {
     toggleCardCreation () {
       this.cardCreationOpened = !this.cardCreationOpened

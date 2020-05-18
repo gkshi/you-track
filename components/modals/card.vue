@@ -35,20 +35,24 @@ export default {
       activeCard: state => state.activeCard
     })
   },
+  watch: {
+    activeCard: {
+      handler () {
+        this.card.update(this.activeCard)
+      },
+      deep: true
+    }
+  },
   created () {
-    console.log('this.activeCard', this.activeCard, this.activeCard._id)
-    console.log('this.card', this.card, this.card._id)
     this.card.update(this.activeCard)
-    console.log('this.card', this.card, this.card._id)
   },
   methods: {
     onClose () {
       this.$store.dispatch('changeActiveCard', null)
     },
     async update () {
-      console.log('this.card', this.card)
-      const res = await this.$store.dispatch('api/updateCard', this.card)
-      console.log('res', res)
+      await this.$store.dispatch('api/updateCard', this.card)
+      this.$emit('update', this.card)
     }
   },
   beforeDestroy () {

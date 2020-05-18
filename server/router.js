@@ -274,7 +274,10 @@ router.post('/cards/move', async (request, response) => {
  * @param data <object>
  */
 router.put('/cards/:id', async (request, response) => {
-  const result = await _update('cards', request.params.id, request.body)
+  const data = request.body
+  delete data._id
+  delete data.column
+  const result = await _update('cards', request.params.id, data)
   response.send(result)
 })
 
@@ -320,13 +323,13 @@ function sortById (items, ids = []) {
 }
 
 async function _get (from, query = {}) {
-  console.log('query', query, typeof query)
+  // console.log('query', query, typeof query)
   if (typeof query !== 'object') {
     query = {
       _id: ObjectId(query)
     }
   }
-  console.log('query', query)
+  // console.log('query', query)
   const result = await db.collection(from).find({
     ...query
   }).toArray()
@@ -356,6 +359,8 @@ async function _add (to, data = {}) {
 }
 
 async function _update (collection, query = {}, data = {}) {
+  // Предотвращаем перезапись _id (если вдруг придет новое значение с клиента)
+  delete data._id
   if (typeof query !== 'object') {
     query = {
       _id: ObjectId(query)

@@ -24,7 +24,7 @@
           @submit="createColumn"
           @close="toggleColumnCreation") Add column
 
-    cardModal
+    cardModal(@update="onCardUpdate")
     columnRemoveModal(:data="activeColumn" @submit="onColumnRemove")
 </template>
 
@@ -97,7 +97,6 @@ export default {
       this.closeModal('column_remove')
     },
     async openCard (id) {
-      // const card = await this.$store.dispatch('api/getCard', id).catch(() => ({}))
       await this.$store.dispatch('changeActiveCard', id)
       if (this.$store.state.activeCard._id) {
         this.openModal('card')
@@ -148,6 +147,24 @@ export default {
         } catch (e) {
           console.warn(e)
         }
+      })
+    },
+    onCardUpdate (card) {
+      console.log('ловим')
+      this.board.columns.every(column => {
+        let found = false
+        const target = column.cards.find(i => i._id === card._id)
+        if (target) {
+          target.description = card.description
+          // TODO: вручную перебираем свойства объекта и заменяем в цели
+          Object.keys(target).forEach(key => {
+            if (card[key]) {
+              target[key] = card[key]
+            }
+          })
+        }
+        found = !!target
+        return !found
       })
     }
   },
