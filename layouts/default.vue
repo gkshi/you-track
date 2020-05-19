@@ -11,6 +11,13 @@ import vHeader from '@/components/header'
 export default {
   components: {
     vHeader
+  },
+  mounted () {
+    document.addEventListener('keyup', e => {
+      if (e.which === 27) {
+        this.$root.$emit('keyup', 'esc')
+      }
+    })
   }
 }
 </script>

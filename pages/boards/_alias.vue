@@ -67,6 +67,11 @@ export default {
     }
   },
   methods: {
+    scrollBoardToRight () {
+      this.$nextTick(() => {
+        this.$refs.scrollParent.scrollLeft = this.$refs.scrollParent.scrollWidth
+      })
+    },
     toggleColumnCreation () {
       this.columnCreationOpened = !this.columnCreationOpened
     },
@@ -80,6 +85,7 @@ export default {
         const column = this.$models.create('column', res)
         this.board.columns.push(column)
         this.columnTitle = ''
+        this.scrollBoardToRight()
       })
     },
     onColumnUpdate (column) {
@@ -211,7 +217,7 @@ export default {
       height: 100%;
       padding: 0 40px;
       user-select: none;
-      overflow: hidden;
+      overflow-y: hidden;
       & > .column {
         &:last-child {
           width: 340px;

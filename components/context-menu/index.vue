@@ -18,7 +18,8 @@ export default {
   data () {
     return {
       isOpened: false,
-      el: null
+      el: null,
+      elHeight: null
     }
   },
   watch: {
@@ -26,10 +27,19 @@ export default {
       this.isOpened ? this.create() : this.destroy()
     }
   },
+  mounted () {
+    this.$root.$on('keyup', this.handleKeyup)
+  },
   beforeDestroy () {
+    this.$root.$off('keyup')
     this.destroy()
   },
   methods: {
+    handleKeyup (key) {
+      if (key === 'esc') {
+        this.close()
+      }
+    },
     toggle () {
       this.isOpened = !this.isOpened
     },
@@ -38,19 +48,40 @@ export default {
     },
     create () {
       this.el = this.$refs.dropdown
-      // detect position
       const position = this.$refs.icon.getBoundingClientRect()
-      this.el.style.top = `${position.y}px`
-      this.el.style.left = `${position.x + position.width}px`
-
+      this.el.classList.add('transparent')
       document.body.appendChild(this.el)
-      this.$emit('open')
+
+      this.$nextTick().then(() => {
+        const bottomSpace = window.innerHeight - (position.top + position.height)
+        if (!this.elHeight) {
+          this.elHeight = this.$refs.dropdown.offsetHeight + 24
+        }
+
+        // Определение направления вверх/вниз
+        if (bottomSpace - 24 < this.elHeight) {
+          this.el.classList.add('dropdown-direction-top')
+          this.el.style.bottom = `${window.innerHeight - position.y - position.height}px`
+          this.el.style.left = `${position.x + position.width}px`
+        } else {
+          this.el.classList.add('dropdown-direction-bottom')
+          this.el.style.top = `${position.y}px`
+          this.el.style.left = `${position.x + position.width}px`
+        }
+
+        this.el.classList.remove('transparent')
+        this.$emit('open')
+      })
     },
     destroy () {
       try {
         document.body.removeChild(this.el)
       } catch (e) {}
       this.el = null
+      this.$refs.dropdown.classList.remove('dropdown-direction-top')
+      this.$refs.dropdown.classList.remove('dropdown-direction-bottom')
+      this.$refs.dropdown.style.top = ''
+      this.$refs.dropdown.style.bottom = ''
       this.$emit('close')
     }
   }
@@ -66,9 +97,13 @@ export default {
       transform: translate(-100%, 0);
     }
     .context-menu-dropdown {
+      transition: $transition-default;
+      &.transparent {
+        opacity: 0;
+        visibility: hidden;
+      }
       .list {
         min-width: 120px;
-        padding-top: 24px;
         background: $color-content-bg;
         border-radius: $border-radius-default;
         box-shadow: $box-shadow-ghost;
@@ -80,11 +115,30 @@ export default {
           display: block;
           padding: 13px 18px;
           text-decoration: none;
-          color: inherit;
+          // color: inherit;
+          color: $color-text-regular;
           transition: $transition-default;
+          &:last-child {
+            border-radius: 0 0 $border-radius-default $border-radius-default;
+          }
+          &:only-child {
+            border-radius: $border-radius-default;
+          }
           &:hover {
             background: rgba($color-bg, .7);
-            color: $color-text-regular;
+            // color: $color-text-regular;
+          }
+        }
+      }
+      &.dropdown-direction {
+        &-top {
+          .list {
+            padding-bottom: 24px;
+          }
+        }
+        &-bottom {
+          .list {
+            padding-top: 24px;
           }
         }
       }

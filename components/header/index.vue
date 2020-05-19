@@ -2,9 +2,8 @@
   header.header-component.flex.a-center
     .wrapper.flex.a-center.j-between
       .side.flex.a-center
-        .buttons
-          commonButton(type="transparent" size="icon" @click="toggleMenu")
-            iconMenu
+        .buttons.flex.a-center
+          headerMenu
           commonButton(to="/" type="transparent" size="icon")
             iconHome
         h1 {{ pageTitle }}
@@ -16,7 +15,7 @@
 
 <script>
 import { mapState } from 'vuex'
-import iconMenu from '@/components/icons/menu'
+import headerMenu from './menu'
 import iconHome from '@/components/icons/home'
 import searchBar from '@/components/search-bar'
 import themeToggler from '@/components/theme-toggler'
@@ -24,7 +23,7 @@ import userBar from '@/components/user-bar'
 
 export default {
   components: {
-    iconMenu,
+    headerMenu,
     iconHome,
     searchBar,
     themeToggler,

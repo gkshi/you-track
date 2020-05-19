@@ -74,6 +74,9 @@ export default {
     this.$root.$off('disableColumnScroll')
     this.$root.$off('enableColumnScroll')
   },
+  created () {
+    this.column.cards = this.column.cards.map(i => this.$models.create('card', i))
+  },
   methods: {
     handleResize () {
       this.footerInteraction = this.$refs.original.offsetHeight >= this.$el.offsetHeight
@@ -137,9 +140,6 @@ export default {
         this.$emit('remove', this.column._id)
       }
     }
-  },
-  created () {
-    this.column.cards = this.column.cards.map(i => this.$models.create('card', i))
   }
 }
 </script>
@@ -198,10 +198,11 @@ export default {
         visibility: hidden;
       }
       & > *:not(:last-child) {
-        margin-right: 8px;
+        margin-right: 24px;
       }
     }
     .drag-hint {
+      margin-bottom: 1px;
       font-weight: $font-weight-normal;
       font-size: $font-size-small;
       line-height: $line-height-small;
@@ -229,7 +230,7 @@ export default {
     }
 
     &.sortable-ghost {
-      padding-bottom: 20px;
+      padding-bottom: 30px;
       .column-original {
         border: 2px dashed rgba($color-text-light, .3);
         box-shadow: none;

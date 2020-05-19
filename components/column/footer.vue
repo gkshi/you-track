@@ -4,14 +4,14 @@
       v-if="!isOpened"
       type="ghost"
       size="large"
-      @click.prevent="toggleCardCreation") + Add card
+      @click.prevent="toggle") + Add card
     addForm(
       v-else
       v-model="newCard.title"
       exception="add-button"
       placeholder="Enter a title for new card..."
       @submit="createCard"
-      @close="closeCardCreation") Add card
+      @close="close") Add card
 </template>
 
 <script>
@@ -41,11 +41,22 @@ export default {
       this.newCard.title = ''
     }
   },
+  mounted () {
+    this.$root.$on('keyup', this.handleKeyup)
+  },
+  beforeDestroy () {
+    this.$root.$off('keyup')
+  },
   methods: {
-    toggleCardCreation () {
+    handleKeyup (key) {
+      if (key === 'esc') {
+        this.close()
+      }
+    },
+    toggle () {
       this.isOpened = !this.isOpened
     },
-    closeCardCreation () {
+    close () {
       this.isOpened = false
     },
     createCard () {
