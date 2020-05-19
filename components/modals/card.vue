@@ -1,19 +1,24 @@
   <template lang="pug">
     commonModal.card-modal(id="card" @close="onClose")
-      .h1 {{ card.title }}
+      article
+        header
+          editableArea.h1(
+            type="light"
+            v-model="card.title"
+            placeholder="Enter a title for this card...")
 
-      .group
-        div Labels:
-        div labels
+        //- section
+          div Labels:
+          div labels
 
-      .group
-        div Description:
-        .description.flex
-          editableArea.grow(
-            v-model="card.description"
-            placeholder="placeholder"
-            @change="update"
-            textarea)
+        section
+          div Description:
+          .description.flex
+            editableArea.grow(
+              v-model="card.description"
+              placeholder="Add a more detailed description..."
+              @change="update"
+              textarea)
   </template>
 
 <script>
@@ -63,6 +68,14 @@ export default {
 
   <style lang="scss" scoped>
     .card-modal {
+      header {
+        margin-bottom: 20px;
+      }
+      section {
+        &:not(:last-child) {
+          margin-bottom: 20px;
+        }
+      }
       .description {
         min-height: 100px;
         .area {

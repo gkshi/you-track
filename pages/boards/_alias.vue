@@ -84,7 +84,10 @@ export default {
     },
     onColumnUpdate (column) {
       const target = this.board.columns.find(i => i._id === column._id)
-      target.update(column)
+      // TODO: target.update(column)
+      Object.keys(target).forEach(key => {
+        target[key] = column[key]
+      })
     },
     onColumnRemoveRequest (id) {
       this.activeColumn.update(this.board.columns.find(i => i._id === id))
@@ -93,7 +96,8 @@ export default {
     async onColumnRemove (id = this.activeColumn._id) {
       await this.$store.dispatch('api/removeColumn', id)
       this.board.columns = this.board.columns.filter(i => i._id !== id)
-      this.activeColumn.reset()
+      // TODO: this.activeColumn.reset()
+      this.activeColumn = this.$models.create('column')
       this.closeModal('column_remove')
     },
     async openCard (id) {
@@ -154,6 +158,7 @@ export default {
       this.board.columns.every(column => {
         let found = false
         const target = column.cards.find(i => i._id === card._id)
+        console.log('target', target, card._id, column.cards)
         if (target) {
           target.description = card.description
           // TODO: вручную перебираем свойства объекта и заменяем в цели
@@ -199,11 +204,14 @@ export default {
 
 <style lang="scss" scoped>
   .page.board {
-    height: calc(100vh - 60px);
+    margin-bottom: 0;
+    height: calc(100vh - #{$header-height});
     .scroll-parent {
+      position: relative;
       height: 100%;
       padding: 0 40px;
       user-select: none;
+      overflow: hidden;
       & > .column {
         &:last-child {
           width: 340px;

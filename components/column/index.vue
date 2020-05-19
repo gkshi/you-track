@@ -1,8 +1,12 @@
 <template lang="pug">
   .column-component(:data-id="column._id" :class="{ 'column-empty': !column.cards.length }")
-    .column-original.flex.column
+    .column-original.flex.column(ref="original")
       .header.flex.a-center.j-between.shrink
-        editableArea.title.grow(ref="title" :value="column.title" @change="onColumnTitleChange")
+        editableArea.title.grow(
+          ref="title"
+          type="light"
+          :value="column.title"
+          @change="onColumnTitleChange")
         .drag-hint.flex.a-center
           iconDragPlace
           div Move
@@ -10,7 +14,7 @@
           a(href="#" @click.prevent="rename") Rename list
           a(href="#" @click.prevent="tryToRemoveColumn") Remove list
 
-      .scroll-parent.grow(ref="scrollParent")
+      .scroll-parent.grow(ref="scrollParent" :class="{ 'no-scroll': !scrollStatus }")
         cardList(
           :data="column.cards"
           :column="column._id"
@@ -18,27 +22,15 @@
           @add="onCardAdd"
           @remove="onCardRemove")
 
-      .footer.shrink
-        commonButton.add-button(
-          v-if="!cardCreationOpened"
-          type="ghost"
-          size="large"
-          @click.prevent="toggleCardCreation") + Add card
-        addForm(
-          v-else
-          v-model="newCard.title"
-          exception="add-button"
-          placeholder="Enter a title for new card..."
-          @submit="createCard"
-          @close="closeCardCreation") Add card
+      columnFooter.shrink(:columnId="column._id" @create="onCardCreate" :margin="footerInteraction")
 </template>
 
 <script>
 import contextMenu from '@/components/context-menu'
 import editableArea from '@/components/editable-area'
 import cardList from './card-list'
-import addForm from '@/components/add-form'
 import iconDragPlace from '@/components/icons/drag-place'
+import columnFooter from './footer'
 
 export default {
   name: 'column-component',
@@ -46,8 +38,8 @@ export default {
     contextMenu,
     editableArea,
     cardList,
-    addForm,
-    iconDragPlace
+    iconDragPlace,
+    columnFooter
   },
   props: {
     data: {
@@ -57,14 +49,10 @@ export default {
   },
   data () {
     return {
-      // Component local data
-      cardCreationOpened: false,
-
       // Column data
       column: this.$models.create('column', this.data),
-
-      // Data for card creation
-      newCard: this.$models.create('card')
+      scrollStatus: true,
+      footerInteraction: true
     }
   },
   watch: {
@@ -75,12 +63,26 @@ export default {
       deep: true
     }
   },
+  mounted () {
+    this.handleResize()
+    window.addEventListener('resize', this.handleResize)
+    this.$root.$on('disableColumnScroll', this.disableScrollStatus)
+    this.$root.$on('enableColumnScroll', this.enableScrollStatus)
+  },
+  beforeDestroy () {
+    window.removeEventListener('resize', this.handleResize)
+    this.$root.$off('disableColumnScroll')
+    this.$root.$off('enableColumnScroll')
+  },
   methods: {
-    toggleCardCreation () {
-      this.cardCreationOpened = !this.cardCreationOpened
+    handleResize () {
+      this.footerInteraction = this.$refs.original.offsetHeight >= this.$el.offsetHeight
     },
-    closeCardCreation () {
-      this.cardCreationOpened = false
+    disableScrollStatus () {
+      this.scrollStatus = false
+    },
+    enableScrollStatus () {
+      this.scrollStatus = true
     },
     scrollListToBottom () {
       this.$nextTick(() => {
@@ -108,6 +110,12 @@ export default {
       this.column.order = order
       this.column.cards = this.column.cards.filter(i => this.column.order.includes(i._id))
     },
+    onCardCreate (data) {
+      const card = this.$models.create('card', data)
+      this.column.cards.push(card)
+      this.$emit('update', this.column)
+      this.scrollListToBottom()
+    },
     onCardAdd (card) {
       const ordered = []
       this.column.order.forEach(i => {
@@ -121,17 +129,6 @@ export default {
     },
     onCardRemove (id) {
       this.column.cards = this.column.cards.filter(i => i._id !== id)
-    },
-    createCard () {
-      this.newCard.column = this.column._id
-      this.$store.dispatch('api/createCard', this.newCard).then(res => {
-        const card = this.$models.create('card', res)
-        this.column.cards.push(card)
-        // TODO: вернуть метод reset() после фикса пакета nuxt-nodels
-        // this.newCard.reset()
-        this.newCard.title = ''
-        this.scrollListToBottom()
-      })
     },
     tryToRemoveColumn () {
       if (this.column.cards.length) {
@@ -151,16 +148,26 @@ export default {
   body {
     &.drag-mode {
       .column-component {
-        .cards.empty {
-          &:after {
+        .cards {
+          &::after {
             content: '';
             position: absolute;
-            top: 0;
             left: 0;
             z-index: 10;
             width: 100%;
-            height: 100%;
             background: transparent;
+          }
+          &:not(.empty) {
+            &::after {
+              bottom: 0;
+              height: 60px;
+            }
+          }
+          &.empty {
+            &:after {
+              top: 0;
+              height: 100%;
+            }
           }
         }
       }
@@ -220,16 +227,9 @@ export default {
         margin-bottom: 10px;
       }
     }
-    .footer {
-      position: relative;
-      padding: 0 $padding $padding;
-      margin-top: -$padding;
-    }
-    .add-button {
-      width: 100%;
-    }
 
     &.sortable-ghost {
+      padding-bottom: 20px;
       .column-original {
         border: 2px dashed rgba($color-text-light, .3);
         box-shadow: none;

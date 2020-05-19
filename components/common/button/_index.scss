@@ -34,7 +34,7 @@ $button-sizes: default $button-padding-default $font-size-small $line-height-sma
     outline: none;
     cursor: pointer;
     transition: $transition-button;
-    border-radius: $border-radius-default;
+    border-radius: $border-radius-button;
 
     // types
     @each $type in $button-types {

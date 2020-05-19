@@ -1,5 +1,8 @@
 export default {
-  _id: String,
+  _id: {
+    type: String,
+    hidden: true
+  },
 
   title: {
     type: String,
@@ -7,10 +10,12 @@ export default {
   },
 
   description: {
-    type: String,
-    required: false
+    type: String
   },
 
   // Parent column id
-  column: String
+  column: {
+    type: String,
+    hidden: true
+  }
 }

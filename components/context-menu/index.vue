@@ -44,12 +44,14 @@ export default {
       this.el.style.left = `${position.x + position.width}px`
 
       document.body.appendChild(this.el)
+      this.$emit('open')
     },
     destroy () {
       try {
         document.body.removeChild(this.el)
       } catch (e) {}
       this.el = null
+      this.$emit('close')
     }
   }
 }

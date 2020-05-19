@@ -41,6 +41,14 @@
   display: inline-flex;
 }
 
+.scroll-parent {
+  overflow: auto;
+}
+
+.no-scroll {
+  overflow: hidden !important;
+}
+
 .buttons {
   & > * {
     &:not(:last-child) {

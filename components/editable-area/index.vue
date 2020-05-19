@@ -1,21 +1,21 @@
 <template lang="pug">
-  .editable-area-component(@click="changeMode('edit')")
+  .editable-area-component(@click="changeMode('edit')" :class="`editable-area-type-${type}`")
     template(v-if="mode === 'edit'")
       textarea.non-draggable(
         v-if="textarea"
         :value="value"
-        placeholder="placeholder"
+        :placeholder="placeholder"
         @change="update"
         @keypress.enter="onEnterPress"
         v-outside="changeMode")
       input.non-draggable(
         v-else
         :value="value"
-        placeholder="placeholder"
+        :placeholder="placeholder"
         @change="update"
-        @keypress.enter="onEnterPress"
         v-outside="changeMode")
-    div(v-else ref="text")
+
+    .preview(v-else)
       div(v-if="value") {{ value }}
       .placeholder(v-else) {{ placeholder }}
 </template>
@@ -25,6 +25,10 @@ export default {
   name: 'editable-area-component',
   props: {
     value: [String, Number],
+    type: {
+      type: String,
+      default: 'default'
+    },
     placeholder: String,
     textarea: Boolean
   },
@@ -76,17 +80,36 @@ export default {
 <style lang="scss" scoped>
   .editable-area-component {
     cursor: text;
+    line-height: $line-height-default;
     input,
     textarea {
       width: 100%;
       height: 100%;
       border-radius: 3px;
       // border: 2px solid #edeef0;
-      // background: #edeef0;
+      background: $color-bg;
+      line-height: $line-height-default;
       outline: none;
+    }
+    .preview {
+      height: 100%;
+      cursor: text;
     }
     .placeholder {
       color: $color-text-light;
+    }
+
+    &.editable-area-type-default {
+      .preview {
+        background: $color-bg;
+      }
+    }
+
+    &.editable-area-type-light {
+      input,
+      textarea {
+        background: $color-content-bg;
+      }
     }
   }
 </style>
