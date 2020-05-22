@@ -1,64 +1,155 @@
 <template lang="pug">
-  .context-menu-component.inline-flex.shrink(@click="toggle" v-outside="close")
-    .button.flex.center(ref="dots" :class="{ active: isOpened }")
+  .context-menu-component(:class="{ opened: isOpened }" v-outside="close")
+    .icon.flex.center(ref="icon" @click="toggle")
       iconDots
-    transition
-      .list(v-if="isOpened")
+    .context-menu-dropdown(ref="dropdown" v-show="isOpened")
+      .list(@click="close")
         slot
 </template>
 
 <script>
+// import Vue from 'vue'
 import iconDots from '@/components/icons/dots'
 
 export default {
-  name: 'context-menu-component',
   components: {
     iconDots
   },
   data () {
     return {
-      isOpened: false
+      isOpened: false,
+      el: null,
+      elHeight: null
     }
   },
   watch: {
     isOpened () {
-      this.setPosition()
-      this.$emit(this.isOpened ? 'open' : 'close')
+      this.isOpened ? this.create() : this.destroy()
     }
   },
+  mounted () {
+    window.addEventListener('resize', this.handleResize)
+    this.$root.$on('keyup', this.handleKeyup)
+  },
+  beforeDestroy () {
+    window.removeEventListener('resize', this.handleResize)
+    this.$root.$off('keyup')
+    this.destroy()
+  },
   methods: {
+    handleResize () {
+      this.close()
+    },
+    handleKeyup (key) {
+      if (key === 'esc') {
+        this.close()
+      }
+    },
     toggle () {
       this.isOpened = !this.isOpened
     },
     close () {
       this.isOpened = false
     },
-    setPosition () {
-      if (this.isOpened) {
-        this.$nextTick(() => {
-          const list = this.$el.querySelector('.list')
-          const dotsRect = this.$refs.dots.getBoundingClientRect()
-          list.style.top = `${dotsRect.height + dotsRect.y + 10}px`
-          list.style.left = `${dotsRect.x}px`
-        })
-      }
+    create () {
+      this.el = this.$refs.dropdown
+      const position = this.$refs.icon.getBoundingClientRect()
+      this.el.classList.add('transparent')
+      this.el.style.zIndex = '9000'
+      this.$el.style.zIndex = '9001'
+      document.body.appendChild(this.el)
+
+      this.$nextTick().then(() => {
+        const bottomSpace = window.innerHeight - (position.top + position.height)
+        if (!this.elHeight) {
+          this.elHeight = this.el.offsetHeight + 24
+        }
+
+        // Определение направления вверх/вниз
+        if (bottomSpace - 24 < this.elHeight) {
+          this.el.classList.add('dropdown-direction-top')
+          this.el.style.bottom = `${window.innerHeight - position.y - position.height}px`
+          this.el.style.left = `${position.x + position.width}px`
+        } else {
+          this.el.classList.add('dropdown-direction-bottom')
+          this.el.style.top = `${position.y}px`
+          this.el.style.left = `${position.x + position.width}px`
+        }
+
+        this.el.classList.remove('transparent')
+        this.$emit('open')
+      })
+    },
+    destroy () {
+      try {
+        document.body.removeChild(this.el)
+      } catch (e) {}
+      this.el = null
+      this.$refs.dropdown.classList.remove('dropdown-direction-top')
+      this.$refs.dropdown.classList.remove('dropdown-direction-bottom')
+      this.$refs.dropdown.style.top = ''
+      this.$refs.dropdown.style.bottom = ''
+      this.$refs.icon.style.zIndex = ''
+      this.$el.style.zIndex = ''
+      this.$emit('close')
     }
-  },
-  mounted () {
-    this.$root.$on('keyup-esc', this.close)
-  },
-  beforeDestroy () {
-    this.$root.$off('keyup-esc', this.close)
   }
 }
 </script>
 
 <style lang="scss">
-  .context-menu-component {
-    .list {
-      & > * {
-        display: block;
-        padding: 10px 20px;
+  body {
+    & > .context-menu-dropdown {
+      position: absolute;
+      z-index: 2000;
+      display: block !important;
+      transform: translate(-100%, 0);
+    }
+    .context-menu-dropdown {
+      transition: $transition-default;
+      &.transparent {
+        opacity: 0;
+        visibility: hidden;
+      }
+      .list {
+        min-width: 120px;
+        background: $color-content-bg;
+        border-radius: $border-radius-default;
+        box-shadow: $box-shadow-ghost;
+        font-size: $font-size-small;
+        line-height: $line-height-small;
+        color: $color-text-light;
+        text-align: right;
+        & > * {
+          display: block;
+          padding: 13px 18px;
+          text-decoration: none;
+          // color: inherit;
+          color: $color-text-regular;
+          transition: $transition-default;
+          &:last-child {
+            border-radius: 0 0 $border-radius-default $border-radius-default;
+          }
+          &:only-child {
+            border-radius: $border-radius-default;
+          }
+          &:hover {
+            background: rgba($color-bg, .7);
+            // color: $color-text-regular;
+          }
+        }
+      }
+      &.dropdown-direction {
+        &-top {
+          .list {
+            padding-bottom: 24px;
+          }
+        }
+        &-bottom {
+          .list {
+            padding-top: 24px;
+          }
+        }
       }
     }
   }
@@ -67,38 +158,27 @@ export default {
 <style lang="scss" scoped>
   .context-menu-component {
     position: relative;
-    font-weight: $font-weight-normal;
+    z-index: 2001;
     user-select: none;
-    .button {
+    transition: $transition-default;
+    .icon {
+      position: relative;
+      z-index: 3;
       width: 24px;
       height: 24px;
-      border-radius: $border-radius-default;
-      color: $color-text-ghost;
-      transition: $transition-button;
       cursor: pointer;
+      border-radius: $border-radius-small;
       &:hover {
-        color: $color-text-regular;
-      }
-      &.active {
         background: $color-bg;
         color: $color-text-regular;
       }
-      svg {
-        height: 12px;
-      }
     }
-    .list {
-      position: fixed;
-      z-index: 1000;
-      background: $color-white;
-      border-radius: $border-radius-default;
-      transition: $transition-context-menu;
-      white-space: nowrap;
-      box-shadow: $box-shadow-deep;
-      &.v-enter,
-      &.v-leave-active {
-        opacity: 0;
-        transform: translate(0, -5px);
+
+    &.opened {
+      opacity: 1 !important;
+      visibility: visible !important;
+      .icon {
+        background: transparent;
       }
     }
   }

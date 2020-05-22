@@ -59,29 +59,6 @@ export default {
 
 <style lang="scss" scoped>
   .modal-component {
-    background: rgba(40, 50, 60, 0.62);
-    dialog {
-      border-radius: $border-radius-default;
-      box-shadow: $box-shadow-deep;
-      user-select: text;
-      .close {
-        width: 24px;
-        height: 24px;
-        opacity: .5;
-        transition: $transition-default;
-        &:hover {
-          opacity: 1;
-        }
-        svg {
-          width: 12px;
-        }
-      }
-      .title {
-        margin-bottom: 10px;
-      }
-      .actions {
-        margin-top: 30px;
-      }
-    }
+    //
   }
 </style>

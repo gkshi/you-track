@@ -1,0 +1,26 @@
+%content-block {
+  padding: 16px 18px;
+  background: $color-content-bg;
+  color: $color-text-light;
+  border-radius: $border-radius-default;
+  font-size: $font-size-small;
+  line-height: $line-height-small;
+  box-shadow: $box-shadow-default;
+  transition: $transition-card;
+  .title {
+    color: $color-text-regular;
+    font-weight: $font-weight-semibold;
+    margin-bottom: 8px;
+  }
+  &:hover {
+    box-shadow: $box-shadow-default-hover;
+  }
+}
+
+%icon-block {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 24px;
+  height: 24px;
+}

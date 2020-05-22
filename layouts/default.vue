@@ -1,45 +1,33 @@
 <template lang="pug">
-  .layout.flex.column
+  #app
     vHeader
-    main.grow
+    main
       nuxt
-    vMessages
 </template>
 
 <script>
 import vHeader from '@/components/header'
-import vMessages from '@/components/messages'
 
 export default {
   components: {
-    vHeader,
-    vMessages
-  },
-  methods: {
-    watchKeypress (evt) {
-      evt = evt || window.event
-      let isEscape = false
-      if ('key' in evt) {
-        isEscape = (evt.key === 'Escape' || evt.key === 'Esc')
-      } else {
-        isEscape = (evt.keyCode === 27)
-      }
-      if (isEscape) {
-        this.$root.$emit('keyup-esc')
-      }
-    }
+    vHeader
   },
   mounted () {
-    document.addEventListener('keyup', this.watchKeypress)
-  },
-  beforeDestroy () {
-    document.removeEventListener('keyup', this.watchKeypress)
+    document.addEventListener('keyup', e => {
+      if (e.which === 27) {
+        this.$root.$emit('keyup', 'esc')
+      }
+    })
   }
 }
 </script>
 
-<style lang="scss" scoped>
-  .layout {
+<style lang="scss">
+  #app {
     height: 100vh;
+    main {
+      height: 100%;
+      padding-top: $header-height;
+    }
   }
 </style>

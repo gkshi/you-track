@@ -8,7 +8,7 @@
     .buttons.flex.a-center
       commonButton(size="small" native="submit" :disabled="!value")
         slot
-      commonButton(size="square" type="ghost" @click="close")
+      commonButton.close(size="icon" type="icon" @click="close")
         iconCross
 </template>
 
@@ -24,6 +24,15 @@ export default {
     value: String,
     placeholder: String,
     exception: String
+  },
+  mounted () {
+    this.$nextTick(() => {
+      this.$refs.field.focus()
+    })
+    this.$root.$on('keyup-esc', this.close)
+  },
+  beforeDestroy () {
+    this.$root.$off('keyup-esc', this.close)
   },
   methods: {
     tryToClose (e) {
@@ -42,33 +51,21 @@ export default {
     close () {
       this.$emit('close')
     }
-  },
-  mounted () {
-    this.$nextTick(() => {
-      this.$refs.field.focus()
-    })
-    this.$root.$on('keyup-esc', this.close)
-  },
-  beforeDestroy () {
-    this.$root.$off('keyup-esc', this.close)
   }
 }
 </script>
 
-<style lang="scss">
-  .add-form-component {
-    input {
-      &:focus {
-        box-shadow: $box-shadow-light !important;
-      }
-    }
-  }
-</style>
-
 <style lang="scss" scoped>
   .add-form-component {
+    @extend %content-block;
     .buttons {
       margin-top: 10px;
+    }
+    .close {
+      color: $color-text-light;
+      &:hover {
+        color: $color-text-regular;
+      }
     }
   }
 </style>

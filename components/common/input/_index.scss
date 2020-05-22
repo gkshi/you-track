@@ -1,10 +1,20 @@
 $error-color: red;
 
 .input-component {
+  label {
+    display: block;
+  }
   input {
     display: block;
     width: 100%;
-    border: 1px solid #ccc;
+    background: $color-bg;
+    border: 2px solid $color-bg;
+    padding: 8px 16px 9px;
+    border-radius: $border-radius-default;
+    outline: none;
+    &:focus {
+      border-color: darken($color-bg, 4%);
+    }
   }
   .error {
     color: $error-color;
@@ -12,25 +22,6 @@ $error-color: red;
   &-error {
     input {
       border-color: $error-color;
-    }
-  }
-
-  &.input-color-default {
-    input {
-      box-shadow: $box-shadow-light;
-      &:focus {
-        box-shadow: $box-shadow-light-focus;
-      }
-    }
-  }
-
-  &.input-color-gray {
-    input {
-      background: $color-light;
-      box-shadow: none;
-      &:focus {
-        box-shadow: none;
-      }
     }
   }
 }

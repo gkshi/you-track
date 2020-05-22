@@ -10,11 +10,12 @@
           @remove-request="onColumnRemoveRequest"
           @remove="onColumnRemove")
       .column.non-draggable.shrink
-        a.add-column-link.ghost-block(
+        commonButton.ghost-block(
           v-if="!columnCreationOpened"
-          href="#"
-          @click.prevent="toggleColumnCreation")
-          span + Add column
+          type="ghost"
+          size="large"
+          @click="toggleColumnCreation")
+          span + Add another list
         addForm(
           v-else
           v-model="columnTitle"
@@ -23,7 +24,7 @@
           @submit="createColumn"
           @close="toggleColumnCreation") Add column
 
-    cardModal
+    cardModal(@update="onCardUpdate")
     columnRemoveModal(:data="activeColumn" @submit="onColumnRemove")
 </template>
 
@@ -37,21 +38,25 @@ import addForm from '@/components/add-form'
 Sortable.mount(new AutoScroll())
 
 export default {
-  name: 'board-page',
   components: {
     boardColumn,
     cardModal,
     columnRemoveModal,
     addForm
   },
-  head () {
-    return {
-      title: `${this.board.title} board - YouTrack`
+  async asyncData ({ route, store, error }) {
+    const res = await store.dispatch('api/getBoard', route.params.alias).catch(() => null)
+    if (!res) {
+      return error({ statusCode: 404, message: 'Not found' })
     }
+    store.dispatch('changeActiveBoard', res)
+    return { response: res }
   },
   data () {
     return {
-      board: this.$models.create('board'),
+      response: {},
+      // board: this.$models.create('board', this.response),
+      board: {},
 
       // sortable
       sortable: null,
@@ -60,7 +65,7 @@ export default {
       columnCreationOpened: false,
       columnTitle: '',
 
-      // Column to remove
+      // column to remove
       activeColumn: this.$models.create('column')
     }
   },
@@ -69,7 +74,32 @@ export default {
       this.columnTitle = ''
     }
   },
+  mounted () {
+    this.board = this.$models.create('board', this.response)
+    // this.board.update(this.response)
+    this.initSortable()
+    if (!this.board.columns.length) {
+      this.toggleColumnCreation()
+    }
+    // Column height watcher
+    this.watchColumnHeight()
+    window.addEventListener('resize', this.watchColumnHeight)
+
+    // Open card modal trigger
+    if (this.$route.query.card) {
+      this.openCard(this.$route.query.card)
+    }
+  },
+  beforeDestroy () {
+    this.$store.dispatch('changeActiveBoard', {})
+    window.removeEventListener('resize', this.watchColumnHeight)
+  },
   methods: {
+    scrollBoardToRight () {
+      this.$nextTick(() => {
+        this.$refs.scrollParent.scrollLeft = this.$refs.scrollParent.scrollWidth
+      })
+    },
     toggleColumnCreation () {
       this.columnCreationOpened = !this.columnCreationOpened
     },
@@ -80,14 +110,18 @@ export default {
           title: this.columnTitle
         }
       }).then(res => {
-        const column = this.$models.create('column', res)
-        this.board.columns.push(column)
+        // const column = this.$models.create('column', res)
+        this.board.columns.push(res)
         this.columnTitle = ''
+        this.scrollBoardToRight()
       })
     },
     onColumnUpdate (column) {
       const target = this.board.columns.find(i => i._id === column._id)
-      target.update(column)
+      // target.cards = column.cards
+      // console.log('column', column)
+      console.log('target', target)
+      // target.merge(column)
     },
     onColumnRemoveRequest (id) {
       this.activeColumn.update(this.board.columns.find(i => i._id === id))
@@ -96,12 +130,15 @@ export default {
     async onColumnRemove (id = this.activeColumn._id) {
       await this.$store.dispatch('api/removeColumn', id)
       this.board.columns = this.board.columns.filter(i => i._id !== id)
-      this.activeColumn.reset()
+      // TODO: this.activeColumn.reset()
+      this.activeColumn = this.$models.create('column')
       this.closeModal('column_remove')
     },
-    openCard (id) {
-      this.$store.dispatch('changeActiveCard', id)
-      this.openModal('card')
+    async openCard (id) {
+      await this.$store.dispatch('changeActiveCard', id)
+      if (this.$store.state.activeCard._id) {
+        this.openModal('card')
+      }
     },
     initSortable () {
       this.sortable = new Sortable(this.$refs.columnParent, {
@@ -149,44 +186,43 @@ export default {
           console.warn(e)
         }
       })
+    },
+    onCardUpdate (card) {
+      this.board.columns.every(column => {
+        let found = false
+        const target = column.cards.find(i => i._id === card._id)
+        if (target) {
+          target.description = card.description
+          // TODO: вручную перебираем свойства объекта и заменяем в цели
+          Object.keys(target).forEach(key => {
+            if (card[key]) {
+              target[key] = card[key]
+            }
+          })
+        }
+        found = !!target
+        return !found
+      })
     }
   },
-  mounted () {
-    this.$store.dispatch('api/getBoard', this.$route.params.alias).then(res => {
-      this.board.update(res)
-      // this.board.columns = this.board.columns.map(i => this.$models.create('column', i))
-      this.$store.dispatch('changeActiveBoard', this.board.title)
-      this.initSortable()
-      if (!this.board.columns.length) {
-        this.toggleColumnCreation()
-      }
-    }).catch(err => {
-      return this.$nuxt.error({ statusCode: 404, message: err.message })
-    })
-
-    // Column height watcher
-    this.watchColumnHeight()
-    window.addEventListener('resize', this.watchColumnHeight)
-
-    // Open card modal trigger
-    if (this.$route.query.card) {
-      this.openCard(this.$route.query.card)
+  head () {
+    return {
+      title: `${this.board.title} board - YouTrack`
     }
-  },
-  beforeDestroy () {
-    this.$store.dispatch('changeActiveBoard', null)
-    window.removeEventListener('resize', this.watchColumnHeight)
   }
 }
 </script>
 
 <style lang="scss" scoped>
   .page.board {
-    height: calc(100vh - 60px);
-    user-select: none;
+    margin-bottom: 0;
+    height: calc(100vh - #{$header-height});
     .scroll-parent {
+      position: relative;
       height: 100%;
       padding: 0 40px;
+      user-select: none;
+      overflow-y: hidden;
       & > .column {
         &:last-child {
           width: 340px;
@@ -202,19 +238,9 @@ export default {
         margin-right: 20px;
       }
     }
-    .add-column-link {
-      display: block;
-      padding: 12px 10px 12px 20px;
-      border-radius: $border-radius-default;
-      background: rgba($color-light, .5);
-      color: $color-text-regular;
-      box-shadow: $box-shadow-light;
-      font-weight: $font-weight-semibold;
-      transition: $transition-button;
-      &:hover {
-        text-decoration: none;
-        background: $color-light;
-        color: $color-text-regular;
+    ::v-deep .column.non-draggable {
+       & > .button-component {
+        width: 100%;
       }
     }
   }

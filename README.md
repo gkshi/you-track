@@ -1,10 +1,10 @@
 # you-track
 
-> Your personal task tracker
+> My outstanding Nuxt.js project
 
 ## Build Setup
 
-``` bash
+```bash
 # install dependencies
 $ yarn install
 

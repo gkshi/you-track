@@ -1,11 +1,21 @@
 export default {
-  _id: String,
+  _id: {
+    type: String,
+    hidden: true
+  },
 
   title: {
     type: String,
     required: true
   },
 
+  description: {
+    type: String
+  },
+
   // Parent column id
-  column: String
+  column: {
+    type: String,
+    required: true
+  }
 }

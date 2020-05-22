@@ -1,5 +1,5 @@
 <template lang="pug">
-  .page.init
+  .page.start.flex.column.center
     h1 Hello. What's your name?
     form.flex.a-center(@submit.prevent="createUser")
       commonInput.grow(v-model="user" placeholder="Jack" autofocus)
@@ -8,8 +8,8 @@
 
 <script>
 export default {
-  name: 'init-page',
-  layout: 'init',
+  name: 'start-page',
+  layout: 'simple',
   data () {
     return {
       user: ''
@@ -28,7 +28,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-  .page.init {
+  .page.start {
     h1 {
       margin-bottom: 24px;
     }

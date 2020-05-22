@@ -121,8 +121,8 @@ router.post('/boards', async (request, response) => {
  * @param data <object>
  */
 router.put('/boards/:id', async (request, response) => {
-  const board = await _getOne('boards', request.params.id)
   await _update('boards', request.params.id, request.body)
+  const board = await _getOne('boards', request.params.id)
   response.send(board)
 })
 
@@ -214,7 +214,11 @@ router.delete('/columns/:id', async (request, response) => {
  */
 router.get('/cards/:id', async (request, response) => {
   const card = await _getOne('cards', request.params.id)
-  response.send(card)
+  if (card) {
+    response.send(card)
+  } else {
+    response.status(404).send({})
+  }
 })
 
 /**
@@ -269,7 +273,10 @@ router.post('/cards/move', async (request, response) => {
  * @param data <object>
  */
 router.put('/cards/:id', async (request, response) => {
-  const result = await _update('cards', request.params.id, request.body)
+  const data = request.body
+  delete data._id
+  delete data.column
+  const result = await _update('cards', request.params.id, data)
   response.send(result)
 })
 
@@ -332,6 +339,9 @@ async function _getOne (from, query) {
 }
 
 async function _add (to, data = {}) {
+  if (!data._id) {
+    delete data._id
+  }
   let result = null
   if (Array.isArray(data)) {
     result = await db.collection(to).insertMany(data).then(res => {
@@ -346,6 +356,8 @@ async function _add (to, data = {}) {
 }
 
 async function _update (collection, query = {}, data = {}) {
+  // Предотвращаем перезапись _id (если вдруг придет новое значение с клиента)
+  delete data._id
   if (typeof query !== 'object') {
     query = {
       _id: ObjectId(query)

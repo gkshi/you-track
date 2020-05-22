@@ -1,6 +1,7 @@
 export default {
   _id: {
-    type: String
+    type: String,
+    hidden: true
   },
 
   title: {
@@ -10,15 +11,27 @@ export default {
 
   alias: {
     type: String,
-    validation: value => !/[а-яА-я]/g.test(value),
-    required: true
+    required: true,
+    validation: value => !/[а-яА-я]/g.test(value)
   },
 
-  description: String,
+  description: {
+    type: String
+  },
 
   // Column list
-  columns: Array,
+  columns: {
+    type: Array,
+    hidden: true
+  },
 
   // Column order in board
-  order: Array
+  order: {
+    type: Array
+  },
+
+  lastModified: {
+    type: String,
+    hidden: true
+  }
 }

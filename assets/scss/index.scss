@@ -1,14 +1,29 @@
 // core
 @import 'variables/index';
-@import 'reset';
 @import 'mixins';
+@import 'extends';
+@import 'reset';
 @import 'utils';
 
-// common components
-@import "@/components/common/button";
-@import "@/components/common/modal";
-@import "@/components/common/input";
-@import "@/components/common/textarea";
+// fonts
+@font-face {
+  font-family: 'SF UI Display';
+  font-weight: 400;
+  font-style: normal;
+  src: url('../fonts/sf_ui_display/SFUIDisplay-Regular.woff2') format('woff2'), url('../fonts/sf_ui_display/SFUIDisplay-Regular.woff') format('woff'), url('../fonts/sf_ui_display/SFUIDisplay-Regular.svg#SFUIDisplay-Regular') format('svg');
+}
+@font-face {
+  font-family: 'SF UI Display';
+  font-weight: 500;
+  font-style: normal;
+  src: url('../fonts/sf_ui_display/SFUIDisplay-Medium.woff2') format('woff2'), url('../fonts/sf_ui_display/SFUIDisplay-Medium.woff') format('woff'), url('../fonts/sf_ui_display/SFUIDisplay-Medium.svg#SFUIDisplay-Medium') format('svg');
+}
+@font-face {
+  font-family: 'SF UI Display';
+  font-weight: 600;
+  font-style: normal;
+  src: url('../fonts/sf_ui_display/SFUIDisplay-Semibold.woff2') format('woff2'), url('../fonts/sf_ui_display/SFUIDisplay-Semibold.woff') format('woff'), url('../fonts/sf_ui_display/SFUIDisplay-Semibold.svg#SFUIDisplay-Semibold') format('svg');
+}
 
 // common styles
 body {
@@ -20,60 +35,31 @@ body {
   color: $color-text-regular;
 }
 
-a {
-  color: $color-primary;
-  text-decoration: none;
-  &:hover {
-    text-decoration: underline;
-  }
+::-webkit-input-placeholder { color: rgba($color-text-regular, .5); }
+::-moz-placeholder { color: rgba($color-text-regular, .5); }
+:-ms-input-placeholder { color: rgba($color-text-regular, .5); }
+
+h1 {
+  font-weight: $font-weight-semibold;
 }
 
-input,
-textarea {
-  font-family: $font-family-default;
-  font-size: $font-size-default;
-  line-height: $line-height-default;
-  font-weight: $font-weight-normal;
-  &::-webkit-input-placeholder {
-    color: $color-text-ghost;
-  }
-  &:-ms-input-placeholder {
-    color: $color-text-ghost;
-  }
-  &::-ms-input-placeholder {
-    color: $color-text-ghost;
-  }
-  &::placeholder {
-    color: $color-text-ghost;
-  }
-}
-
-h1, .h1 {
+.h1 {
   font-size: $font-size-heading;
   line-height: $line-height-heading;
-  font-weight: $font-weight-normal;
-  margin: 0 auto;
+  font-weight: $font-weight-semibold;
 }
 
 h2, .h2 {
-  font-size: $font-size-subheading;
-  line-height: $line-height-subheading;
-  font-weight: $font-weight-normal;
-  margin: 0 auto;
+  font-size: $font-size-heading;
+  line-height: $line-height-heading;
+  font-weight: $font-weight-semibold;
 }
 
 .page {
-  padding: 40px 0;
+  padding-top: 32px;
+  margin-bottom: 100px;
 }
 
 .wrapper {
-  padding: 0 40px;
-}
-
-.buttons {
-  .button-component {
-    &:not(:last-child) {
-      margin-right: 10px;
-    }
-  }
+  padding: 0 32px;
 }

@@ -1,6 +1,16 @@
-$border-radius-default: 3px;
+// layout
+$header-height: 60px;
+$column-narrow: 250px;
+$column-default: 400px;
 
-$box-shadow-light: 0 2px 4px -1px rgba(#000, .05);
-$box-shadow-light-hover: 0 2px 6px -1px rgba(#000, .1);
-$box-shadow-light-focus: 0 3px 12px -1px rgba(#000, .15);
-$box-shadow-deep: 0 5px 20px -6px rgba(#000, .1);
+// border radius values
+$border-radius-default: 7px;
+$border-radius-button: 5px;
+$border-radius-small: 4px;
+
+// box-shadow values
+$box-shadow-default: 0 10px 18px 0 #EDEDF5;
+$box-shadow-default-hover: 0 10px 18px 0 darken(#EDEDF5, 3%);
+
+$box-shadow-black: 0 10px 18px 0 rgba(0, 0, 0, 0.18);
+$box-shadow-ghost: 0 8px 12px -1px rgba(0, 0, 0, 0.08);

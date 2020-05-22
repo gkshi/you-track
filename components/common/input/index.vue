@@ -1,10 +1,11 @@
 <template lang="pug">
-  .input-component(:class="[{ 'input-component-error': error }, `input-color-${color}`]")
+  .input-component(:class="{ 'input-component-error': error }")
     label(v-if="$slots.default" :for="localId")
       slot
     input(
       ref="input"
       :id="localId"
+      :name="name"
       :type="type"
       :value="value"
       :readonly="readonly"
@@ -14,7 +15,9 @@
       @input="$emit('input', $event.target.value)"
       @change="$emit('change', $event.target.value)"
       @focus="$emit('focus', $event.target.value)"
-      @blur="$emit('blur', $event.target.value)")
+      @blur="$emit('blur', $event.target.value)"
+      @keyup="$emit('keyup', $event)"
+      @paste="paste")
     .error(v-if="error") {{ errorText }}
 </template>
 
@@ -23,13 +26,10 @@ export default {
   name: 'input-component',
   props: {
     id: String,
+    name: String,
     type: {
       type: String,
       default: 'text'
-    },
-    color: {
-      type: String,
-      default: 'default'
     },
     value: [String, Number],
     error: [String, Boolean],
@@ -48,17 +48,23 @@ export default {
       return typeof this.error === 'string' ? this.error : 'Error'
     }
   },
-  methods: {
-    focus () {
-      this.$refs.input.focus()
-    }
-  },
   mounted () {
     this.localId = this.localId || Math.random().toFixed(7).slice(2)
     if (this.autofocus) {
+      this.focus()
+    }
+  },
+  methods: {
+    focus () {
       this.$nextTick(() => {
-        this.focus()
+        this.$refs.input.focus()
       })
+    },
+    paste (e) {
+      e.preventDefault()
+      const value = e.clipboardData.getData('Text')
+      this.$emit('input', value)
+      this.$emit('paste', value)
     }
   }
 }
@@ -66,16 +72,6 @@ export default {
 
 <style lang="scss" scoped>
   .input-component {
-    label {
-      display: block;
-    }
-    input {
-      display: block;
-      padding: 11px 20px 12px;
-      border: none;
-      border-radius: $border-radius-default;
-      outline: none;
-      transition: $transition-field;
-    }
+    //
   }
 </style>

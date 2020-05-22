@@ -1,9 +1,11 @@
 <template lang="pug">
-  .card-component(:class="{ 'options-opened': isOptionsOpened }" :data-id="data._id")
+  .card-component(:class="{ 'options-opened': isOpened }" :data-id="data._id")
     .intro(@click="open")
-      div {{ data.title }}
-    contextMenu.options(@open="onOptionsOpen" @close="onOptionsClose")
-      a(href="#" @click.prevent="remove") Remove
+      .title {{ data.title }}
+      .description(v-if="data.description") {{ data.description }}
+    contextMenu.options(@open="onOpen" @close="onClose")
+      a(href="#" @click.prevent="open") Open card
+      a(href="#" @click.prevent="remove") Remove card
 </template>
 
 <script>
@@ -22,24 +24,27 @@ export default {
   },
   data () {
     return {
-      isOptionsOpened: false
+      isOpened: false
     }
   },
   methods: {
-    onOptionsOpen () {
-      this.isOptionsOpened = true
-    },
-    onOptionsClose () {
-      this.isOptionsOpened = false
-    },
     open () {
       this.$store.dispatch('changeActiveCard', this.data._id)
       this.openModal('card')
     },
-    remove () {
-      this.$store.dispatch('api/removeCard', this.data._id).then(() => {
+    async remove () {
+      const res = await this.$store.dispatch('api/removeCard', this.data._id).catch(() => null)
+      if (res) {
         this.$emit('remove', this.data._id)
-      })
+      }
+    },
+    onOpen () {
+      // для column/index.vue, блокируем скролл в родителе
+      this.$root.$emit('disableColumnScroll')
+    },
+    onClose () {
+      // для column/index.vue, разблокируем скролл в родителе
+      this.$root.$emit('enableColumnScroll')
     }
   }
 }
@@ -47,19 +52,21 @@ export default {
 
 <style lang="scss" scoped>
   .card-component {
+    @extend %content-block;
+    padding: 0;
     position: relative;
+    border: 2px solid $color-content-bg;
     border-radius: $border-radius-default;
-    background: $color-white;
-    box-shadow: $box-shadow-light;
-    transition: $transition-card;
     cursor: pointer;
-    &:hover {
-      background: darken($color-white, 1%);
-      box-shadow: $box-shadow-light-hover;
-    }
 
     .intro {
-      padding: 10px 12px 20px;
+      padding: 14px 16px 15px;
+    }
+
+    .title {
+      padding-right: 20px;
+      font-size: $font-size-card-title;
+      line-height: $line-height-card-title;
     }
 
     .options {
@@ -79,7 +86,8 @@ export default {
     }
 
     &.sortable-ghost {
-      background: $color-bg;
+      border: 2px dashed rgba($color-text-light, .3);
+      background: transparent;
       box-shadow: none;
       & > * {
         opacity: 0;

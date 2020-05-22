@@ -3,14 +3,38 @@
  * Put your custom styles into index.vue
  */
 
+$button-padding-default: 11px 20px 13px;
+$button-padding-small: 10px 18px 11px 17px;
+
+// $button-types: name background color background-hover color-hover
+$button-types: default $color-primary $color-text-white darken($color-primary, 5%) $color-text-white,
+               light $color-bg $color-text-regular $color-bg-highlight $color-text-regular,
+               icon transparent $color-text-light transparent $color-text-regular,
+               ghost transparent $color-text-light $color-content-bg $color-text-regular,
+               transparent transparent $color-text-white $color-dark-highlight $color-text-white;
+
+// $button-sizes: name padding font-size line-height;
+$button-sizes: default $button-padding-default $font-size-small $line-height-small,
+               large $button-padding-default $font-size-default $line-height-default,
+               small $button-padding-small $font-size-extrasmall $line-height-extrasmall,
+               icon 0 $font-size-default 1;
+
+
 .button-component {
   display: inline-flex;
   .button {
     display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
     font-family: $font-family-default;
+    font-weight: $font-weight-semibold;
     border: none;
     text-decoration: none;
+    outline: none;
     cursor: pointer;
+    transition: $transition-button;
+    border-radius: $border-radius-button;
 
     // types
     @each $type in $button-types {
@@ -45,8 +69,28 @@
     }
 
     // icons
-    svg {
-      margin-right: 10px;
+    &:not(.button-size-icon) {
+      svg {
+        margin-right: 10px;
+      }
+    }
+
+    &.button-size-icon {
+      width: 32px;
+      height: 32px;
+      border-radius: $border-radius-small;
+      font-weight: $font-weight-normal;
+    }
+
+    &.button-type-default {
+      box-shadow: 0 6px 12px -4px rgba($color-primary, .15);
+      &:hover {
+        box-shadow: 0 6px 12px -4px rgba($color-primary, .5);
+      }
+    }
+
+    &.button-type-ghost.button-size-large {
+      justify-content: flex-start;
     }
   }
 

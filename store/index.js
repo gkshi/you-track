@@ -8,7 +8,7 @@ export const modules = {
 export const state = () => ({
   user: {},
   modals: [],
-  activeBoard: null,
+  activeBoard: {},
   activeCard: {},
 
   // information messages, network status, api errors
@@ -30,27 +30,30 @@ export const actions = {
     commit('MODAL_CLEAR')
   },
 
-  changeActiveBoard ({ commit }, board = null) {
-    commit('ACTIVE_BOARD_UPDATE', board)
+  changeActiveBoard ({ commit }, board) {
+    const copy = { ...board }
+    // TODO: временное решение
+    delete copy.columns
+    commit('ACTIVE_BOARD_UPDATE', copy)
   },
-  changeActiveCard ({ dispatch, commit }, card) {
-    if (!card) {
-      commit('ACTIVE_CARD_UPDATE', {})
-      this.$router.push({
-        query: {}
-      })
-      return
+
+  async changeActiveCard ({ dispatch, commit, state }, card) {
+    if (card) {
+      const res = await dispatch('api/getCard', card).catch(() => null)
+      if (res) {
+        commit('ACTIVE_CARD_UPDATE', res)
+        this.$router.push({
+          query: {
+            card: res._id
+          }
+        })
+        return
+      }
     }
-    dispatch('api/getCard', card).then(res => {
-      commit('ACTIVE_CARD_UPDATE', res)
-      this.$router.push({
-        query: {
-          card: res._id
-        }
-      })
-    }).catch(err => {
-      console.warn('changeActiveCard err', err)
-      commit('ACTIVE_CARD_UPDATE', {})
+
+    commit('ACTIVE_CARD_UPDATE', {})
+    this.$router.push({
+      query: {}
     })
   },
 
@@ -58,6 +61,8 @@ export const actions = {
     const message = this.app.$models.create('message', data)
     commit('MESSAGES_ADD', message)
   },
+  // TODO: проверить, нужно ли почистить за компонентом "message"
+  // либо привести в порядок, либо вырезать полностью
   hideMessage ({ commit }, id) {
     commit('MESSAGES_REMOVE', id)
   }
@@ -81,7 +86,7 @@ export const mutations = {
   ACTIVE_BOARD_UPDATE (state, board) {
     state.activeBoard = board
   },
-  ACTIVE_CARD_UPDATE (state, card = {}) {
+  ACTIVE_CARD_UPDATE (state, card) {
     state.activeCard = card
   },
 

@@ -1,82 +1,93 @@
 <template lang="pug">
   .page.index
-    .wrapper
-      template(v-if="boards.length")
-        h2 My boards:
-        .boards.flex.column.a-start
-          .board.flex.j-between.a-start(v-for="board in boards" :key="board.id")
-            nuxt-link(:to="`/boards/${board.alias}`")
-              div {{ board.title }}
-            contextMenu.options
-              a(href="#" @click.prevent) Rename
-              a(href="#" @click.prevent="requestBoardRemoving(board)") Remove
-      .boards(v-if="!boards.length")
-        div No boards yet.
-
-      commonButton(@click="openModal('create_board')") Create board
+    .columns.flex.a-start.j-center
+      div
+        h1 Personal Boards
+        .boards
+          vBoard(
+            v-for="board in boards"
+            :data="board"
+            :key="board._id"
+            @update="onBoardUpdate"
+            @remove="onBoardRemove")
+        div
+          commonButton(@click="openModal('board_create')") Create a board
+      div
+        h1 News and updates
+        .news-list
+          contentBlock(v-for="(item, i) in newsList" :data="item" :key="i")
 
     modalCreateBoard(@success="onBoardCreate")
-    modalRemoveBoard(@submit="removeBoard" @close="activeBoard = null")
+    modalEditBoard(@update="onBoardUpdate")
 </template>
 
 <script>
-import contextMenu from '@/components/context-menu'
-import modalCreateBoard from '@/components/modals/create-board'
-import modalRemoveBoard from '@/components/modals/remove-board'
+import newsList from '@/updates'
+import vBoard from '@/components/board'
+import contentBlock from '@/components/content-block'
+import modalCreateBoard from '@/components/modals/board-create'
+import modalEditBoard from '@/components/modals/board-edit'
 
 export default {
-  name: 'index-page',
   components: {
-    contextMenu,
+    vBoard,
+    contentBlock,
     modalCreateBoard,
-    modalRemoveBoard
+    modalEditBoard
   },
   data () {
     return {
+      newsList,
       boards: []
-    }
-  },
-  methods: {
-    onBoardCreate (board) {
-      this.boards.push(board)
-    },
-    requestBoardRemoving (board) {
-      this.activeBoard = board
-      this.openModal('remove_board')
-    },
-    removeBoard (board = this.activeBoard) {
-      this.$store.dispatch('api/removeBoard', board._id).then(() => {
-        this.boards = this.boards.filter(i => i._id !== board._id)
-        this.closeModal('remove_board')
-      })
     }
   },
   created () {
     this.$store.dispatch('api/getBoards').then(res => {
       res.forEach(item => {
-        const board = this.$models.create('board', item)
-        this.boards.push(board)
+        // const board = this.$models.create('board', item)
+        // this.boards.push(board)
+        this.boards.push(item)
       })
     })
+  },
+  methods: {
+    onBoardUpdate (data) {
+      const target = this.boards.find(i => i._id === data._id)
+      if (target) {
+        target.merge(data)
+      }
+    },
+    onBoardCreate (board) {
+      this.boards.push(board)
+      // this.boards.push(this.$models.create('board', board))
+    },
+    onBoardRemove (board) {
+      this.boards = this.boards.filter(i => i._id !== board._id)
+    }
   }
 }
 </script>
 
 <style lang="scss" scoped>
   .page.index {
-    .boards {
-      margin: 10px auto 30px;
-    }
-    .board {
-      width: 300px;
-      background: #f8f8f8;
-      padding: 20px 20px;
-      box-shadow: $box-shadow-light;
-      &:not(:last-child) {
-        margin-bottom: 20px;
+    .columns {
+      & > *:last-child {
+        margin-left: 128px;
       }
-      .actions {
-        margin-left: 10px;
+    }
+    h1 {
+      display: block;
+      margin-bottom: 16px;
+    }
+    .news-list {
+      width: 400px;
+    }
+    .boards {
+      margin-bottom: 24px;
+      ::v-deep {
+        & > *:not(:last-child) {
+          margin-bottom: 16px;
+        }
       }
     }
   }

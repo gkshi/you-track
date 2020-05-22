@@ -1,5 +1,8 @@
 export default {
-  _id: String,
+  _id: {
+    type: String,
+    hidden: true
+  },
 
   title: {
     type: String,
@@ -7,11 +10,18 @@ export default {
   },
 
   // Parent board id
-  board: String,
+  board: {
+    type: String,
+    hidden: true
+  },
 
   // Card list
-  cards: Array,
+  cards: {
+    type: Array
+  },
 
   // Card order in column
-  order: Array
+  order: {
+    type: Array
+  }
 }
