@@ -32,10 +32,11 @@ export default {
       this.$store.dispatch('changeActiveCard', this.data._id)
       this.openModal('card')
     },
-    remove () {
-      this.$store.dispatch('api/removeCard', this.data._id).then(() => {
+    async remove () {
+      const res = await this.$store.dispatch('api/removeCard', this.data._id).catch(() => null)
+      if (res) {
         this.$emit('remove', this.data._id)
-      })
+      }
     },
     onOpen () {
       // для column/index.vue, блокируем скролл в родителе
@@ -60,6 +61,12 @@ export default {
 
     .intro {
       padding: 14px 16px 15px;
+    }
+
+    .title {
+      padding-right: 20px;
+      font-size: $font-size-card-title;
+      line-height: $line-height-card-title;
     }
 
     .options {

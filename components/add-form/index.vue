@@ -25,6 +25,15 @@ export default {
     placeholder: String,
     exception: String
   },
+  mounted () {
+    this.$nextTick(() => {
+      this.$refs.field.focus()
+    })
+    this.$root.$on('keyup-esc', this.close)
+  },
+  beforeDestroy () {
+    this.$root.$off('keyup-esc', this.close)
+  },
   methods: {
     tryToClose (e) {
       if (this.exception) {
@@ -42,15 +51,6 @@ export default {
     close () {
       this.$emit('close')
     }
-  },
-  mounted () {
-    this.$nextTick(() => {
-      this.$refs.field.focus()
-    })
-    this.$root.$on('keyup-esc', this.close)
-  },
-  beforeDestroy () {
-    this.$root.$off('keyup-esc', this.close)
   }
 }
 </script>

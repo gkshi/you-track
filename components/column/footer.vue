@@ -37,8 +37,7 @@ export default {
   },
   watch: {
     isOpened () {
-      // TODO: this.newCard.reset()
-      this.newCard.title = ''
+      this.newCard.reset()
     }
   },
   mounted () {
@@ -60,11 +59,12 @@ export default {
       this.isOpened = false
     },
     createCard () {
-      this.newCard.column = this.columnId
+      this.newCard.update({
+        column: this.columnId
+      })
       this.$store.dispatch('api/createCard', this.newCard).then(res => {
         this.$emit('create', res)
-        // TODO: this.newCard.reset()
-        this.newCard.title = ''
+        this.newCard.reset()
       })
     }
   }

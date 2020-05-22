@@ -16,6 +16,6 @@ export default {
   // Parent column id
   column: {
     type: String,
-    hidden: true
+    required: true
   }
 }

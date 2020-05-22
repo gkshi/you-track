@@ -58,11 +58,11 @@ export default {
       font-size: $font-size-small;
       line-height: $line-height-small;
       color: $color-text-light;
+      transition: $transition-default;
       & > * {
         display: block;
         padding: 13px 18px;
         text-decoration: none;
-        // color: inherit;
         color: $color-text-regular;
         transition: $transition-default;
         &:first-child {
@@ -76,8 +76,13 @@ export default {
         }
         &:hover {
           background: rgba($color-bg, .7);
-          // color: $color-text-regular;
         }
+      }
+
+      &.v-enter,
+      &.v-leave-active {
+        opacity: 0;
+        transform: translate(0, -3px);
       }
     }
   }

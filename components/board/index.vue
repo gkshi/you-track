@@ -1,13 +1,13 @@
 <template lang="pug">
   .board-component
-    nuxt-link(:to="`/boards/${data.alias}`")
-      .title {{ data.title }}
-      div {{ data.description }}
-      div {{ data.order.length }} lists
+    nuxt-link(:to="`/boards/${board.alias}`")
+      .title {{ board.title }}
+      .description {{ board.description }}
+      .counters {{ board.order.length }} lists
     contextMenu.menu
-      nuxt-link(:to="`/boards/${data.alias}`") Open board
-      a(href="#" @click.prevent) Edit board
-      a(href="#" @click.prevent) Delete board
+      nuxt-link(:to="`/boards/${board.alias}`") Open board
+      a(href="#" @click.prevent="edit") Edit board
+      a(href="#" @click.prevent="remove") Delete board
 </template>
 
 <script>
@@ -21,6 +21,31 @@ export default {
     data: {
       type: Object,
       default: () => ({})
+    }
+  },
+  data () {
+    return {
+      board: this.$models.create('board', this.data)
+    }
+  },
+  watch: {
+    data: {
+      handler () {
+        this.board.update(this.data)
+      },
+      deep: true
+    }
+  },
+  methods: {
+    edit () {
+      this.$store.dispatch('changeActiveBoard', this.data)
+      this.openModal('board_edit')
+    },
+    async remove () {
+      const res = await this.$store.dispatch('api/removeBoard', this.board._id)
+      if (res) {
+        this.$emit('remove', this.data)
+      }
     }
   }
 }
@@ -37,6 +62,15 @@ export default {
       padding: 16px 18px;
       text-decoration: none;
       color: inherit;
+    }
+    .title {
+      padding-right: 20px;
+      font-size: $font-size-card-title;
+      line-height: $line-height-card-title;
+    }
+    .counters {
+      margin-top: 2px;
+      // text-decoration: underline;
     }
     ::v-deep .menu {
       position: absolute;

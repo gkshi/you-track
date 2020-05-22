@@ -48,6 +48,12 @@ export default {
       return typeof this.error === 'string' ? this.error : 'Error'
     }
   },
+  mounted () {
+    this.localId = this.localId || Math.random().toFixed(7).slice(2)
+    if (this.autofocus) {
+      this.focus()
+    }
+  },
   methods: {
     focus () {
       this.$nextTick(() => {
@@ -59,12 +65,6 @@ export default {
       const value = e.clipboardData.getData('Text')
       this.$emit('input', value)
       this.$emit('paste', value)
-    }
-  },
-  mounted () {
-    this.localId = this.localId || Math.random().toFixed(7).slice(2)
-    if (this.autofocus) {
-      this.focus()
     }
   }
 }

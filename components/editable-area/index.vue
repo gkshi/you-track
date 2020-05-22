@@ -6,13 +6,13 @@
         :value="value"
         :placeholder="placeholder"
         @change="update"
-        @keypress.enter="onEnterPress"
         v-outside="changeMode")
       input.non-draggable(
         v-else
         :value="value"
         :placeholder="placeholder"
         @change="update"
+        @keypress.enter="onEnterPress"
         v-outside="changeMode")
 
     .preview(v-else)
@@ -23,6 +23,9 @@
 <script>
 export default {
   name: 'editable-area-component',
+  model: {
+    event: 'change'
+  },
   props: {
     value: [String, Number],
     type: {
@@ -31,9 +34,6 @@ export default {
     },
     placeholder: String,
     textarea: Boolean
-  },
-  model: {
-    event: 'change'
   },
   data () {
     return {
@@ -46,6 +46,12 @@ export default {
         this.focus()
       }
     }
+  },
+  mounted () {
+    this.$root.$on('keyup-esc', this.changeMode)
+  },
+  beforeDestroy () {
+    this.$root.$off('keyup-esc')
   },
   methods: {
     changeMode (mode = 'show') {
@@ -67,12 +73,6 @@ export default {
       }
       this.changeMode('show')
     }
-  },
-  mounted () {
-    this.$root.$on('keyup-esc', this.changeMode)
-  },
-  beforeDestroy () {
-    this.$root.$off('keyup-esc')
   }
 }
 </script>

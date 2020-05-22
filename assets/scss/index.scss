@@ -49,6 +49,12 @@ h1 {
   font-weight: $font-weight-semibold;
 }
 
+h2, .h2 {
+  font-size: $font-size-heading;
+  line-height: $line-height-heading;
+  font-weight: $font-weight-semibold;
+}
+
 .page {
   padding-top: 32px;
   margin-bottom: 100px;

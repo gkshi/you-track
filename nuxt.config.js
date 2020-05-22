@@ -31,6 +31,9 @@ module.exports = {
       { rel: 'icon', type: 'image/png', sizes: '16x16', href: '/favicon-16x16.png' },
       { rel: 'icon', type: 'image/png', sizes: '32x32', href: '/favicon-32x32.png' }
     ]
+    // script: [
+    //   { src: '/js/helpers.js' }
+    // ]
   },
   /*
   ** Customize the progress-bar color
@@ -56,7 +59,8 @@ module.exports = {
   ** Plugins to load before mounting the App
   */
   plugins: [
-    'node_modules/nuxt-models',
+    '@/plugins/helpers',
+    'node_modules/nuxt-models', // '@/plugins/nuxt-models/src',
     '@/plugins/common-components',
     '@/mixins/modal',
     '@/directives/outside'
@@ -78,6 +82,9 @@ module.exports = {
     // Doc: https://github.com/nuxt-community/dotenv-module
     '@nuxtjs/dotenv'
   ],
+  models: {
+    logs: false
+  },
   /*
   ** Router options
   */

@@ -39,7 +39,7 @@ export default {
       activeBoard: state => state.activeBoard
     }),
     pageTitle () {
-      return this.activeBoard ? `${this.activeBoard} board` : this.$route.path === '/' ? 'Main page' : 'Loading...'
+      return this.activeBoard.title ? `${this.activeBoard.title} board` : this.$route.path === '/' ? 'Main page' : 'Loading...'
     }
   },
   methods: {

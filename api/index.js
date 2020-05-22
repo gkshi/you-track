@@ -56,7 +56,7 @@ export default {
     return this.do('POST', '/boards', data)
   },
   updateBoard (payload) {
-    return this.do('PUT', `/boards/${payload.board}`, payload.data)
+    return this.do('PUT', `/boards/${payload._id}`, payload)
   },
   removeBoard (id) {
     return this.do('DELETE', `/boards/${id}`)

@@ -36,7 +36,7 @@ $transition-modal: opacity 0.25s ease, transform 0.25s ease;
     color: inherit;
 
     .title {
-      margin-bottom: 16px;
+      margin-bottom: 8px;
     }
   }
 
@@ -54,6 +54,10 @@ $transition-modal: opacity 0.25s ease, transform 0.25s ease;
       background: $color-bg-highlight;
       color: $color-text-regular;
     }
+  }
+
+  .actions {
+    margin-top: 24px;
   }
 
   &.modal-enter {

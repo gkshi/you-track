@@ -46,6 +46,9 @@ export default {
       return typeof this.error === 'string' ? this.error : 'Error'
     }
   },
+  mounted () {
+    this.localId = this.localId || Math.random().toFixed(7).slice(2)
+  },
   methods: {
     paste (e) {
       e.preventDefault()
@@ -53,9 +56,6 @@ export default {
       this.$emit('input', value)
       this.$emit('paste', value)
     }
-  },
-  mounted () {
-    this.localId = this.localId || Math.random().toFixed(7).slice(2)
   }
 }
 </script>

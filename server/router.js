@@ -121,8 +121,8 @@ router.post('/boards', async (request, response) => {
  * @param data <object>
  */
 router.put('/boards/:id', async (request, response) => {
-  const board = await _getOne('boards', request.params.id)
   await _update('boards', request.params.id, request.body)
+  const board = await _getOne('boards', request.params.id)
   response.send(board)
 })
 
@@ -214,7 +214,6 @@ router.delete('/columns/:id', async (request, response) => {
  */
 router.get('/cards/:id', async (request, response) => {
   const card = await _getOne('cards', request.params.id)
-  console.log('card', card)
   if (card) {
     response.send(card)
   } else {
@@ -323,13 +322,11 @@ function sortById (items, ids = []) {
 }
 
 async function _get (from, query = {}) {
-  // console.log('query', query, typeof query)
   if (typeof query !== 'object') {
     query = {
       _id: ObjectId(query)
     }
   }
-  // console.log('query', query)
   const result = await db.collection(from).find({
     ...query
   }).toArray()

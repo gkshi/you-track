@@ -6140,10 +6140,10 @@ number-is-nan@^1.0.0:
   resolved "https://registry.yarnpkg.com/number-is-nan/-/number-is-nan-1.0.1.tgz#097b602b53422a522c1afb8790318336941a011d"
   integrity sha1-CXtgK1NCKlIsGvuHkDGDNpQaAR0=
 
-nuxt-models@^0.0.9:
-  version "0.0.9"
-  resolved "https://registry.yarnpkg.com/nuxt-models/-/nuxt-models-0.0.9.tgz#5e6a90a595b5fbe08b8cd5d54e09cb053cc63c61"
-  integrity sha512-y9G8HnUN2V2XUrLSwTTOwzZR3GJbZTuv/j0abyFJAKZwcloKAM8pWmCNr+X372tt1Fd0Oe65pWrPbBKNcb4+AA==
+nuxt-models@^0.0.11:
+  version "0.0.11"
+  resolved "https://registry.yarnpkg.com/nuxt-models/-/nuxt-models-0.0.11.tgz#9825a4405c7ba2c73d656ca9d054ca0dad188caf"
+  integrity sha512-l8PQTSaiKoqx49Ft+DIbNwXGjrTLZwW3rfXFWll1P1TED3aN6TG4D2C5kYcnXARVRDMgVlE8Os2mIdeMQmbBwQ==
 
 nuxt@^2.12.2:
   version "2.12.2"

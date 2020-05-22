@@ -63,6 +63,9 @@ export default {
       deep: true
     }
   },
+  created () {
+    // this.column.cards = this.column.cards.map(i => this.$models.create('card', i))
+  },
   mounted () {
     this.handleResize()
     window.addEventListener('resize', this.handleResize)
@@ -74,12 +77,11 @@ export default {
     this.$root.$off('disableColumnScroll')
     this.$root.$off('enableColumnScroll')
   },
-  created () {
-    this.column.cards = this.column.cards.map(i => this.$models.create('card', i))
-  },
   methods: {
     handleResize () {
-      this.footerInteraction = this.$refs.original.offsetHeight >= this.$el.offsetHeight
+      this.$nextTick(() => {
+        this.footerInteraction = this.$refs.original.offsetHeight >= this.$el.offsetHeight
+      })
     },
     disableScrollStatus () {
       this.scrollStatus = false
@@ -110,16 +112,19 @@ export default {
       })
     },
     onOrderUpdate (order) {
+      console.log('onOrderUpdate', order)
+      console.log('this.column.cards', this.column.cards)
       this.column.order = order
       this.column.cards = this.column.cards.filter(i => this.column.order.includes(i._id))
     },
     onCardCreate (data) {
-      const card = this.$models.create('card', data)
-      this.column.cards.push(card)
-      this.$emit('update', this.column)
+      // const card = this.$models.create('card', data)
+      this.column.cards.push(data)
+      this.$emit('update', data)
       this.scrollListToBottom()
     },
     onCardAdd (card) {
+      console.log('onCardAdd')
       const ordered = []
       this.column.order.forEach(i => {
         if (card._id === i) {

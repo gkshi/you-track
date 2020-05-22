@@ -44,19 +44,27 @@ export default {
     columnRemoveModal,
     addForm
   },
-  head () {
-    return {
-      title: `${this.board.title} board - YouTrack`
+  async asyncData ({ route, store, error }) {
+    const res = await store.dispatch('api/getBoard', route.params.alias).catch(() => null)
+    if (!res) {
+      return error({ statusCode: 404, message: 'Not found' })
     }
+    store.dispatch('changeActiveBoard', res)
+    return { response: res }
   },
   data () {
     return {
-      board: this.$models.create('board'),
+      response: {},
+      // board: this.$models.create('board', this.response),
+      board: {},
+
       // sortable
       sortable: null,
+
       // column creation
       columnCreationOpened: false,
       columnTitle: '',
+
       // column to remove
       activeColumn: this.$models.create('column')
     }
@@ -65,6 +73,26 @@ export default {
     columnCreationOpened () {
       this.columnTitle = ''
     }
+  },
+  mounted () {
+    this.board = this.$models.create('board', this.response)
+    // this.board.update(this.response)
+    this.initSortable()
+    if (!this.board.columns.length) {
+      this.toggleColumnCreation()
+    }
+    // Column height watcher
+    this.watchColumnHeight()
+    window.addEventListener('resize', this.watchColumnHeight)
+
+    // Open card modal trigger
+    if (this.$route.query.card) {
+      this.openCard(this.$route.query.card)
+    }
+  },
+  beforeDestroy () {
+    this.$store.dispatch('changeActiveBoard', {})
+    window.removeEventListener('resize', this.watchColumnHeight)
   },
   methods: {
     scrollBoardToRight () {
@@ -82,18 +110,18 @@ export default {
           title: this.columnTitle
         }
       }).then(res => {
-        const column = this.$models.create('column', res)
-        this.board.columns.push(column)
+        // const column = this.$models.create('column', res)
+        this.board.columns.push(res)
         this.columnTitle = ''
         this.scrollBoardToRight()
       })
     },
     onColumnUpdate (column) {
       const target = this.board.columns.find(i => i._id === column._id)
-      // TODO: target.update(column)
-      Object.keys(target).forEach(key => {
-        target[key] = column[key]
-      })
+      // target.cards = column.cards
+      // console.log('column', column)
+      console.log('target', target)
+      // target.merge(column)
     },
     onColumnRemoveRequest (id) {
       this.activeColumn.update(this.board.columns.find(i => i._id === id))
@@ -160,11 +188,9 @@ export default {
       })
     },
     onCardUpdate (card) {
-      console.log('ловим')
       this.board.columns.every(column => {
         let found = false
         const target = column.cards.find(i => i._id === card._id)
-        console.log('target', target, card._id, column.cards)
         if (target) {
           target.description = card.description
           // TODO: вручную перебираем свойства объекта и заменяем в цели
@@ -179,31 +205,10 @@ export default {
       })
     }
   },
-  mounted () {
-    this.$store.dispatch('api/getBoard', this.$route.params.alias).then(res => {
-      this.board.update(res)
-      // this.board.columns = this.board.columns.map(i => this.$models.create('column', i))
-      this.$store.dispatch('changeActiveBoard', this.board.title)
-      this.initSortable()
-      if (!this.board.columns.length) {
-        this.toggleColumnCreation()
-      }
-    }).catch(err => {
-      return this.$nuxt.error({ statusCode: 404, message: err.message })
-    })
-
-    // Column height watcher
-    this.watchColumnHeight()
-    window.addEventListener('resize', this.watchColumnHeight)
-
-    // Open card modal trigger
-    if (this.$route.query.card) {
-      this.openCard(this.$route.query.card)
+  head () {
+    return {
+      title: `${this.board.title} board - YouTrack`
     }
-  },
-  beforeDestroy () {
-    this.$store.dispatch('changeActiveBoard', null)
-    window.removeEventListener('resize', this.watchColumnHeight)
   }
 }
 </script>

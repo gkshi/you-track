@@ -28,13 +28,18 @@ export default {
     }
   },
   mounted () {
+    window.addEventListener('resize', this.handleResize)
     this.$root.$on('keyup', this.handleKeyup)
   },
   beforeDestroy () {
+    window.removeEventListener('resize', this.handleResize)
     this.$root.$off('keyup')
     this.destroy()
   },
   methods: {
+    handleResize () {
+      this.close()
+    },
     handleKeyup (key) {
       if (key === 'esc') {
         this.close()
@@ -50,12 +55,14 @@ export default {
       this.el = this.$refs.dropdown
       const position = this.$refs.icon.getBoundingClientRect()
       this.el.classList.add('transparent')
+      this.el.style.zIndex = '9000'
+      this.$el.style.zIndex = '9001'
       document.body.appendChild(this.el)
 
       this.$nextTick().then(() => {
         const bottomSpace = window.innerHeight - (position.top + position.height)
         if (!this.elHeight) {
-          this.elHeight = this.$refs.dropdown.offsetHeight + 24
+          this.elHeight = this.el.offsetHeight + 24
         }
 
         // Определение направления вверх/вниз
@@ -82,6 +89,8 @@ export default {
       this.$refs.dropdown.classList.remove('dropdown-direction-bottom')
       this.$refs.dropdown.style.top = ''
       this.$refs.dropdown.style.bottom = ''
+      this.$refs.icon.style.zIndex = ''
+      this.$el.style.zIndex = ''
       this.$emit('close')
     }
   }

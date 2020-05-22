@@ -37,39 +37,6 @@ export default {
       lastCardAdded: null
     }
   },
-  methods: {
-    beforeDragStart () {
-      this.$root.$emit('keyup-esc')
-    },
-    onDragStart () {
-      document.body.classList.add('drag-mode')
-    },
-    onDragEnd () {
-      document.body.classList.remove('drag-mode')
-    },
-    onDragAdd (e) {
-      this.lastCardAdded = e.item
-    },
-    moveCard (order) {
-      this.$emit('add', this.lastCardAdded.__vue__.data)
-      this.$store.dispatch('api/moveCard', {
-        card: this.lastCardAdded.dataset.id,
-        column: {
-          id: this.column,
-          order
-        }
-      })
-    },
-    async updateColumnOrder (order) {
-      this.$emit('order-update', order)
-      await this.$store.dispatch('api/updateColumn', {
-        id: this.column,
-        data: {
-          order
-        }
-      })
-    }
-  },
   mounted () {
     // Sortable init
     this.sortable = new Sortable(this.$refs.cards, {
@@ -109,6 +76,39 @@ export default {
       onEnd: this.onDragEnd,
       onAdd: this.onDragAdd
     })
+  },
+  methods: {
+    beforeDragStart () {
+      this.$root.$emit('keyup-esc')
+    },
+    onDragStart () {
+      document.body.classList.add('drag-mode')
+    },
+    onDragEnd () {
+      document.body.classList.remove('drag-mode')
+    },
+    onDragAdd (e) {
+      this.lastCardAdded = e.item
+    },
+    moveCard (order) {
+      this.$emit('add', this.lastCardAdded.__vue__.data)
+      this.$store.dispatch('api/moveCard', {
+        card: this.lastCardAdded.dataset.id,
+        column: {
+          id: this.column,
+          order
+        }
+      })
+    },
+    async updateColumnOrder (order) {
+      this.$emit('order-update', order)
+      await this.$store.dispatch('api/updateColumn', {
+        id: this.column,
+        data: {
+          order
+        }
+      })
+    }
   }
 }
 </script>

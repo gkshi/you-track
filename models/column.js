@@ -17,8 +17,7 @@ export default {
 
   // Card list
   cards: {
-    type: Array,
-    hidden: true
+    type: Array
   },
 
   // Card order in column

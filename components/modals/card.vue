@@ -5,7 +5,8 @@
           editableArea.h1(
             type="light"
             v-model="card.title"
-            placeholder="Enter a title for this card...")
+            placeholder="Enter a title for this card..."
+            @change="update")
 
         //- section
           div Labels:
@@ -51,6 +52,9 @@ export default {
   created () {
     this.card.update(this.activeCard)
   },
+  beforeDestroy () {
+    this.onClose()
+  },
   methods: {
     onClose () {
       this.$store.dispatch('changeActiveCard', null)
@@ -59,9 +63,6 @@ export default {
       await this.$store.dispatch('api/updateCard', this.card)
       this.$emit('update', this.card)
     }
-  },
-  beforeDestroy () {
-    this.onClose()
   }
 }
 </script>

@@ -28,5 +28,10 @@ export default {
   // Column order in board
   order: {
     type: Array
+  },
+
+  lastModified: {
+    type: String,
+    hidden: true
   }
 }

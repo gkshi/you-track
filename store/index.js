@@ -8,7 +8,7 @@ export const modules = {
 export const state = () => ({
   user: {},
   modals: [],
-  activeBoard: null,
+  activeBoard: {},
   activeCard: {},
 
   // information messages, network status, api errors
@@ -30,9 +30,13 @@ export const actions = {
     commit('MODAL_CLEAR')
   },
 
-  changeActiveBoard ({ commit }, board = null) {
-    commit('ACTIVE_BOARD_UPDATE', board)
+  changeActiveBoard ({ commit }, board) {
+    const copy = { ...board }
+    // TODO: временное решение
+    delete copy.columns
+    commit('ACTIVE_BOARD_UPDATE', copy)
   },
+
   async changeActiveCard ({ dispatch, commit, state }, card) {
     if (card) {
       const res = await dispatch('api/getCard', card).catch(() => null)
@@ -82,8 +86,7 @@ export const mutations = {
   ACTIVE_BOARD_UPDATE (state, board) {
     state.activeBoard = board
   },
-  ACTIVE_CARD_UPDATE (state, card = {}) {
-    console.log('ACTIVE_CARD_UPDATE', card)
+  ACTIVE_CARD_UPDATE (state, card) {
     state.activeCard = card
   },
 
