@@ -65,8 +65,8 @@ export default {
     }
     .title {
       padding-right: 20px;
-      font-size: $font-size-card-title;
-      line-height: $line-height-card-title;
+      font-size: $font-size-smaller;
+      line-height: $line-height-smaller;
     }
     .counters {
       margin-top: 2px;

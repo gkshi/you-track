@@ -1,5 +1,8 @@
 $error-color: red;
 
+$input-padding-default: 8px 16px 9px;
+$input-padding-alt: 7px 17px 8px;
+
 .input-component {
   label {
     display: block;
@@ -9,7 +12,7 @@ $error-color: red;
     width: 100%;
     background: $color-bg;
     border: 2px solid $color-bg;
-    padding: 8px 16px 9px;
+    padding: $input-padding-default;
     border-radius: $border-radius-default;
     outline: none;
     &:focus {
@@ -22,6 +25,27 @@ $error-color: red;
   &-error {
     input {
       border-color: $error-color;
+    }
+  }
+
+  &.input-type-alt {
+    ::-webkit-input-placeholder { color: rgba($color-text-white, .5); }
+    ::-moz-placeholder { color: rgba($color-text-white, .5); }
+    :-ms-input-placeholder { color: rgba($color-text-white, .5); }
+    input {
+      padding: $input-padding-alt;
+      background: lighten($color-dark, 4%);
+      color: $color-text-white;
+      border: none;
+      border-radius: 30px;
+      font-size: $font-size-smaller;
+      line-height: $line-height-smaller;
+      &:hover {
+        background: lighten($color-dark, 5%);
+      }
+      &:focus {
+        background: lighten($color-dark, 5%);
+      }
     }
   }
 }

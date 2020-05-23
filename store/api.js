@@ -56,6 +56,10 @@ export const actions = {
   },
   removeCard (context, id) {
     return API.removeCard(id)
+  },
+
+  search (context, query = '') {
+    return API.search(query)
   }
 }
 

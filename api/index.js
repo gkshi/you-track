@@ -86,5 +86,9 @@ export default {
   },
   removeCard (id) {
     return this.do('DELETE', `/cards/${id}`)
+  },
+
+  search (query) {
+    return this.do('GET', '/search', { query })
   }
 }
