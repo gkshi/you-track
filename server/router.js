@@ -299,8 +299,49 @@ router.delete('/cards/:id', async (request, response) => {
 })
 
 /**
+ * Search in boards and cards by text fields
+ */
+router.get('/search', async (request, response) => {
+  const text = request.query.text
+
+  if (text === '') {
+    response.send({})
+  }
+
+  const boards = await _get('boards', _getQueryForLikeSearch(['title', 'description', 'alias'], text))
+  const cards = await _get('cards', _getQueryForLikeSearch(['title', 'description'], text))
+
+  response.send({
+    boards,
+    cards
+  })
+})
+
+/**
  * Helpers
  */
+
+/**
+ * @param fields
+ * @param text
+ * @param logicalOperator
+ * @returns {{logicalOperator: []}}
+ * @private
+ */
+function _getQueryForLikeSearch (fields, text, logicalOperator = '$or') {
+  const arr = []
+
+  fields.forEach(field => {
+    arr.push({
+      [field]: {
+        $regex: '.*' + text + '.*',
+        $options: 'gim'
+      }
+    })
+  })
+
+  return { [logicalOperator]: arr }
+}
 
 function sortById (items, ids = []) {
   const sorted = []
