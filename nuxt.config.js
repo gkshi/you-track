@@ -7,7 +7,7 @@ module.exports = {
   */
   server: {
     port: process.env.NODE_ENV === 'production' ? 80 : 3000, // default: 3000
-    host: process.env.NODE_ENV === 'production' ? '167.71.75.50' : 'localhost', // default: localhost,
+    host: process.env.NUXT_ENV_IP || 'localhost', // default: localhost
     timing: false
   },
   /*
