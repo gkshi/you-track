@@ -11,15 +11,25 @@
 
     transition
       .dropdown(v-if="isOpened")
-        div(v-if="response.boards.length")
-          div Boards
-          div(v-for="board in response.boards" :key="board._id") {{ board._id }}
+        div
+          .group(v-if="response.boards.length")
+            .title Boards
+            .boards
+              nuxt-link.board(
+                v-for="board in response.boards"
+                :to="`/boards/${board.alias}`"
+                :key="board._id") {{ board.title }}
 
-        div(v-if="response.cards.length")
-          div Cards
-          div(v-for="card in response.cards" :key="card._id") {{ card._id }}
+          .group(v-if="response.cards.length")
+            .title Cards
+            .cards
+              nuxt-link.card(
+                v-for="card in response.cards"
+                to="/"
+                :key="card._id")
+                div {{ card.title }}
 
-        div(v-if="!response.boards.length && !response.cards.length") No items found.
+          div(v-if="!response.boards.length && !response.cards.length") No items found.
 </template>
 
 <script>
@@ -62,6 +72,9 @@ export default {
       }
       // Object.assign(this.$data, this.$options.data())
     },
+    select () {
+      this.$refs.input.select()
+    },
     search () {
       if (!this.query) {
         this.reset()
@@ -77,14 +90,15 @@ export default {
         return
       }
       this.isLoading = true
-      const res = await this.$store.dispatch('api/search', this.query)
-      console.log('res', res)
+      this.response = await this.$store.dispatch('api/search', this.query)
       this.isOpened = true
       this.isLoading = false
     },
     onFocus () {
       if (this.query) {
         this.isOpened = true
+        this.sendRequest()
+        this.select()
       }
     }
   }
@@ -95,6 +109,7 @@ export default {
   .search-bar-component {
     position: relative;
     width: 176px;
+    margin-bottom: 1px;
 
     .icon {
       position: absolute;
@@ -109,10 +124,31 @@ export default {
       }
     }
 
+    .title {
+      padding-left: 24px;
+      padding-right: 24px;
+    }
+
     .input {
       ::v-deep input {
         padding-left: 40px;
         text-align: right;
+      }
+    }
+
+    .card,
+    .board {
+      display: block;
+      padding: 10px 24px;
+      text-decoration: none;
+      &:hover {
+        background: $color-bg;
+      }
+    }
+
+    .group {
+      &:not(:last-child) {
+        margin-bottom: 24px;
       }
     }
 
@@ -123,7 +159,11 @@ export default {
       right: 0;
       z-index: 10;
       width: 360px;
+      max-height: 320px;
+      padding-left: 0;
+      padding-right: 0;
       text-align: right;
+      overflow: auto;
       transition: $transition-default;
       box-shadow: $box-shadow-default-hover;
 
