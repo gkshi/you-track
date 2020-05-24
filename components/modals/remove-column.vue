@@ -1,7 +1,7 @@
 <template lang="pug">
   commonModal.remove-column-modal(:id="id" size="narrow")
-    span(slot="title") Column deletion
-    div Warning: all cards in the column will be deleted.
+    span(slot="title") Warning!
+    div All cards in the list will be deleted.
     .buttons(slot="actions")
       commonButton(@click="$emit('submit')") Delete
       commonButton(type="light" @click="closeModal(id)") Cancel

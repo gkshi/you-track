@@ -302,14 +302,17 @@ router.delete('/cards/:id', async (request, response) => {
  * Search in boards and cards by text fields
  */
 router.get('/search', async (request, response) => {
-  const text = request.query.text
+  const text = request.query.query
 
   if (text === '') {
-    response.send({})
+    response.send({
+      boards: [],
+      cards: []
+    })
   }
 
-  const boards = await _get('boards', _getQueryForLikeSearch(['title', 'description', 'alias'], text))
-  const cards = await _get('cards', _getQueryForLikeSearch(['title', 'description'], text))
+  const boards = await _get('boards', _generateSearchQuery(['title', 'description', 'alias'], text))
+  const cards = await _get('cards', _generateSearchQuery(['title', 'description'], text))
 
   response.send({
     boards,
@@ -328,7 +331,7 @@ router.get('/search', async (request, response) => {
  * @returns {{logicalOperator: []}}
  * @private
  */
-function _getQueryForLikeSearch (fields, text, logicalOperator = '$or') {
+function _generateSearchQuery (fields, text, logicalOperator = '$or') {
   const arr = []
 
   fields.forEach(field => {
