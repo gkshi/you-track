@@ -37,7 +37,7 @@ export const actions = {
     commit('ACTIVE_BOARD_UPDATE', copy)
   },
 
-  async changeActiveCard ({ dispatch, commit, state }, card) {
+  async changeActiveCard ({ dispatch, commit, state }, card = null) {
     if (card) {
       const res = await dispatch('api/getCard', card).catch(() => null)
       if (res) {

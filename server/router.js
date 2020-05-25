@@ -10,7 +10,7 @@ const ObjectId = require('mongodb').ObjectId
 let db
 const dbName = 'youtrack'
 const dbUrl = process.env.NODE_ENV === 'production'
-  ? `mongodb+srv://${process.env.DB_USERNAME}:${process.env.DB_PASSWORD}@cluster0-pampp.mongodb.net/test?retryWrites=true&w=majority`
+  ? `mongodb+srv://${process.env.NUXT_ENV_DB_USERNAME}:${process.env.NUXT_ENV_DB_PASSWORD}@cluster0-pampp.mongodb.net/test?retryWrites=true&w=majority`
   : 'mongodb://localhost:27017'
 const mongoClient = new MongoClient(dbUrl, {
   useUnifiedTopology: true,
@@ -318,6 +318,34 @@ router.get('/search', async (request, response) => {
     boards,
     cards
   })
+})
+
+/**
+ * Search board by card ID
+ * @param id <string>
+ */
+router.get('/search/:id', async (request, response) => {
+  let card
+  // get card by id
+  try {
+    card = await _getOne('cards', request.params.id)
+  } catch (e) {
+    response.status(404).send()
+    return
+  }
+  // get card column
+  const column = await _getOne('columns', {
+    _id: card.column
+  })
+  if (column) {
+    // get card board
+    const board = await _getOne('boards', {
+      _id: column.board
+    })
+    response.send(board)
+  } else {
+    response.status(404).send()
+  }
 })
 
 /**

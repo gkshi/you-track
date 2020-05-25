@@ -1,17 +1,19 @@
 <template lang="pug">
   .page.index
     .columns.flex.a-start.j-center
-      div
+      .left
         h1 Personal Boards
-        .boards
-          vBoard(
-            v-for="board in boards"
-            :data="board"
-            :key="board._id"
-            @update="onBoardUpdate"
-            @remove="onBoardRemove")
-        div
-          commonButton(@click="openModal('board_create')") Create a board
+        commonLoader(v-if="isLoading")
+        template(v-else)
+          .boards
+            vBoard(
+              v-for="board in boards"
+              :data="board"
+              :key="board._id"
+              @update="onBoardUpdate"
+              @remove="onBoardRemove")
+          div
+            commonButton(@click="openModal('board_create')") Create a board
       div
         h1 News and updates
         .news-list
@@ -38,19 +40,24 @@ export default {
   data () {
     return {
       newsList,
+
+      isLoading: false,
       boards: []
     }
   },
   created () {
-    this.$store.dispatch('api/getBoards').then(res => {
-      res.forEach(item => {
-        // const board = this.$models.create('board', item)
-        // this.boards.push(board)
-        this.boards.push(item)
-      })
-    })
+    this.getBoards()
   },
   methods: {
+    async getBoards () {
+      if (this.isLoading) {
+        return
+      }
+      this.isLoading = true
+      const boards = await this.$store.dispatch('api/getBoards')
+      this.boards = [...boards]
+      this.isLoading = false
+    },
     onBoardUpdate (data) {
       const target = this.boards.find(i => i._id === data._id)
       if (target) {
@@ -59,7 +66,6 @@ export default {
     },
     onBoardCreate (board) {
       this.boards.push(board)
-      // this.boards.push(this.$models.create('board', board))
     },
     onBoardRemove (board) {
       this.boards = this.boards.filter(i => i._id !== board._id)
@@ -75,12 +81,20 @@ export default {
         margin-left: 128px;
       }
     }
+    .left {
+      min-width: 250px;
+    }
     h1 {
       display: block;
       margin-bottom: 16px;
     }
     .news-list {
       width: 400px;
+    }
+    ::v-deep .news-list > * {
+      &:not(:last-child) {
+        margin-bottom: 16px;
+      }
     }
     .boards {
       margin-bottom: 24px;

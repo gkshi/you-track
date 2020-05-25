@@ -52,9 +52,6 @@ export default {
   created () {
     this.card.update(this.activeCard)
   },
-  beforeDestroy () {
-    this.onClose()
-  },
   methods: {
     onClose () {
       this.$store.dispatch('changeActiveCard', null)
