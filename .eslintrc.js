@@ -21,7 +21,6 @@ module.exports = {
     'vue/name-property-casing': ['warn', 'kebab-case'],
     'no-console': ['warn', { allow: ['warn', 'error'] }],
     'vue/require-default-prop': 'off',
-    'arrow-parens': ['warn', 'as-needed'],
-    'import/order': 'off'
+    'arrow-parens': ['warn', 'as-needed']
   }
 }
