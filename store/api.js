@@ -5,7 +5,7 @@ export const actions = {
     return API.check()
   },
 
-  // users
+  // user
   getUser () {
     return API.getUser()
   },
@@ -13,7 +13,7 @@ export const actions = {
     return API.createUser(data)
   },
 
-  // boards
+  // board
   getBoards () {
     return API.getBoards()
   },
@@ -30,7 +30,7 @@ export const actions = {
     return API.removeBoard(id)
   },
 
-  // columns
+  // column
   createColumn (context, payload) {
     return API.createColumn(payload.board, payload.data)
   },
@@ -41,7 +41,7 @@ export const actions = {
     return API.removeColumn(id)
   },
 
-  // cards
+  // card
   createCard (context, data) {
     return API.createCard(data)
   },
@@ -58,8 +58,12 @@ export const actions = {
     return API.removeCard(id)
   },
 
+  // search
   search (context, query = '') {
     return API.search(query)
+  },
+  searchCardBoard (context, cardId) {
+    return API.searchCardBoard(cardId)
   }
 }
 

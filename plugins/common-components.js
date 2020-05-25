@@ -7,6 +7,7 @@ import commonTextarea from '@/components/common/textarea'
 // import commonCounter from '@/components/common/counter'
 // import commonRadio from '@/components/common/radio'
 // import commonCheckbox from '@/components/common/checkbox'
+import commonLoader from '@/components/common/loader'
 import commonModal from '@/components/common/modal'
 // import commonTabs from '@/components/common/tabs'
 
@@ -29,5 +30,6 @@ Vue.component('commonTextarea', commonTextarea)
 // Vue.component('commonCounter', commonCounter)
 // Vue.component('commonRadio', commonRadio)
 // Vue.component('commonCheckbox', commonCheckbox)
+Vue.component('commonLoader', commonLoader)
 Vue.component('commonModal', commonModal)
 // Vue.component('commonTabs', commonTabs)

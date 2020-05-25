@@ -134,8 +134,7 @@ export default {
             border-radius: $border-radius-default;
           }
           &:hover {
-            background: rgba($color-bg, .7);
-            // color: $color-text-regular;
+            background: $color-bg;
           }
         }
       }

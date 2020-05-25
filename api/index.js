@@ -35,10 +35,12 @@ export default {
     })
   },
 
+  // ping
   check () {
     return this.do('GET', '/')
   },
 
+  // user
   getUser () {
     return this.do('GET', '/user')
   },
@@ -46,6 +48,7 @@ export default {
     return this.do('POST', '/user', data)
   },
 
+  // board
   getBoards () {
     return this.do('GET', '/boards')
   },
@@ -62,6 +65,7 @@ export default {
     return this.do('DELETE', `/boards/${id}`)
   },
 
+  // column
   createColumn (board, data) {
     return this.do('POST', '/columns', { board, data })
   },
@@ -72,6 +76,7 @@ export default {
     return this.do('DELETE', `/columns/${id}`)
   },
 
+  // card
   getCard (id) {
     return this.do('GET', `/cards/${id}`)
   },
@@ -88,7 +93,11 @@ export default {
     return this.do('DELETE', `/cards/${id}`)
   },
 
+  // search
   search (query) {
     return this.do('GET', '/search', { query })
+  },
+  searchCardBoard (cardId) {
+    return this.do('GET', `/search/${cardId}`)
   }
 }

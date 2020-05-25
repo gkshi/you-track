@@ -1,21 +1,12 @@
-require('dotenv').config()
-
 module.exports = {
   mode: 'spa', // universal, spa
   /*
   ** Server config
   */
   server: {
-    port: process.env.NODE_ENV === 'production' ? 80 : 3000, // default: 3000
-    host: process.env.NUXT_ENV_IP || 'localhost', // default: localhost
+    host: process.env.NUXT_ENV_HOST || 'localhost', // default: localhost
+    port: process.env.NUXT_ENV_PORT || 3000, // default: 3000
     timing: false
-  },
-  /*
-  ** Environment variables
-  */
-  env: {
-    DB_USERNAME: process.env.DB_USERNAME,
-    DB_PASSWORD: process.env.DB_PASSWORD
   },
   /*
   ** Headers of the page

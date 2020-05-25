@@ -1,5 +1,5 @@
 <template lang="pug">
-  .page.board
+  .page.board(:class="{ loading: isLoading }")
     .scroll-parent.flex.a-start(ref="scrollParent")
       .columns.flex.a-start.shrink(ref="columnParent")
         boardColumn.column(
@@ -7,8 +7,8 @@
           :data="column"
           :key="column._id"
           @update="onColumnUpdate"
-          @remove-request="onColumnRemoveRequest"
-          @remove="onColumnRemove")
+          @remove-request="requestColumnRemove"
+          @remove="removeColumn")
       .column.non-draggable.shrink
         commonButton.ghost-block(
           v-if="!columnCreationOpened"
@@ -25,10 +25,11 @@
           @close="toggleColumnCreation") Add column
 
     cardModal(@update="onCardUpdate")
-    columnRemoveModal(:data="activeColumn" @submit="onColumnRemove")
+    columnRemoveModal(:data="activeColumn" @submit="removeColumn")
 </template>
 
 <script>
+import { mapState } from 'vuex'
 import { Sortable, AutoScroll } from 'sortablejs/modular/sortable.core.esm.js'
 import boardColumn from '@/components/column'
 import cardModal from '@/components/modals/card'
@@ -45,11 +46,12 @@ export default {
     addForm
   },
   async asyncData ({ route, store, error }) {
+    // Убираем из хранилища активную доску
+    store.dispatch('changeActiveBoard', {})
     const res = await store.dispatch('api/getBoard', route.params.alias).catch(() => null)
     if (!res) {
       return error({ statusCode: 404, message: 'Not found' })
     }
-    store.dispatch('changeActiveBoard', res)
     return { response: res }
   },
   data () {
@@ -69,10 +71,26 @@ export default {
       activeColumn: this.$models.create('column')
     }
   },
+  computed: {
+    ...mapState({
+      activeBoardInStore: state => state.activeBoard
+    }),
+    isLoading () {
+      return !this.activeBoardInStore._id
+    }
+  },
   watch: {
+    '$route.query' () {
+      if (this.$route.query.card) {
+        this.openCard(this.$route.query.card)
+      }
+    },
     columnCreationOpened () {
       this.columnTitle = ''
     }
+  },
+  created () {
+    this.$store.dispatch('changeActiveBoard', this.response)
   },
   mounted () {
     this.board = this.$models.create('board', this.response)
@@ -118,16 +136,13 @@ export default {
     },
     onColumnUpdate (column) {
       const target = this.board.columns.find(i => i._id === column._id)
-      // target.cards = column.cards
-      // console.log('column', column)
-      console.log('target', target)
-      // target.merge(column)
+      Object.assign(target, column)
     },
-    onColumnRemoveRequest (id) {
+    requestColumnRemove (id) {
       this.activeColumn.update(this.board.columns.find(i => i._id === id))
       this.openModal('column_remove')
     },
-    async onColumnRemove (id = this.activeColumn._id) {
+    async removeColumn (id = this.activeColumn._id) {
       await this.$store.dispatch('api/removeColumn', id)
       this.board.columns = this.board.columns.filter(i => i._id !== id)
       // TODO: this.activeColumn.reset()
@@ -241,6 +256,13 @@ export default {
     ::v-deep .column.non-draggable {
        & > .button-component {
         width: 100%;
+      }
+    }
+
+    &.loading {
+      .scroll-parent {
+        opacity: .5;
+        pointer-events: none;
       }
     }
   }

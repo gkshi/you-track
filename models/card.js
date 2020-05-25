@@ -13,7 +13,7 @@ export default {
     type: String
   },
 
-  // Parent column id
+  // Column parent ID
   column: {
     type: String,
     required: true

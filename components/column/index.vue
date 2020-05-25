@@ -63,9 +63,6 @@ export default {
       deep: true
     }
   },
-  created () {
-    // this.column.cards = this.column.cards.map(i => this.$models.create('card', i))
-  },
   mounted () {
     this.handleResize()
     window.addEventListener('resize', this.handleResize)
@@ -112,19 +109,16 @@ export default {
       })
     },
     onOrderUpdate (order) {
-      console.log('onOrderUpdate', order)
-      console.log('this.column.cards', this.column.cards)
       this.column.order = order
       this.column.cards = this.column.cards.filter(i => this.column.order.includes(i._id))
+      this.$emit('update', this.column)
     },
     onCardCreate (data) {
-      // const card = this.$models.create('card', data)
       this.column.cards.push(data)
-      this.$emit('update', data)
       this.scrollListToBottom()
+      this.$emit('update', this.data)
     },
     onCardAdd (card) {
-      console.log('onCardAdd')
       const ordered = []
       this.column.order.forEach(i => {
         if (card._id === i) {
@@ -134,6 +128,7 @@ export default {
         }
       })
       this.column.cards = ordered
+      this.$emit('update', this.column)
     },
     onCardRemove (id) {
       this.column.cards = this.column.cards.filter(i => i._id !== id)
