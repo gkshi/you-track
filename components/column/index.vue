@@ -26,11 +26,11 @@
 </template>
 
 <script>
+import cardList from './card-list'
+import columnFooter from './footer'
 import contextMenu from '@/components/context-menu'
 import editableArea from '@/components/editable-area'
-import cardList from './card-list'
 import iconDragPlace from '@/components/icons/drag-place'
-import columnFooter from './footer'
 
 export default {
   name: 'column-component',

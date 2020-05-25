@@ -33,7 +33,7 @@
                   :key="card._id")
                   div {{ card.title }}
 
-            div(v-if="!response.boards.length && !response.cards.length") No items found.
+            .title(v-if="!response.boards.length && !response.cards.length") No items found.
 </template>
 
 <script>
@@ -81,16 +81,6 @@ export default {
         }
       })
     },
-    reset () {
-      clearTimeout(this.timeout)
-      this.isOpened = false
-      this.isLoading = false
-      this.response = {
-        boards: [],
-        cards: []
-      }
-      // Object.assign(this.$data, this.$options.data())
-    },
     select () {
       this.$refs.input.select()
     },
@@ -112,6 +102,19 @@ export default {
       this.isLoading = true
       this.response = await this.$store.dispatch('api/search', this.query)
       this.isLoading = false
+    },
+    reset () {
+      clearTimeout(this.timeout)
+      this.isOpened = false
+      this.isLoading = false
+      if (!this.response.boards.length && !this.response.cards.length) {
+        this.query = ''
+      }
+      this.response = {
+        boards: [],
+        cards: []
+      }
+      // Object.assign(this.$data, this.$options.data())
     },
     onFocus () {
       if (this.query) {
