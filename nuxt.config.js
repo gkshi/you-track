@@ -6,9 +6,16 @@ module.exports = {
   ** Server config
   */
   server: {
-    host: process.env.NUXT_ENV_HOST || 'localhost', // default: localhost
-    port: process.env.NUXT_ENV_PORT || 3000, // default: 3000
+    host: process.env.HOST || 'localhost', // default: localhost
+    port: process.env.PORT || 3000, // default: 3000
     timing: false
+  },
+  /*
+  ** Environment variables
+  */
+  env: {
+    DB_USERNAME: process.env.DB_USERNAME,
+    DB_PASSWORD: process.env.DB_PASSWORD
   },
   /*
   ** Headers of the page

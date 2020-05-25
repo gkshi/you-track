@@ -10,7 +10,7 @@ const ObjectId = require('mongodb').ObjectId
 let db
 const dbName = 'youtrack'
 const dbUrl = process.env.NODE_ENV === 'production'
-  ? `mongodb+srv://${process.env.NUXT_ENV_DB_USERNAME}:${process.env.NUXT_ENV_DB_PASSWORD}@cluster0-pampp.mongodb.net/test?retryWrites=true&w=majority`
+  ? `mongodb+srv://${process.env.DB_USERNAME}:${process.env.DB_PASSWORD}@cluster0-pampp.mongodb.net/test?retryWrites=true&w=majority`
   : 'mongodb://localhost:27017'
 const mongoClient = new MongoClient(dbUrl, {
   useUnifiedTopology: true,
