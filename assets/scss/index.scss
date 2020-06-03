@@ -60,6 +60,19 @@ h2, .h2 {
   margin-bottom: 100px;
 }
 
+.page-enter-active, .page-leave-active {
+  transition: $transition-page;
+  // transform: scale(.95);
+}
+.page-enter {
+  opacity: 0;
+  transform: translate(0, -1%);
+}
+.page-leave-active {
+  opacity: 0;
+  transform: translate(0, -1%);
+}
+
 .wrapper {
   padding: 0 32px;
 }

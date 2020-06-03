@@ -19,10 +19,10 @@
         addForm(
           v-else
           v-model="columnTitle"
-          placeholder="Enter a title for new column..."
+          placeholder="Enter a title for new list..."
           exception="add-column-link"
           @submit="createColumn"
-          @close="toggleColumnCreation") Add column
+          @close="toggleColumnCreation") Add list
 
     cardModal(@update="onCardUpdate")
     columnRemoveModal(:data="activeColumn" @submit="removeColumn")
@@ -81,9 +81,7 @@ export default {
   },
   watch: {
     '$route.query' () {
-      if (this.$route.query.card) {
-        this.openCard(this.$route.query.card)
-      }
+      this.checkQuery()
     },
     columnCreationOpened () {
       this.columnTitle = ''
@@ -103,16 +101,22 @@ export default {
     this.watchColumnHeight()
     window.addEventListener('resize', this.watchColumnHeight)
 
-    // Open card modal trigger
-    if (this.$route.query.card) {
-      this.openCard(this.$route.query.card)
-    }
+    this.checkQuery()
   },
   beforeDestroy () {
     this.$store.dispatch('changeActiveBoard', {})
     window.removeEventListener('resize', this.watchColumnHeight)
   },
   methods: {
+    checkQuery () {
+      // Open card modal trigger
+      if (this.$route.query.card) {
+        // Timeout для фикса "прыжка" модалки из-за анимации перехода между страницами
+        setTimeout(() => {
+          this.openCard(this.$route.query.card)
+        }, 300)
+      }
+    },
     scrollBoardToRight () {
       this.$nextTick(() => {
         this.$refs.scrollParent.scrollLeft = this.$refs.scrollParent.scrollWidth

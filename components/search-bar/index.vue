@@ -110,10 +110,10 @@ export default {
       if (!this.response.boards.length && !this.response.cards.length) {
         this.query = ''
       }
-      this.response = {
-        boards: [],
-        cards: []
-      }
+      // this.response = {
+      //   boards: [],
+      //   cards: []
+      // }
       // Object.assign(this.$data, this.$options.data())
     },
     onFocus () {

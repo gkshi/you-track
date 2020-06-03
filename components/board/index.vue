@@ -7,15 +7,19 @@
     contextMenu.menu
       nuxt-link(:to="`/boards/${board.alias}`") Open board
       a(href="#" @click.prevent="edit") Edit board
-      a(href="#" @click.prevent="remove") Delete board
+      a(href="#" @click.prevent="requestRemoving") Delete board
+
+    modalRemoveBoard(@submit="remove")
 </template>
 
 <script>
 import contextMenu from '@/components/context-menu'
+import modalRemoveBoard from '@/components/modals/remove-board'
 
 export default {
   components: {
-    contextMenu
+    contextMenu,
+    modalRemoveBoard
   },
   props: {
     data: {
@@ -41,10 +45,14 @@ export default {
       this.$store.dispatch('changeActiveBoard', this.data)
       this.openModal('board_edit')
     },
+    requestRemoving () {
+      this.openModal('board_remove')
+    },
     async remove () {
       const res = await this.$store.dispatch('api/removeBoard', this.board._id)
       if (res) {
         this.$emit('remove', this.data)
+        this.closeModal('board_remove')
       }
     }
   }
