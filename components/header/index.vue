@@ -9,7 +9,7 @@
         h1 {{ pageTitle }}
       .side.flex.a-center
         searchBar
-        themeToggler
+        // themeToggler
         userBar
 </template>
 
@@ -39,7 +39,7 @@ export default {
       activeBoard: state => state.activeBoard
     }),
     pageTitle () {
-      return this.activeBoard.title ? `${this.activeBoard.title} board` : this.$route.path === '/' ? 'Main page' : 'Loading...'
+      return this.activeBoard.title ? `${this.activeBoard.title} board` : this.$route.path === '/' ? 'Main page' : ''
     }
   },
   methods: {
@@ -65,7 +65,7 @@ export default {
     }
     .side {
       & > *:not(:last-child) {
-        margin-right: 24px;
+        margin-right: 32px;
       }
     }
     .buttons {

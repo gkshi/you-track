@@ -13,11 +13,17 @@ export default {
     vHeader
   },
   mounted () {
-    document.addEventListener('keyup', e => {
+    document.addEventListener('keyup', this.handleKeyup)
+  },
+  beforeDestroy () {
+    document.removeEventListener('keyup', this.handleKeyup)
+  },
+  methods: {
+    handleKeyup (e) {
       if (e.which === 27) {
         this.$root.$emit('keyup', 'esc')
       }
-    })
+    }
   }
 }
 </script>
