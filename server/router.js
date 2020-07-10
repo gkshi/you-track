@@ -1,8 +1,12 @@
 const express = require('express')
 const router = express.Router()
-const appVersion = require('../package.json').version
+const webPush = require('web-push')
+const CronJob = require('cron').CronJob
 const MongoClient = require('mongodb').MongoClient
 const ObjectId = require('mongodb').ObjectId
+const appVersion = require('../package.json').version
+
+const cronJobs = {}
 
 /**
  * MongoDB init
@@ -23,6 +27,50 @@ mongoClient.connect((err, client) => {
   }
   db = client.db(dbName)
   // app.listen(3000)
+})
+
+router.post('/startcron', (request, response) => {
+  const subscription = request.body.subscription
+  const payload = JSON.stringify({
+    title: 'Push notifications with Service Workers'
+  })
+  // CronJob
+  cronJobs[request.body.id] = new CronJob(
+    '0-59/6 * * * * *',
+    function (onComplete) {
+      console.log('You will see this message every 10 seconds')
+      webPush.sendNotification(subscription, payload).catch(error => {
+        console.log(error)
+      })
+      if (onComplete) {
+        onComplete()
+      }
+    },
+    function () {
+      console.log('onComplete')
+      console.log('this', this)
+      // this.stop()
+    })
+  cronJobs[request.body.id].start()
+  response.send({ status: 'ok' })
+})
+router.post('/stopcron', (request, response) => {
+  console.log('stop', request.body.id)
+  cronJobs[request.body.id].stop()
+  response.send({ status: 'ok' })
+})
+
+router.post('/subscribe', (request, response) => {
+  const subscription = request.body
+
+  response.status(201).json({})
+
+  const payload = JSON.stringify({
+    title: 'Push notifications with Service Workers'
+  })
+
+  webPush.sendNotification(subscription, payload)
+    .catch(error => console.error(error))
 })
 
 /**

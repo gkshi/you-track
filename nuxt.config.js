@@ -15,7 +15,10 @@ module.exports = {
   */
   env: {
     DB_USERNAME: process.env.DB_USERNAME,
-    DB_PASSWORD: process.env.DB_PASSWORD
+    DB_PASSWORD: process.env.DB_PASSWORD,
+
+    PUBLIC_VAPID_KEY: process.env.PUBLIC_VAPID_KEY,
+    PRIVATE_VAPID_KEY: process.env.PRIVATE_VAPID_KEY
   },
   /*
   ** Headers of the page
