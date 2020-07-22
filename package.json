@@ -5,7 +5,7 @@
   "author": "George Shinkarev",
   "private": true,
   "engines": {
-    "node": "12.x"
+    "node": ">=12.x"
   },
   "scripts": {
     "dev": "cross-env NODE_ENV=development nodemon server/index.js --watch server",
@@ -15,12 +15,12 @@
     "lint": "eslint --ext .js,.vue --ignore-path .gitignore ."
   },
   "dependencies": {
-    "@nuxtjs/axios": "^5.10.3",
+    "@nuxtjs/axios": "^5.12.0",
     "body-parser": "^1.19.0",
     "cross-env": "^7.0.2",
     "express": "^4.17.1",
-    "mongodb": "^3.5.8",
-    "nuxt": "^2.12.2"
+    "mongodb": "^3.5.9",
+    "nuxt": "^2.13.3"
   },
   "devDependencies": {
     "@nuxtjs/dotenv": "^1.4.1",
@@ -28,14 +28,15 @@
     "@nuxtjs/eslint-module": "^2.0.0",
     "@nuxtjs/style-resources": "^1.0.0",
     "babel-eslint": "^10.1.0",
-    "eslint": "^7.1.0",
+    "eslint": "^7.5.0",
     "eslint-plugin-nuxt": ">=1.0.0",
     "node-sass": "^4.14.1",
     "nodemon": "^2.0.4",
     "nuxt-models": "^0.0.11",
     "pug": "^3.0.0",
     "pug-plain-loader": "^1.0.0",
-    "sass-loader": "^8.0.2",
-    "sortablejs": "^1.10.2"
+    "sass-loader": "^9.0.2",
+    "sortablejs": "^1.10.2",
+    "vue-common-components": "^0.0.15"
   }
 }
