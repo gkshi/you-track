@@ -1,27 +1,46 @@
 <template lang="pug">
   .page.settings
     .wrapper.narrow
-      // section
-        .h1 Account photo
-        div content
-
       section
+        .h1 Account information
+        div
+          div name
+          div photo
+
+      section.notifications
         .h1 Notification settings
-        pushNotifications
+        settings-push-notifications.setting-block(@change="onPushStatusChange")
+        // settings-eye-care.setting-block(:disabled="!isPushActive")
 </template>
 
 <script>
-import pushNotifications from '@/components/settings/push-notifications'
-
 export default {
-  components: {
-    pushNotifications
+  data () {
+    return {
+      isPushActive: false
+    }
+  },
+  methods: {
+    onPushStatusChange (state = false) {
+      this.isPushActive = state
+    }
   }
 }
 </script>
 
 <style lang="scss" scoped>
   .page.settings {
-    //
+    section {
+      margin-bottom: 48px;
+    }
+
+    .h1 {
+      display: block;
+      margin-bottom: 16px;
+    }
+
+    .setting-block {
+      margin-bottom: 16px;
+    }
   }
 </style>

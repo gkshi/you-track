@@ -60,17 +60,22 @@ router.post('/stopcron', (request, response) => {
   response.send({ status: 'ok' })
 })
 
-router.post('/subscribe', (request, response) => {
-  const subscription = request.body
-
-  response.status(201).json({})
-
+router.post('/subscribe', async (request, response) => {
+  const subscription = request.body.subscription
+  console.log('subscription', subscription)
   const payload = JSON.stringify({
     title: 'Push notifications with Service Workers'
   })
-
-  webPush.sendNotification(subscription, payload)
-    .catch(error => console.error(error))
+  const res = await webPush.sendNotification(subscription, payload).catch(error => {
+    console.error(error)
+    return null
+  })
+  console.log('res', res)
+  if (res) {
+    response.status(200).send()
+  } else {
+    response.status(500).send()
+  }
 })
 
 /**
@@ -99,6 +104,18 @@ router.post('/user', async (request, response) => {
     name: request.body.name,
     photo: request.body.photo
   })
+  response.send(user)
+})
+
+/**
+ * Update user
+ * @param user <object>
+ */
+router.put('/user', async (request, response) => {
+  const data = { ...request.body }
+  delete data._id
+  await _update('users', request.body._id, data)
+  const user = await _getOne('users', request.body._id)
   response.send(user)
 })
 

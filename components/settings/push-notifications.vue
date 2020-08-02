@@ -1,89 +1,124 @@
 <template lang="pug">
   .push-notification-settings-component
     .h2 Push notifications
-    div status: {{ status }}
-    div
-      a(href="#" @click.prevent="trigger") trigger
-    div
-      a(href="#" @click.prevent="startcron") startcron
-    div
-      a(href="#" @click.prevent="stopcron") stopcron
+    div is available: {{ isAvailable }}
+
+    template(v-if="isAvailable")
+      div worker registered: {{ isWorkerRegistered }}
+      div is subscribed: {{ isSubscribed }}
+
+      // error message
+      div(v-if="errorMessage") {{ errorMessage }}
+
+      template(v-if="isSubscribed")
+        div
+          a(href="#" @click.prevent="sendExample") send example push
+        div
+          a(href="#" @click.prevent="unregister") turn off
+      template(v-else)
+        div
+          a(href="#" @click.prevent="subscribe") turn on
+
+    // if workers is not available
+    template(v-else)
+      div isAvailable: false
 </template>
 
 <script>
+import { mapState } from 'vuex'
+import { urlBase64ToUint8Array } from '@/plugins/push-helpers'
+
 export default {
   name: 'push-notification-settings-component',
   data () {
     return {
-      status: false
+      isActive: false,
+      isWorkerRegistered: false,
+      isSubscribed: false,
+      errorMessage: null,
+
+      pushManager: null
     }
   },
+  computed: {
+    ...mapState({
+      user: state => state.user
+    }),
+    isAvailable () {
+      return 'serviceWorker' in navigator
+    }
+  },
+  watch: {
+    isSubscribed () {
+      this.$emit('change', this.isSubscribed)
+    }
+  },
+  mounted () {
+    this.check()
+  },
   methods: {
-    async startcron () {
-      const id = 'eyecare'
-      const register = await navigator.serviceWorker.register('/sw.js', {
+    async sendExample () {
+      const subscription = await this.pushManager.getSubscription()
+      // console.log('subscription', subscription)
+      this.$store.dispatch('push/sendExample', {
+        subscription
+      })
+    },
+    async check () {
+      const serviceWorkerRegistration = await this.register()
+      console.log('serviceWorkerRegistration', serviceWorkerRegistration)
+      this.pushManager = serviceWorkerRegistration.pushManager
+      // console.log('this.pushManager', this.pushManager)
+      const subscription = await this.pushManager.getSubscription()
+      // console.log('subscription', subscription)
+      if (subscription) {
+        this.isSubscribed = true
+      } else if (this.user.notifications) {
+        this.subscribe()
+      }
+    },
+    register () {
+      return navigator.serviceWorker.register('/sw.js', {
         scope: '/'
+      }).then(serviceWorkerRegistration => {
+        this.isWorkerRegistered = true
+        return serviceWorkerRegistration
+      }).catch(e => {
+        console.warn('[worker registration]', e)
+        this.isWorkerRegistered = false
+        return null
       })
-      const subscription = await register.pushManager.subscribe({
+    },
+    subscribe () {
+      if (!this.pushManager) {
+        this.isSubscribed = false
+        return null
+      }
+      this.pushManager.subscribe({
         userVisibleOnly: true,
-        applicationServerKey: this.urlBase64ToUint8Array(process.env.PUBLIC_VAPID_KEY)
-      })
-      await fetch('/api/startcron', {
-        method: 'POST',
-        body: JSON.stringify({
-          id,
-          subscription
-        }),
-        headers: {
-          'Content-Type': 'application/json'
-        }
-      })
-    },
-    async stopcron () {
-      const id = 'eyecare'
-      await fetch('/api/stopcron', {
-        method: 'POST',
-        body: JSON.stringify({ id }),
-        headers: {
-          'Content-Type': 'application/json'
-        }
+        applicationServerKey: urlBase64ToUint8Array(process.env.PUBLIC_VAPID_KEY)
+      }).then(pushSubscription => {
+        this.isSubscribed = true
+        this.$store.dispatch('api/updateUser', {
+          id: this.user._id,
+          notifications: true
+        })
+        return pushSubscription
+      }).catch(error => {
+        console.warn('[worker subscription]', error)
+        this.isSubscribed = false
+        this.errorMessage = error
+        return null
       })
     },
-    urlBase64ToUint8Array (base64String) {
-      const padding = '='.repeat((4 - base64String.length % 4) % 4)
-      const base64 = (base64String + padding)
-        .replace(/-/g, '+')
-        .replace(/_/g, '/')
-
-      const rawData = window.atob(base64)
-      const outputArray = new Uint8Array(rawData.length)
-
-      for (let i = 0; i < rawData.length; ++i) {
-        outputArray[i] = rawData.charCodeAt(i)
-      }
-      return outputArray
-    },
-    async trigger () {
-      if ('serviceWorker' in navigator) {
-        const register = await navigator.serviceWorker.register('/sw.js', {
-          scope: '/'
-        })
-
-        const subscription = await register.pushManager.subscribe({
-          userVisibleOnly: true,
-          applicationServerKey: this.urlBase64ToUint8Array(process.env.PUBLIC_VAPID_KEY)
-        })
-
-        await fetch('/api/subscribe', {
-          method: 'POST',
-          body: JSON.stringify(subscription),
-          headers: {
-            'Content-Type': 'application/json'
-          }
-        })
-      } else {
-        console.error('Service workers are not supported in this browser')
-      }
+    async unregister () {
+      const serviceWorkerRegistration = await this.register()
+      serviceWorkerRegistration.unregister()
+      this.$store.dispatch('api/updateUser', {
+        _id: this.user._id,
+        notifications: false
+      })
+      this.isSubscribed = false
     }
   }
 }

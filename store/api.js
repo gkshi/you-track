@@ -12,6 +12,9 @@ export const actions = {
   createUser (context, data) {
     return API.createUser(data)
   },
+  updateUser (context, data) {
+    return API.updateUser(data)
+  },
 
   // board
   getBoards () {

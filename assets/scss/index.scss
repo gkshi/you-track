@@ -43,17 +43,15 @@ a {
   transition: $transition-link;
 }
 
-h1 {
-  font-weight: $font-weight-semibold;
-}
-
-.h1 {
-  font-size: $font-size-heading;
-  line-height: $line-height-heading;
+h1, .h1 {
+  display: block;
+  font-size: $font-size-h1;
+  line-height: $line-height-h1;
   font-weight: $font-weight-semibold;
 }
 
 h2, .h2 {
+  display: block;
   font-size: $font-size-heading;
   line-height: $line-height-heading;
   font-weight: $font-weight-semibold;

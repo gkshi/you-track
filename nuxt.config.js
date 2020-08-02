@@ -83,7 +83,15 @@ module.exports = {
     // Doc: https://axios.nuxtjs.org/usage
     '@nuxtjs/axios',
     // Doc: https://github.com/nuxt-community/dotenv-module
-    '@nuxtjs/dotenv'
+    '@nuxtjs/dotenv',
+    '@nuxt/components'
+  ],
+  /*
+  ** Component auto import
+  */
+  components: [
+    '~/components', // shortcut to { path: '~/components' }
+    { path: '~/components/settings/', prefix: 'settings' }
   ],
   models: {
     logs: false

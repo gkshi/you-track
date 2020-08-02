@@ -1,8 +1,10 @@
 // Modules
 import api from './api'
+import push from './push'
 
 export const modules = {
-  api
+  api,
+  push
 }
 
 export const state = () => ({
