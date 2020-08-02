@@ -3,5 +3,6 @@ $function: ease;
 
 $transition-default: all $duration $function;
 $transition-page: $transition-default;
+$transition-link: color $duration $function;
 $transition-button: $transition-default;
 $transition-card: box-shadow $duration $function;

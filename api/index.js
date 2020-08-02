@@ -1,6 +1,8 @@
 import axios from 'axios'
+import pushMethods from './push'
 
-const urlPrefix = '/api'
+const API_BASE_URL = '/api'
+const SUCCESS_STATUSES = [200, 201, 204]
 
 export default {
 
@@ -15,7 +17,7 @@ export default {
   do (method = 'GET', url = '', data = {}, headers = {}) {
     const options = {
       method,
-      url: `${urlPrefix}${url}`,
+      url: `${API_BASE_URL}${url}`,
       headers: {
         'Cache-Control': 'no-cache',
         ...headers
@@ -24,7 +26,7 @@ export default {
     method === 'GET' ? options.params = data : options.data = data
     return new Promise((resolve, reject) => {
       axios(options).then(res => {
-        if (res.status === 200) {
+        if (SUCCESS_STATUSES.includes(res.status)) {
           resolve(res.data)
         } else {
           reject(res)
@@ -46,6 +48,9 @@ export default {
   },
   createUser (data) {
     return this.do('POST', '/user', data)
+  },
+  updateUser (data) {
+    return this.do('PUT', '/user', data)
   },
 
   // board
@@ -99,5 +104,7 @@ export default {
   },
   searchCardBoard (cardId) {
     return this.do('GET', `/search/${cardId}`)
-  }
+  },
+
+  ...pushMethods
 }

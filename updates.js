@@ -1,5 +1,10 @@
 export default [
   {
+    title: 'Push notifications in progress',
+    content: `New features will be added soon:
+* Eye care`
+  },
+  {
     title: 'v1.1.0 release',
     content: `* Global search by boards and cards added
 * Data reactivity critical bug fixed

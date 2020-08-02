@@ -1,23 +1,24 @@
 <template lang="pug">
   .page.index
-    .columns.flex.a-start.j-center
-      .left
-        h1 Personal Boards
-        commonLoader(v-if="isLoading")
-        template(v-else)
-          .boards
-            vBoard(
-              v-for="board in boards"
-              :data="board"
-              :key="board._id"
-              @update="onBoardUpdate"
-              @remove="onBoardRemove")
-          div
-            commonButton(@click="openModal('board_create')") Create a board
-      div
-        h1 News and updates
-        .news-list
-          contentBlock(v-for="(item, i) in newsList" :data="item" :key="i")
+    .wrapper.narrow
+      .columns.flex.a-start.j-center
+        .left
+          h1 Personal Boards
+          commonLoader(v-if="isLoading")
+          template(v-else)
+            .boards
+              vBoard(
+                v-for="board in boards"
+                :data="board"
+                :key="board._id"
+                @update="onBoardUpdate"
+                @remove="onBoardRemove")
+            div
+              commonButton(@click="openModal('board_create')") Create a board
+        .grow
+          h1 News and updates
+          .news-list
+            contentBlock(v-for="(item, i) in newsList" :data="item" :key="i")
 
     modalCreateBoard(@success="onBoardCreate")
     modalEditBoard(@update="onBoardUpdate")
@@ -89,7 +90,7 @@ export default {
       margin-bottom: 16px;
     }
     .news-list {
-      width: 400px;
+      // width: 400px;
     }
     ::v-deep .news-list > * {
       &:not(:last-child) {

@@ -1,8 +1,12 @@
 const express = require('express')
 const router = express.Router()
-const appVersion = require('../package.json').version
+const webPush = require('web-push')
+const CronJob = require('cron').CronJob
 const MongoClient = require('mongodb').MongoClient
 const ObjectId = require('mongodb').ObjectId
+const appVersion = require('../package.json').version
+
+const cronJobs = {}
 
 /**
  * MongoDB init
@@ -23,6 +27,55 @@ mongoClient.connect((err, client) => {
   }
   db = client.db(dbName)
   // app.listen(3000)
+})
+
+router.post('/startcron', (request, response) => {
+  const subscription = request.body.subscription
+  const payload = JSON.stringify({
+    title: 'Push notifications with Service Workers'
+  })
+  // CronJob
+  cronJobs[request.body.id] = new CronJob(
+    '0-59/6 * * * * *',
+    function (onComplete) {
+      console.log('You will see this message every 10 seconds')
+      webPush.sendNotification(subscription, payload).catch(error => {
+        console.log(error)
+      })
+      if (onComplete) {
+        onComplete()
+      }
+    },
+    function () {
+      console.log('onComplete')
+      console.log('this', this)
+      // this.stop()
+    })
+  cronJobs[request.body.id].start()
+  response.send({ status: 'ok' })
+})
+router.post('/stopcron', (request, response) => {
+  console.log('stop', request.body.id)
+  cronJobs[request.body.id].stop()
+  response.send({ status: 'ok' })
+})
+
+router.post('/subscribe', async (request, response) => {
+  const subscription = request.body.subscription
+  console.log('subscription', subscription)
+  const payload = JSON.stringify({
+    title: 'Push notifications with Service Workers'
+  })
+  const res = await webPush.sendNotification(subscription, payload).catch(error => {
+    console.error(error)
+    return null
+  })
+  console.log('res', res)
+  if (res) {
+    response.status(200).send()
+  } else {
+    response.status(500).send()
+  }
 })
 
 /**
@@ -51,6 +104,18 @@ router.post('/user', async (request, response) => {
     name: request.body.name,
     photo: request.body.photo
   })
+  response.send(user)
+})
+
+/**
+ * Update user
+ * @param user <object>
+ */
+router.put('/user', async (request, response) => {
+  const data = { ...request.body }
+  delete data._id
+  await _update('users', request.body._id, data)
+  const user = await _getOne('users', request.body._id)
   response.send(user)
 })
 

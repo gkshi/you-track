@@ -1,5 +1,6 @@
 const express = require('express')
 const consola = require('consola')
+const webPush = require('web-push')
 const bodyParser = require('body-parser')
 const { Nuxt, Builder } = require('nuxt')
 const app = express()
@@ -15,6 +16,8 @@ app.use(bodyParser.urlencoded({
 
 // eslint-disable-next-line no-path-concat
 app.use(express.static(__dirname + '/public'))
+
+webPush.setVapidDetails('mailto:gkshi@ya.ru', process.env.PUBLIC_VAPID_KEY, process.env.PRIVATE_VAPID_KEY)
 
 /**
  * Routes

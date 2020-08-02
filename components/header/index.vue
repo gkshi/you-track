@@ -6,20 +6,20 @@
           headerMenu
           commonButton(to="/" type="transparent" size="icon")
             iconHome
-        h1 {{ pageTitle }}
+        h1.h2 {{ pageTitle }}
       .side.flex.a-center
         searchBar
-        themeToggler
+        // themeToggler
         userBar
 </template>
 
 <script>
 import { mapState } from 'vuex'
-import headerMenu from './menu'
 import iconHome from '@/components/icons/home'
 import searchBar from '@/components/search-bar'
 import themeToggler from '@/components/theme-toggler'
 import userBar from '@/components/user-bar'
+import headerMenu from './menu'
 
 export default {
   components: {
@@ -39,7 +39,7 @@ export default {
       activeBoard: state => state.activeBoard
     }),
     pageTitle () {
-      return this.activeBoard.title ? `${this.activeBoard.title} board` : this.$route.path === '/' ? 'Main page' : 'Loading...'
+      return this.activeBoard.title ? `${this.activeBoard.title} board` : this.$route.path === '/' ? 'Main page' : ''
     }
   },
   methods: {
@@ -65,7 +65,7 @@ export default {
     }
     .side {
       & > *:not(:last-child) {
-        margin-right: 24px;
+        margin-right: 32px;
       }
     }
     .buttons {
