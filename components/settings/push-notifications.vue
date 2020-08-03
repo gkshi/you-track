@@ -18,10 +18,6 @@
       template(v-else)
         div
           a(href="#" @click.prevent="subscribe") turn on
-
-    // if workers is not available
-    template(v-else)
-      div isAvailable: false
 </template>
 
 <script>

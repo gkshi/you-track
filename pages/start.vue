@@ -2,8 +2,8 @@
   .page.start.flex.column.center
     h1 Hello. What's your name?
     form.flex.a-center(@submit.prevent="createUser")
-      commonInput.grow(v-model="user" placeholder="Jack" autofocus)
-      commonButton.shrink(native="submit" :disabled="!user") Next
+      common-input.grow(v-model="user" placeholder="Jack" autofocus)
+      common-button.shrink(native="submit" :disabled="!user") Next
 </template>
 
 <script>

@@ -1,7 +1,7 @@
 <template lang="pug">
   .header-menu-component(v-outside="close")
-    commonButton(type="transparent" size="icon" @click="toggle")
-      iconMenu
+    common-button(type="transparent" size="icon" @click="toggle")
+      icon-menu
 
     transition
       .dropdown(v-if="isOpened" @click="toggle")
@@ -10,13 +10,8 @@
 </template>
 
 <script>
-import iconMenu from '@/components/icons/menu'
-
 export default {
   name: 'header-menu-component',
-  components: {
-    iconMenu
-  },
   data () {
     return {
       isOpened: false

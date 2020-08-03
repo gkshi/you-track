@@ -1,0 +1,22 @@
+  $error-color: red;
+
+[class*="common-textarea-component"] {
+  textarea {
+    background: $color-bg;
+    border: 2px solid $color-bg;
+    padding: 8px 16px;
+    border-radius: $border-radius-default;
+    outline: none;
+    &:focus {
+      border-color: darken($color-bg, 4%);
+    }
+  }
+  .error {
+    color: $error-color;
+  }
+  &-error {
+    textarea {
+      border-color: $error-color;
+    }
+  }
+}

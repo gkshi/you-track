@@ -1,7 +1,7 @@
 <template lang="pug">
   .card-list-component
     .cards(ref="cards" :class="{ empty: !data.length }")
-      boardCard.card(
+      card-item.card(
         v-for="card in data"
         :data="card"
         :key="card._id"
@@ -10,15 +10,11 @@
 
 <script>
 import { Sortable, AutoScroll } from 'sortablejs/modular/sortable.core.esm.js'
-import boardCard from '@/components/card'
 
 Sortable.mount(new AutoScroll())
 
 export default {
   name: 'card-list-component',
-  components: {
-    boardCard
-  },
   props: {
     // Card list
     data: {

@@ -1,20 +1,14 @@
 <template lang="pug">
   .context-menu-component(:class="{ opened: isOpened }" v-outside="close")
     .icon.flex.center(ref="icon" @click="toggle")
-      iconDots
+      icon-dots
     .context-menu-dropdown(ref="dropdown" v-show="isOpened")
       .list(@click="close")
         slot
 </template>
 
 <script>
-// import Vue from 'vue'
-import iconDots from '@/components/icons/dots'
-
 export default {
-  components: {
-    iconDots
-  },
   data () {
     return {
       isOpened: false,

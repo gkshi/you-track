@@ -1,16 +1,14 @@
 <template lang="pug">
   .page.settings
     .wrapper.narrow
-      section
+      section.account
         .h1 Account information
-        div
-          div name
-          div photo
+        setting-personal-information
 
       section.notifications
         .h1 Notification settings
-        settings-push-notifications.setting-block(@change="onPushStatusChange")
-        // settings-eye-care.setting-block(:disabled="!isPushActive")
+        setting-push-notifications.setting-block(@change="onPushStatusChange")
+        // setting-eye-care.setting-block(:disabled="!isPushActive")
 </template>
 
 <script>

@@ -62,10 +62,9 @@ module.exports = {
   ** Plugins to load before mounting the App
   */
   plugins: [
-    '@/plugins/helpers',
+    '@/plugins/object-helpers',
     'node_modules/nuxt-models', // '@/plugins/nuxt-models/src',
-    '@/plugins/common-components',
-    '@/mixins/modal',
+    'node_modules/vue-common-components',
     '@/directives/outside'
   ],
   /*
@@ -91,16 +90,30 @@ module.exports = {
   */
   components: [
     '~/components', // shortcut to { path: '~/components' }
-    { path: '~/components/settings/', prefix: 'settings' }
+    { path: '~/components/card/', prefix: 'card' },
+    { path: '~/components/column/', prefix: 'column' },
+    { path: '~/components/header/', prefix: 'header' },
+    { path: '~/components/icons/', prefix: 'icon' },
+    { path: '~/components/modals/', prefix: 'modal' },
+    { path: '~/components/settings/', prefix: 'setting' },
+    { path: '~/components/search/', prefix: 'search' },
+    { path: '~/components/user/', prefix: 'user' }
   ],
-  models: {
-    logs: false
+  /*
+  ** Vue-common-components options
+  */
+  commonComponents: {
+    // exclude: ['input']
+    nameCasing: 'kebab-case',
+    modal: {
+      icon: () => import('@/components/icons/cross')
+    }
   },
   /*
   ** Router options
   */
   router: {
-    middleware: ['connection']
+    middleware: ['auth']
   },
   /*
   ** Axios module configuration
@@ -116,6 +129,9 @@ module.exports = {
     ** You can extend webpack config here
     */
     extend (config, ctx) {
+      config.node = {
+        fs: 'empty'
+      }
     }
   }
 }

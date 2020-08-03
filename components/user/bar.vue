@@ -1,8 +1,7 @@
 <template lang="pug">
   nuxt-link.user-bar-component.flex.a-center(to="/settings")
-    .photo.shrink
-      img(v-if="user.photo" :src="user.photo")
-    div {{ user.name }}
+    user-photo(:data="user")
+    .name {{ user.name }}
 </template>
 
 <script>
@@ -22,16 +21,12 @@ export default {
     color: $color-text-light;
     text-decoration: none;
 
-    &:hover {
-      color: $color-text-white;
+    .name {
+      margin-left: 10px;
     }
 
-    .photo {
-      width: 32px;
-      height: 32px;
-      margin-right: 10px;
-      border-radius: 50%;
-      background: $color-dark-highlight;
+    &:hover {
+      color: $color-text-white;
     }
   }
 </style>

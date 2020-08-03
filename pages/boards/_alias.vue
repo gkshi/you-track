@@ -2,7 +2,7 @@
   .page.board(:class="{ loading: isLoading }")
     .scroll-parent.flex.a-start(ref="scrollParent")
       .columns.flex.a-start.shrink(ref="columnParent")
-        boardColumn.column(
+        column-item.column(
           v-for="column in board.columns"
           :data="column"
           :key="column._id"
@@ -10,13 +10,13 @@
           @remove-request="requestColumnRemove"
           @remove="removeColumn")
       .column.non-draggable.shrink
-        commonButton.ghost-block(
+        common-button.ghost-block(
           v-if="!columnCreationOpened"
           type="ghost"
           size="large"
           @click="toggleColumnCreation")
           span + Add another list
-        addForm(
+        add-form(
           v-else
           v-model="columnTitle"
           placeholder="Enter a title for new list..."
@@ -24,27 +24,17 @@
           @submit="createColumn"
           @close="toggleColumnCreation") Add list
 
-    cardModal(@update="onCardUpdate")
-    columnRemoveModal(:data="activeColumn" @submit="removeColumn")
+    modal-card(@update="onCardUpdate")
+    modal-column-remove(:data="activeColumn" @submit="removeColumn")
 </template>
 
 <script>
 import { mapState } from 'vuex'
 import { Sortable, AutoScroll } from 'sortablejs/modular/sortable.core.esm.js'
-import boardColumn from '@/components/column'
-import cardModal from '@/components/modals/card'
-import columnRemoveModal from '@/components/modals/remove-column'
-import addForm from '@/components/add-form'
 
 Sortable.mount(new AutoScroll())
 
 export default {
-  components: {
-    boardColumn,
-    cardModal,
-    columnRemoveModal,
-    addForm
-  },
   async asyncData ({ route, store, error }) {
     // Убираем из хранилища активную доску
     store.dispatch('changeActiveBoard', {})

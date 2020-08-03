@@ -1,10 +1,10 @@
 <template lang="pug">
-  commonModal.remove-board-modal(:id="id" size="narrow")
-    span(slot="title") Warning!
+  common-modal.remove-board-modal(:id="id" size="narrow")
+    .h2(slot="head") Warning!
     div All lists and cards in the board will be deleted.
-    .buttons(slot="actions")
-      commonButton(@click="$emit('submit')") Delete
-      commonButton(type="light" @click="closeModal(id)") Cancel
+    .buttons(slot="buttons")
+      common-button(type="warning" @click="$emit('submit')") Delete
+      common-button(type="light" @click="closeModal(id)") Cancel
 </template>
 
 <script>

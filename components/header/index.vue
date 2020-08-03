@@ -4,30 +4,22 @@
       .side.flex.a-center
         .buttons.flex.a-center
           headerMenu
-          commonButton(to="/" type="transparent" size="icon")
-            iconHome
+          common-button(to="/" type="transparent" size="icon")
+            icon-home
         h1.h2 {{ pageTitle }}
       .side.flex.a-center
-        searchBar
-        // themeToggler
-        userBar
+        search-bar
+        // theme-toggler
+        user-bar
 </template>
 
 <script>
 import { mapState } from 'vuex'
-import iconHome from '@/components/icons/home'
-import searchBar from '@/components/search-bar'
-import themeToggler from '@/components/theme-toggler'
-import userBar from '@/components/user-bar'
 import headerMenu from './menu'
 
 export default {
   components: {
-    headerMenu,
-    iconHome,
-    searchBar,
-    themeToggler,
-    userBar
+    headerMenu
   },
   data () {
     return {
