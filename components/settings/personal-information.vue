@@ -1,16 +1,17 @@
 <template lang="pug">
   .personal-information-setting-component
-    div
-      common-input(type="white" v-model="name")
+    common-input(type="white" v-model="user.name" readonly)
 </template>
 
 <script>
+import { mapState } from 'vuex'
+
 export default {
   name: 'personal-information-setting-component',
-  data () {
-    return {
-      name: ''
-    }
+  computed: {
+    ...mapState({
+      user: state => state.user
+    })
   }
 }
 </script>
