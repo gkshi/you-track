@@ -60,19 +60,20 @@ router.post('/stopcron', (request, response) => {
   response.send({ status: 'ok' })
 })
 
-router.post('/subscribe', async (request, response) => {
+router.post('/push-test', async (request, response) => {
   const subscription = request.body.subscription
   console.log('subscription', subscription)
   const payload = JSON.stringify({
     title: 'Push notifications with Service Workers'
   })
-  const res = await webPush.sendNotification(subscription, payload).catch(error => {
+  const res = await webPush.sendNotification(subscription, payload).then(res => {
+    console.log('res', res)
+  }).catch(error => {
     console.error(error)
     return null
   })
-  console.log('res', res)
   if (res) {
-    response.status(200).send()
+    response.status(200).send({})
   } else {
     response.status(500).send()
   }

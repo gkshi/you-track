@@ -1,7 +1,14 @@
 require('dotenv').config()
 
 module.exports = {
-  mode: 'spa', // universal, spa
+  ssr: false,
+  // mode: 'spa',
+
+  telemetry: {
+    enabled: false,
+    consent: 1
+  },
+
   /*
   ** Server config
   */

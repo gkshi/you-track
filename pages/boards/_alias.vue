@@ -160,10 +160,8 @@ export default {
             // if order has changed, update board order
             if (JSON.stringify(sortable.toArray()) !== JSON.stringify(this.board.order)) {
               this.$store.dispatch('api/updateBoard', {
-                board: this.board._id,
-                data: {
-                  order: sortable.toArray()
-                }
+                _id: this.board._id,
+                order: sortable.toArray()
               }).then(board => {
                 this.board.order = board.order
               })
