@@ -21,6 +21,8 @@
 </template>
 
 <script>
+import * as firebase from 'firebase/app'
+import 'firebase/messaging'
 import { mapState } from 'vuex'
 import { urlBase64ToUint8Array } from '@/plugins/push-helpers'
 
@@ -50,9 +52,26 @@ export default {
     }
   },
   mounted () {
-    this.check()
+    this.init()
+    // this.check()
   },
   methods: {
+    init () {
+      // console.log('firebase', firebase)
+      firebase.initializeApp({
+        apiKey: 'AIzaSyBUNP7efjDmRe02XpM0GIheZaGYsBfdU7Y',
+        authDomain: 'youtrack-a4424.firebaseapp.com',
+        // databaseURL: "https://youtrack-a4424.firebaseio.com",
+        projectId: 'youtrack-a4424',
+        // storageBucket: "youtrack-a4424.appspot.com",
+        messagingSenderId: '671268226802',
+        appId: '1:671268226802:web:3ec02f121f8282b466b26b'
+      })
+      console.log('firebase', firebase)
+      console.log('messaging', firebase.messaging())
+      // const messaging = firebase.messaging()
+      // console.log('messaging', messaging)
+    },
     async sendExample () {
       const subscription = await this.pushManager.getSubscription()
       // console.log('subscription', subscription)
@@ -94,6 +113,7 @@ export default {
         userVisibleOnly: true,
         applicationServerKey: urlBase64ToUint8Array(process.env.PUBLIC_VAPID_KEY)
       }).then(pushSubscription => {
+        console.log('pushSubscription', pushSubscription)
         this.isSubscribed = true
         this.$store.dispatch('api/updateUser', {
           id: this.user._id,
@@ -109,7 +129,7 @@ export default {
     },
     async unregister () {
       const serviceWorkerRegistration = await this.register()
-      serviceWorkerRegistration.unregister()
+      await serviceWorkerRegistration.unregister()
       this.$store.dispatch('api/updateUser', {
         _id: this.user._id,
         notifications: false

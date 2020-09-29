@@ -139,22 +139,13 @@ export default {
           &::after {
             content: '';
             position: absolute;
+            top: calc(100% - 54px);
             left: 0;
             z-index: 10;
             width: 100%;
+            height: 100vh;
             background: transparent;
-          }
-          &:not(.empty) {
-            &::after {
-              bottom: 0;
-              height: 60px;
-            }
-          }
-          &.empty {
-            &:after {
-              top: 0;
-              height: 100%;
-            }
+            // background: rgba(red, .1);
           }
         }
       }

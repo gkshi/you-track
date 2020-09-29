@@ -5,6 +5,7 @@ const CronJob = require('cron').CronJob
 const MongoClient = require('mongodb').MongoClient
 const ObjectId = require('mongodb').ObjectId
 const appVersion = require('../package.json').version
+const firebaseAdmin = require('firebase-admin')
 
 const cronJobs = {}
 
@@ -61,17 +62,23 @@ router.post('/stopcron', (request, response) => {
 })
 
 router.post('/push-test', async (request, response) => {
-  const subscription = request.body.subscription
-  console.log('subscription', subscription)
-  const payload = JSON.stringify({
-    title: 'Push notifications with Service Workers'
+  // const subscription = request.body.subscription
+  // console.log('subscription', subscription)
+  // const payload = JSON.stringify({
+  //   title: 'Push notifications with Service Workers'
+  // })
+  // const res = await webPush.sendNotification(subscription, payload).then(res => {
+  //   console.log('res', res)
+  // }).catch(error => {
+  //   console.error(error)
+  //   return null
+  // })
+  const app = firebaseAdmin.initializeApp({
+    credential: firebaseAdmin.credential.applicationDefault(),
+    databaseURL: 'https://youtrack-a4424.firebaseio.com'
   })
-  const res = await webPush.sendNotification(subscription, payload).then(res => {
-    console.log('res', res)
-  }).catch(error => {
-    console.error(error)
-    return null
-  })
+  console.log('app', app)
+  const res = false
   if (res) {
     response.status(200).send({})
   } else {
