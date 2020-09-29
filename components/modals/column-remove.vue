@@ -1,10 +1,10 @@
 <template lang="pug">
-  commonModal.remove-column-modal(:id="id" size="narrow")
-    span(slot="title") Warning!
+  common-modal.remove-column-modal(:id="id" size="narrow")
+    .h2(slot="title") Warning!
     div All cards in the list will be deleted.
-    .buttons(slot="actions")
-      commonButton(@click="$emit('submit')") Delete
-      commonButton(type="light" @click="closeModal(id)") Cancel
+    .buttons(slot="buttons")
+      common-button(@click="$emit('submit')") Delete
+      common-button(type="light" @click="closeModal(id)") Cancel
 </template>
 
 <script>

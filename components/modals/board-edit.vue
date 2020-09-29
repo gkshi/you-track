@@ -1,13 +1,13 @@
 <template lang="pug">
-  commonModal.board-create-modal(:id="id" size="narrow" @open="onOpen" @close="reset")
-    .h1(slot="title") Edit board
+  common-modal.board-create-modal(:id="id" size="narrow" @open="onOpen" @close="reset")
+    .h2(slot="head") Edit board
     form(@submit.prevent="update")
-      commonInput(v-model="board.title" placeholder="Title" autofocus)
-      commonInput(v-model="board.alias" placeholder="Alias")
-      commonTextarea(v-model="board.description" placeholder="Description")
-      .buttons
-        commonButton(native="submit" :disabled="isLoading") Update
-        commonButton(type="light" @click="closeModal(id)") Cancel
+      common-input(v-model="board.title" placeholder="Title" autofocus)
+      common-input(v-model="board.alias" placeholder="Alias")
+      common-textarea(v-model="board.description" placeholder="Description")
+      .buttons(slot="buttons")
+        common-button(native="submit" :disabled="isLoading || !board.title || !board.alias") Update
+        common-button(type="light" @click="closeModal(id)") Cancel
 </template>
 
 <script>

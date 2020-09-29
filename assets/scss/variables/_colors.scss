@@ -3,6 +3,7 @@ $color-primary: #317EF6;
 
 $color-dark: #282C31;
 $color-dark-highlight: #2F343A;
+$color-white: #fff;
 
 $color-content-bg: #fff;
 $color-bg: #f3f3f5;
@@ -10,4 +11,6 @@ $color-bg-highlight: darken($color-bg, 3%);
 
 $color-text-regular: #323232;
 $color-text-light: #8C939F;
-$color-text-white: #fff;
+$color-text-white: $color-white;
+
+$color-warning: #f7496b;

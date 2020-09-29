@@ -4,23 +4,17 @@
       .title {{ board.title }}
       .description {{ board.description }}
       .counters {{ board.order.length }} lists
-    contextMenu.menu
+
+    context-menu.menu
       nuxt-link(:to="`/boards/${board.alias}`") Open board
       a(href="#" @click.prevent="edit") Edit board
       a(href="#" @click.prevent="requestRemoving") Delete board
 
-    modalRemoveBoard(@submit="remove")
+    modal-board-remove(@submit="remove")
 </template>
 
 <script>
-import contextMenu from '@/components/context-menu'
-import modalRemoveBoard from '@/components/modals/remove-board'
-
 export default {
-  components: {
-    contextMenu,
-    modalRemoveBoard
-  },
   props: {
     data: {
       type: Object,

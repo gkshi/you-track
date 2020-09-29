@@ -1,7 +1,7 @@
 <template lang="pug">
   .search-bar-component(v-outside="reset")
-    iconSearch.icon(@click.native="$refs.input.focus")
-    commonInput.input(
+    icon-search.icon(@click.native="$refs.input.focus")
+    common-input.input(
       ref="input"
       type="alt"
       v-model="query"
@@ -13,7 +13,7 @@
       .dropdown(v-if="isOpened")
         div
           .title(v-if="isLoading")
-            commonLoader
+            common-loader(:show="isLoading")
           template(v-else)
             .group(v-if="response.boards.length")
               .title Boards
@@ -37,12 +37,7 @@
 </template>
 
 <script>
-import iconSearch from '@/components/icons/search'
-
 export default {
-  components: {
-    iconSearch
-  },
   props: {
     placeholder: {
       type: String,

@@ -1,25 +1,20 @@
 <template lang="pug">
   form.add-form-component(@submit.prevent="$emit('submit', value)" v-outside="tryToClose")
-    commonInput(
+    common-input(
       ref="field"
       :value="value"
       :placeholder="placeholder"
       @input="$emit('input', $event)")
     .buttons.flex.a-center
-      commonButton(size="small" native="submit" :disabled="!value")
+      common-button(size="small" native="submit" :disabled="!value")
         slot
-      commonButton.close(size="icon" type="icon" @click="close")
-        iconCross
+      common-button.close(size="icon" type="icon" @click="close")
+        icon-cross
 </template>
 
 <script>
-import iconCross from '@/components/icons/cross'
-
 export default {
   name: 'add-form-component',
-  components: {
-    iconCross
-  },
   props: {
     value: String,
     placeholder: String,

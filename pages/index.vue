@@ -4,39 +4,37 @@
       .columns.flex.a-start.j-center
         .left
           h1 Personal Boards
-          commonLoader(v-if="isLoading")
+
+          template(v-if="isLoading")
+            common-loader(:show="isLoading")
+
           template(v-else)
             .boards
-              vBoard(
+              v-board(
                 v-for="board in boards"
                 :data="board"
                 :key="board._id"
                 @update="onBoardUpdate"
                 @remove="onBoardRemove")
             div
-              commonButton(@click="openModal('board_create')") Create a board
+              common-button(@click="openModal('board_create')") Create a board
+
         .grow
           h1 News and updates
           .news-list
-            contentBlock(v-for="(item, i) in newsList" :data="item" :key="i")
+            content-block(v-for="(item, i) in newsList" :data="item" :key="i")
 
-    modalCreateBoard(@success="onBoardCreate")
-    modalEditBoard(@update="onBoardUpdate")
+    modal-board-create(@success="onBoardCreate")
+    modal-board-edit(@update="onBoardUpdate")
 </template>
 
 <script>
 import newsList from '@/updates'
 import vBoard from '@/components/board'
-import contentBlock from '@/components/content-block'
-import modalCreateBoard from '@/components/modals/board-create'
-import modalEditBoard from '@/components/modals/board-edit'
 
 export default {
   components: {
-    vBoard,
-    contentBlock,
-    modalCreateBoard,
-    modalEditBoard
+    vBoard
   },
   data () {
     return {

@@ -2,45 +2,32 @@
   .column-component(:data-id="column._id" :class="{ 'column-empty': !column.cards.length }")
     .column-original.flex.column(ref="original")
       .header.flex.a-center.j-between.shrink
-        editableArea.title.grow(
+        editable-area.title.grow(
           ref="title"
           type="light"
           :value="column.title"
           @change="onColumnTitleChange")
         .drag-hint.flex.a-center
-          iconDragPlace
+          icon-drag-place
           div Move
-        contextMenu.menu
+        context-menu.menu
           a(href="#" @click.prevent="rename") Rename list
           a(href="#" @click.prevent="tryToRemoveColumn") Remove list
 
       .scroll-parent.grow(ref="scrollParent" :class="{ 'no-scroll': !scrollStatus }")
-        cardList(
+        column-card-list(
           :data="column.cards"
           :column="column._id"
           @order-update="onOrderUpdate"
           @add="onCardAdd"
           @remove="onCardRemove")
 
-      columnFooter.shrink(:columnId="column._id" @create="onCardCreate" :margin="footerInteraction")
+      column-footer.shrink(:columnId="column._id" @create="onCardCreate" :margin="footerInteraction")
 </template>
 
 <script>
-import contextMenu from '@/components/context-menu'
-import editableArea from '@/components/editable-area'
-import iconDragPlace from '@/components/icons/drag-place'
-import columnFooter from './footer'
-import cardList from './card-list'
-
 export default {
   name: 'column-component',
-  components: {
-    contextMenu,
-    editableArea,
-    cardList,
-    iconDragPlace,
-    columnFooter
-  },
   props: {
     data: {
       type: Object,
@@ -152,22 +139,13 @@ export default {
           &::after {
             content: '';
             position: absolute;
+            top: calc(100% - 54px);
             left: 0;
             z-index: 10;
             width: 100%;
+            height: 100vh;
             background: transparent;
-          }
-          &:not(.empty) {
-            &::after {
-              bottom: 0;
-              height: 60px;
-            }
-          }
-          &.empty {
-            &:after {
-              top: 0;
-              height: 100%;
-            }
+            // background: rgba(red, .1);
           }
         }
       }

@@ -1,0 +1,57 @@
+//
+$error-color: red;
+$input-padding-default: 8px 16px 9px;
+$input-padding-alt: 8px 17px 8px;
+
+[class*="common-input-component"] {
+  label {
+    display: block;
+  }
+  input {
+    display: block;
+    width: 100%;
+    background: $color-bg;
+    border: 2px solid $color-bg;
+    padding: $input-padding-default;
+    border-radius: $border-radius-default;
+    outline: none;
+    &:focus {
+      border-color: darken($color-bg, 4%);
+    }
+  }
+  .error {
+    color: $error-color;
+  }
+  &-error {
+    input {
+      border-color: $error-color;
+    }
+  }
+
+  &.common-input-type-white {
+    input {
+      background: $color-white;
+    }
+  }
+
+  &.common-input-type-alt {
+    ::-webkit-input-placeholder { color: rgba($color-text-white, .5); }
+    ::-moz-placeholder { color: rgba($color-text-white, .5); }
+    :-ms-input-placeholder { color: rgba($color-text-white, .5); }
+    input {
+      padding: $input-padding-alt;
+      background: lighten($color-dark, 4%);
+      color: $color-text-white;
+      border: none;
+      border-radius: 30px;
+      font-size: $font-size-smaller;
+      line-height: $line-height-smaller;
+      &:hover {
+        background: lighten($color-dark, 5%);
+      }
+      &:focus {
+        background: lighten($color-dark, 5%);
+      }
+    }
+  }
+}

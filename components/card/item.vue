@@ -3,19 +3,15 @@
     .intro(@click="open")
       .title {{ data.title }}
       .description(v-if="data.description") {{ data.description }}
-    contextMenu.options(@open="onOpen" @close="onClose")
+
+    context-menu.options(@open="onOpen" @close="onClose")
       a(href="#" @click.prevent="open") Open card
       a(href="#" @click.prevent="remove") Remove card
 </template>
 
 <script>
-import contextMenu from '@/components/context-menu'
-
 export default {
   name: 'card-component',
-  components: {
-    contextMenu
-  },
   props: {
     data: {
       type: Object,

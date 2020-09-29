@@ -1,11 +1,12 @@
 <template lang="pug">
   .column-footer-component(:class="{ 'opened': isOpened, 'no-margin': !margin }")
-    commonButton.button(
+    common-button.button(
       v-if="!isOpened"
       type="ghost"
       size="large"
       @click.prevent="toggle") + Add card
-    addForm(
+
+    add-form(
       v-else
       v-model="newCard.title"
       exception="add-button"
@@ -15,13 +16,8 @@
 </template>
 
 <script>
-import addForm from '@/components/add-form'
-
 export default {
   name: 'column-footer-component',
-  components: {
-    addForm
-  },
   props: {
     columnId: String,
     margin: {

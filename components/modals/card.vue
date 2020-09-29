@@ -1,5 +1,5 @@
   <template lang="pug">
-    commonModal.card-modal(id="card" @close="onClose")
+    common-modal.card-modal(id="card" @close="onClose")
       article
         header
           editableArea.h1(
@@ -15,7 +15,7 @@
         section
           div Description:
           .description.flex
-            editableArea.grow(
+            editable-area.grow(
               v-model="card.description"
               placeholder="Add a more detailed description..."
               @change="update"
@@ -24,13 +24,9 @@
 
 <script>
 import { mapState } from 'vuex'
-import editableArea from '@/components/editable-area'
 
 export default {
   name: 'card-modal',
-  components: {
-    editableArea
-  },
   data () {
     return {
       card: this.$models.create('card')

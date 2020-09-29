@@ -1,20 +1,14 @@
 <template lang="pug">
   .theme-toggler-component.flex.a-center
     div
-      iconSun
+      icon-sun
     div
-      iconMoon
+      icon-moon
 </template>
 
 <script>
-import iconSun from '@/components/icons/sun'
-import iconMoon from '@/components/icons/moon'
-
 export default {
-  components: {
-    iconSun,
-    iconMoon
-  }
+  //
 }
 </script>
 

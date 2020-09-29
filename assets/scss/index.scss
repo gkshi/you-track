@@ -5,6 +5,13 @@
 @import 'reset';
 @import 'utils';
 
+// common components
+@import "components/button";
+@import "components/input";
+@import "components/loader";
+@import "components/modal";
+@import "components/textarea";
+
 // fonts
 @font-face {
   font-family: 'SF UI Display';

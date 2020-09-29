@@ -1,5 +1,5 @@
 export default {
   sendExamplePush (data) {
-    return this.do('POST', '/subscribe', data)
+    return this.do('POST', '/push-test', data)
   }
 }
