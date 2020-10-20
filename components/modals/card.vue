@@ -8,9 +8,9 @@
             placeholder="Enter a title for this card..."
             @change="update")
 
-        //- section
+        section
           div Labels:
-          div labels
+          card-label-bar(:board="board")
 
         section
           div Description:
@@ -27,6 +27,12 @@ import { mapState } from 'vuex'
 
 export default {
   name: 'card-modal',
+  props: {
+    board: {
+      type: Object,
+      default: () => ({})
+    }
+  },
   data () {
     return {
       card: this.$models.create('card')

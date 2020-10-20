@@ -4,8 +4,9 @@ const webPush = require('web-push')
 const CronJob = require('cron').CronJob
 const MongoClient = require('mongodb').MongoClient
 const ObjectId = require('mongodb').ObjectId
-const appVersion = require('../package.json').version
 const firebaseAdmin = require('firebase-admin')
+const appVersion = require('../package.json').version
+const appConfig = require('../app.config')
 
 const cronJobs = {}
 
@@ -61,7 +62,7 @@ router.post('/stopcron', (request, response) => {
   response.send({ status: 'ok' })
 })
 
-router.post('/push-test', async (request, response) => {
+router.post('/push-test', (request, response) => {
   // const subscription = request.body.subscription
   // console.log('subscription', subscription)
   // const payload = JSON.stringify({
@@ -178,12 +179,15 @@ router.get('/boards/:alias', async (request, response) => {
  * @param board <object>
  */
 router.post('/boards', async (request, response) => {
+  const defaultLabelSet = appConfig.defaultLabelSet()
+
   const board = await _add('boards', {
     title: request.body.title,
     alias: request.body.alias,
     description: request.body.description,
     columns: [],
-    order: []
+    order: [],
+    labels: defaultLabelSet
   })
   response.send(board)
 })
