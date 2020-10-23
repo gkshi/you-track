@@ -21,7 +21,7 @@ export default {
   .label-bar-component {
     & > * {
       &:not(:last-child) {
-        margin-right: 10px;
+        margin-right: 8px;
       }
     }
   }

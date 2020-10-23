@@ -22,6 +22,10 @@ export default {
     height: 32px;
     background: rgba($color-text-regular, .2);
     border-radius: $border-radius-small;
+    font-size: $font-size-label;
+    line-height: $line-height-label;
+    font-weight: $font-weight-semibold;
+    color: $color-text-white;
     cursor: pointer;
     transition: $transition-label;
 

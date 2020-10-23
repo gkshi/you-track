@@ -7,7 +7,7 @@
 
     transition
       .dropdown(v-if="isOpened" v-outside="close")
-        div all board labels:
+        div Board labels:
         label-feature(
           v-for="label in board.labels"
           :data="label"
@@ -76,14 +76,15 @@ export default {
       bottom: 0;
       left: 0;
       z-index: 10;
+      min-width: 200px;
+      padding: 10px;
       transform: translate(0, 100%);
       background: $color-white;
-      padding: 10px;
       border-radius: $border-radius-default;
     }
 
     .plus {
-      margin-left: 10px;
+      margin-left: 8px;
     }
   }
 </style>

@@ -5,6 +5,7 @@
     div
       input(type="checkbox" :checked="selected")
     div {{ data.color }}
+      // input(:value="data.title" @change="onChange" placeholder="Label name")
 </template>
 
 <script>
@@ -15,6 +16,11 @@ export default {
       default: () => ({})
     },
     selected: Boolean
+  },
+  methods: {
+    onChange (e) {
+      console.log('onChange', e)
+    }
   }
 }
 </script>
