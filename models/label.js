@@ -1,6 +1,6 @@
 export default {
   _id: {
-    type: String,
+    type: Number,
     hidden: true
   },
 

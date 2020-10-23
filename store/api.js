@@ -61,6 +61,14 @@ export const actions = {
     return API.removeCard(id)
   },
 
+  // labels
+  setLabel (context, payload) {
+    return API.setLabel(payload)
+  },
+  toggleLabel (context, payload) {
+    return API.toggleLabel(payload)
+  },
+
   // search
   search (context, query = '') {
     return API.search(query)

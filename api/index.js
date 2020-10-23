@@ -98,6 +98,19 @@ export default {
     return this.do('DELETE', `/cards/${id}`)
   },
 
+  createLabel (payload) {
+    return this.do('POST', '/labels', payload)
+  },
+  toggleLabel (payload) {
+    return this.do('PATCH', '/labels', payload)
+  },
+  updateLabel (payload) {
+    return this.do('PUT', '/labels', payload)
+  },
+  removeLabel (payload) {
+    return this.do('DELETE', '/labels', payload)
+  },
+
   // search
   search (query) {
     return this.do('GET', '/search', { query })

@@ -47,7 +47,6 @@ export default {
   data () {
     return {
       response: {},
-      // board: this.$models.create('board', this.response),
       board: {},
 
       // sortable

@@ -101,6 +101,7 @@ module.exports = {
     { path: '~/components/column/', prefix: 'column' },
     { path: '~/components/header/', prefix: 'header' },
     { path: '~/components/icons/', prefix: 'icon' },
+    { path: '~/components/label/', prefix: 'label' },
     { path: '~/components/modals/', prefix: 'modal' },
     { path: '~/components/settings/', prefix: 'setting' },
     { path: '~/components/search/', prefix: 'search' },

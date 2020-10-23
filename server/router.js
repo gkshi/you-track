@@ -103,7 +103,6 @@ router.get('/user', async (request, response) => {
   const user = await _getOne('users')
   response.send(user)
 })
-
 /**
  * Create user
  * @param user <object>
@@ -115,7 +114,6 @@ router.post('/user', async (request, response) => {
   })
   response.send(user)
 })
-
 /**
  * Update user
  * @param user <object>
@@ -135,7 +133,6 @@ router.get('/boards', async (request, response) => {
   const boards = await _get('boards')
   response.send(boards)
 })
-
 /**
  * Get board
  * @param alias <string>
@@ -173,7 +170,6 @@ router.get('/boards/:alias', async (request, response) => {
     response.send(board)
   })
 })
-
 /**
  * Create board
  * @param board <object>
@@ -191,7 +187,6 @@ router.post('/boards', async (request, response) => {
   })
   response.send(board)
 })
-
 /**
  * Update board
  * @param id <string>
@@ -202,7 +197,6 @@ router.put('/boards/:id', async (request, response) => {
   const board = await _getOne('boards', request.params.id)
   response.send(board)
 })
-
 /**
  * Remove board
  * @param id <id>
@@ -250,7 +244,6 @@ router.post('/columns', async (request, response) => {
   })
   response.send(column)
 })
-
 /**
  * Update column
  * @param id <string>
@@ -261,7 +254,6 @@ router.put('/columns/:id', async (request, response) => {
   const column = await _getOne('columns', request.params.id)
   response.send(column)
 })
-
 /**
  * Remove column
  * @param id <string>
@@ -297,7 +289,6 @@ router.get('/cards/:id', async (request, response) => {
     response.status(404).send({})
   }
 })
-
 /**
  * Create card
  * @param data <object>
@@ -316,7 +307,6 @@ router.post('/cards', async (request, response) => {
   })
   response.send(card)
 })
-
 /**
  * Move card between columns
  * @param card <string>
@@ -343,7 +333,6 @@ router.post('/cards/move', async (request, response) => {
 
   response.send({})
 })
-
 /**
  * Update card
  * @param id <string>
@@ -356,7 +345,6 @@ router.put('/cards/:id', async (request, response) => {
   const result = await _update('cards', request.params.id, data)
   response.send(result)
 })
-
 /**
  * Remove card
  * @param id <string>
@@ -373,6 +361,40 @@ router.delete('/cards/:id', async (request, response) => {
   })
 
   response.send(res)
+})
+
+router.patch('/labels', async (request, response) => {
+  const card = await _getOne('cards', request.body.card)
+  card.labels = card.labels || []
+
+  console.log('request.body.card', request.body.card)
+  console.log('request.body.label', request.body.label)
+
+  let newValue = []
+
+  if (card.labels.find(i => i === request.body.label)) {
+    newValue = card.labels.filter(i => i !== request.body.label)
+    console.log('found. remove label', newValue)
+  } else {
+    newValue = [...card.labels, request.body.label]
+    console.log('not found. add label', newValue)
+  }
+  const res = await _update('cards', request.body.card, {
+    labels: newValue
+  })
+  console.log('res', res.result)
+  response.send({})
+})
+/**
+ * Update label
+ * @param id <string>
+ * @param data <object>
+ */
+router.put('/labels', async (request, response) => {
+  const board = await _getOne('boards', request.body.board)
+  const label = board.labels.find(i => i._id === request.body.label)
+  console.log('label', label)
+  response.send({})
 })
 
 /**
@@ -396,7 +418,6 @@ router.get('/search', async (request, response) => {
     cards
   })
 })
-
 /**
  * Search board by card ID
  * @param id <string>

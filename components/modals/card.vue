@@ -10,7 +10,7 @@
 
         section
           div Labels:
-          card-label-bar(:board="board")
+          card-label-bar(:board="board" :card="card")
 
         section
           div Description:
@@ -47,6 +47,12 @@ export default {
     activeCard: {
       handler () {
         this.card.update(this.activeCard)
+      },
+      deep: true
+    },
+    card: {
+      handler () {
+        this.$emit('update', this.card)
       },
       deep: true
     }
