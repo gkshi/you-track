@@ -3,7 +3,7 @@
     .intro(@click="open")
       .title {{ data.title }}
       .description(v-if="data.description") {{ data.description }}
-      .labels.flex.a-center
+      .labels.flex.a-center.wrap
         label-in-card(v-for="label in labels" :data="label" :key="label._id")
 
     context-menu.options(@open="onOpen" @close="onClose")
@@ -12,7 +12,7 @@
 </template>
 
 <script>
-import { mapState } from 'vuex'
+import { mapGetters } from 'vuex'
 
 export default {
   props: {
@@ -27,8 +27,8 @@ export default {
     }
   },
   computed: {
-    ...mapState({
-      board: state => state.activeBoard
+    ...mapGetters({
+      board: 'activeBoard'
     }),
     labels () {
       const labels = []
@@ -82,6 +82,7 @@ export default {
 
     .labels {
       & > * {
+        margin-bottom: 4px;
         &:not(:last-child) {
           margin-right: 4px;
         }

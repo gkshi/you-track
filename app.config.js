@@ -1,10 +1,13 @@
+// label colors
 const colors = [
-  '#8C939F',
-  '#73CAF7',
-  '#68E8A6',
-  '#A181F1',
-  '#F8B857',
-  '#F75E7C'
+  '#50B8E1',
+  '#48D289',
+  '#E5C83F',
+  '#F5A02A',
+  '#DE5361',
+  '#F271B5',
+  '#A25ADD',
+  '#3E4D63'
 ]
 
 module.exports = {

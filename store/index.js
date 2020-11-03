@@ -36,6 +36,7 @@ export const actions = {
     const copy = { ...board }
     // TODO: временное решение
     delete copy.columns
+    // delete copy.labels
     commit('ACTIVE_BOARD_UPDATE', copy)
   },
 
@@ -97,5 +98,11 @@ export const mutations = {
   },
   MESSAGES_REMOVE (state, id) {
     state.messages = state.messages.filter(i => i.id !== id)
+  }
+}
+
+export const getters = {
+  activeBoard: state => {
+    return state.activeBoard
   }
 }

@@ -131,6 +131,17 @@ router.put('/user', async (request, response) => {
  */
 router.get('/boards', async (request, response) => {
   const boards = await _get('boards')
+
+  // set card number in each board
+  // for (const item of array) {
+  //   await delayedLog(item);
+  // }
+  // boards.forEach(board => {
+  //   const cardNumber = await _get('cards', {
+  //     board: board._id
+  //   })
+  // })
+
   response.send(boards)
 })
 /**
@@ -240,7 +251,7 @@ router.post('/columns', async (request, response) => {
   // Update board columns order
   const board = await _getOne('boards', request.body.board)
   await _update('boards', request.body.board, {
-    order: [...board.order, column._id]
+    order: [...board.order, column._id.toString()]
   })
   response.send(column)
 })
@@ -262,9 +273,14 @@ router.delete('/columns/:id', async (request, response) => {
   const column = await _getOne('columns', request.params.id)
 
   // update board order
-  const board = await _getOne('boards', column.board)
+  const board = await _getOne('boards', {
+    _id: column.board
+  })
+  const newOrder = board.order.filter(i => {
+    return typeof i === 'string' ? i !== column._id.toString() : i !== column._id
+  })
   await _update('boards', { _id: board._id }, {
-    order: board.order.filter(i => i !== column._id.toString())
+    order: newOrder
   })
 
   // remove cards in column
@@ -363,26 +379,42 @@ router.delete('/cards/:id', async (request, response) => {
   response.send(res)
 })
 
+/**
+ * Create label
+ */
+router.post('/labels', async (request, response) => {
+  const board = await _getOne('boards', request.body.board)
+  const sortedLabelsById = [...board.labels].sort((a, b) => b._id - a._id)
+  const label = {
+    ...request.body.label,
+    _id: sortedLabelsById[0]._id + 1
+  }
+  const res = await _update('boards', request.body.board, {
+    labels: [...board.labels, label]
+  })
+  if (res) {
+    response.send(label)
+    return
+  }
+  response.status(500).send({
+    error: 'not updated'
+  })
+})
 router.patch('/labels', async (request, response) => {
   const card = await _getOne('cards', request.body.card)
   card.labels = card.labels || []
-
-  console.log('request.body.card', request.body.card)
-  console.log('request.body.label', request.body.label)
 
   let newValue = []
 
   if (card.labels.find(i => i === request.body.label)) {
     newValue = card.labels.filter(i => i !== request.body.label)
-    console.log('found. remove label', newValue)
   } else {
     newValue = [...card.labels, request.body.label]
-    console.log('not found. add label', newValue)
   }
   const res = await _update('cards', request.body.card, {
     labels: newValue
   })
-  console.log('res', res.result)
+  console.log('res', res)
   response.send({})
 })
 /**
@@ -392,9 +424,59 @@ router.patch('/labels', async (request, response) => {
  */
 router.put('/labels', async (request, response) => {
   const board = await _getOne('boards', request.body.board)
-  const label = board.labels.find(i => i._id === request.body.label)
-  console.log('label', label)
-  response.send({})
+  const newLabels = [...board.labels]
+  const targetIndex = newLabels.findIndex(i => i._id === request.body.data._id)
+  const updatedLabel = {
+    ...newLabels[targetIndex],
+    ...request.body.data
+  }
+  newLabels.splice(targetIndex, 1, updatedLabel)
+  const res = await _update('boards', request.body.board, {
+    labels: newLabels
+  })
+  if (res) {
+    response.send(updatedLabel)
+    return
+  }
+  response.status(500).send({
+    error: 'not updated'
+  })
+})
+/**
+ * Remove label
+ */
+router.delete('/labels/:board/:label', async (request, response) => {
+  // delete the label
+  const board = await _getOne('boards', request.params.board)
+  const newLabels = [...board.labels.filter(i => i._id !== +request.params.label)]
+  const removeResult = await _update('boards', request.body.board, {
+    labels: newLabels
+  })
+
+  // remove label from all the cards
+  const cardsWithLabel = await _get('cards', {
+    labels: {
+      $in: [+request.params.label]
+    }
+  })
+
+  const updateResults = []
+  for (let i = 0; i < cardsWithLabel.length; i++) {
+    const res = await _update('cards', {
+      _id: cardsWithLabel[i]._id
+    }, {
+      labels: cardsWithLabel[i].labels.filter(i => i !== +request.params.label)
+    })
+    updateResults.push(res)
+  }
+
+  if (removeResult && updateResults.length === cardsWithLabel.length) {
+    response.send({})
+    return
+  }
+  response.status(500).send({
+    error: 'not updated'
+  })
 })
 
 /**
@@ -539,7 +621,10 @@ async function _update (collection, query = {}, data = {}) {
       lastModified: true
     }
   }).then(res => {
-    return res
+    if (!res.result.ok) {
+      throw new Error(res.error)
+    }
+    return res.result
   })
   return result
 }

@@ -119,6 +119,7 @@ export default {
     },
     onCardRemove (id) {
       this.column.cards = this.column.cards.filter(i => i._id !== id)
+      this.$emit('update', this.column)
     },
     tryToRemoveColumn () {
       if (this.column.cards.length) {

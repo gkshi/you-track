@@ -7,7 +7,8 @@
 
       section.notifications
         .h1 Notification settings
-        setting-push-notifications-new.setting-block(@change="onPushStatusChange")
+        div (soon)
+        // setting-push-notifications-new.setting-block(@change="onPushStatusChange")
         // setting-eye-care.setting-block(:disabled="!isPushActive")
 </template>
 

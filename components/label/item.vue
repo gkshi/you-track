@@ -2,7 +2,7 @@
   .label-component.flex.center(
     :style="`background-color: ${data.color}`"
     @click="$emit('click', $event)")
-    div {{ data.color }}
+    div {{ data.title }}
 </template>
 
 <script>
@@ -18,16 +18,12 @@ export default {
 
 <style lang="scss" scoped>
   .label-component {
+    @extend %label;
     min-width: 80px;
     height: 32px;
+    padding: 0 10px;
     background: rgba($color-text-regular, .2);
-    border-radius: $border-radius-small;
-    font-size: $font-size-label;
-    line-height: $line-height-label;
-    font-weight: $font-weight-semibold;
-    color: $color-text-white;
-    cursor: pointer;
-    transition: $transition-label;
+    border-radius: $border-radius-label;
 
     &:hover {
       background: rgba($color-text-regular, .25);

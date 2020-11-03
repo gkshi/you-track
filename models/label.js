@@ -1,13 +1,7 @@
 export default {
-  _id: {
-    type: Number,
-    hidden: true
-  },
+  _id: Number,
 
   title: String,
 
-  color: {
-    type: String,
-    required: true
-  }
+  color: String
 }

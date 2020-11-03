@@ -1,8 +1,10 @@
 export default [
   {
-    title: 'Push notifications in progress',
-    content: `New features will be added soon:
-* Eye care`
+    title: 'v1.2.0 release',
+    content: `* Card labels added
+* File uploading feature in progress
+* Web Push notifications in progress
+* Minor bugfixes`
   },
   {
     title: 'v1.1.0 release',

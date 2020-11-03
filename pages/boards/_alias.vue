@@ -80,7 +80,10 @@ export default {
     this.$store.dispatch('changeActiveBoard', this.response)
   },
   mounted () {
+    this.$root.$on('remove-label', this.onLabelRemove)
+
     this.board = this.$models.create('board', this.response)
+
     // this.board.update(this.response)
     this.initSortable()
     if (!this.board.columns.length) {
@@ -93,6 +96,7 @@ export default {
     this.checkQuery()
   },
   beforeDestroy () {
+    this.$root.$off('remove-label')
     this.$store.dispatch('changeActiveBoard', {})
     window.removeEventListener('resize', this.watchColumnHeight)
   },
@@ -208,6 +212,15 @@ export default {
         }
         found = !!target
         return !found
+      })
+    },
+    onLabelRemove (label) {
+      // update cards with the label
+      this.board.columns.forEach(column => {
+        const cards = column.cards.filter(card => card.labels.includes(label))
+        cards.forEach(card => {
+          card.labels = card.labels.filter(i => i !== label)
+        })
       })
     }
   },

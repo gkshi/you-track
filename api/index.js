@@ -108,7 +108,7 @@ export default {
     return this.do('PUT', '/labels', payload)
   },
   removeLabel (payload) {
-    return this.do('DELETE', '/labels', payload)
+    return this.do('DELETE', `/labels/${payload.board}/${payload.label}`)
   },
 
   // search

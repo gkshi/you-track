@@ -9,7 +9,8 @@
             common-loader(:show="isLoading")
 
           template(v-else)
-            .boards
+            .no-boards(v-if="!boards.length") No created boards yet.
+            .boards(v-else)
               v-board(
                 v-for="board in boards"
                 :data="board"
@@ -80,21 +81,30 @@ export default {
         margin-left: 128px;
       }
     }
+
     .left {
       min-width: 250px;
     }
+
     h1 {
       display: block;
       margin-bottom: 16px;
     }
+
     .news-list {
       // width: 400px;
     }
+
     ::v-deep .news-list > * {
       &:not(:last-child) {
         margin-bottom: 16px;
       }
     }
+
+    .no-boards {
+      margin-bottom: 16px;
+    }
+
     .boards {
       margin-bottom: 24px;
       ::v-deep {

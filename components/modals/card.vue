@@ -20,6 +20,10 @@
               placeholder="Add a more detailed description..."
               @change="update"
               textarea)
+
+        section
+          // div Files:
+          div(style="height: 300px;")
   </template>
 
 <script>
