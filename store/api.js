@@ -61,6 +61,36 @@ export const actions = {
     return API.removeCard(id)
   },
 
+  // labels
+  createLabel (context, payload) {
+    return API.createLabel(payload)
+  },
+  toggleLabel (context, payload) {
+    return API.toggleLabel(payload)
+  },
+  /**
+   * update label
+   * @param context
+   * @param {object} payload
+   * @param {string} payload.board
+   * @param {object} payload.data
+   * @returns {object}
+   */
+  updateLabel (context, payload) {
+    return API.updateLabel(payload)
+  },
+  /**
+   * remove label
+   * @param context
+   * @param {object} payload
+   * @param {string} payload.board
+   * @param {string} payload.label
+   * @returns {object}
+   */
+  removeLabel (context, payload) {
+    return API.removeLabel(payload)
+  },
+
   // search
   search (context, query = '') {
     return API.search(query)

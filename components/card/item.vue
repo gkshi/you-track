@@ -3,6 +3,8 @@
     .intro(@click="open")
       .title {{ data.title }}
       .description(v-if="data.description") {{ data.description }}
+      .labels.flex.a-center.wrap
+        label-in-card(v-for="label in labels" :data="label" :key="label._id")
 
     context-menu.options(@open="onOpen" @close="onClose")
       a(href="#" @click.prevent="open") Open card
@@ -10,17 +12,30 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex'
+
 export default {
-  name: 'card-component',
   props: {
     data: {
       type: Object,
-      required: true
+      default: () => ({})
     }
   },
   data () {
     return {
       isOpened: false
+    }
+  },
+  computed: {
+    ...mapGetters({
+      board: 'activeBoard'
+    }),
+    labels () {
+      const labels = []
+      this.data.labels.forEach(i => {
+        labels.push(this.$models.create('label', this.board.labels.find(j => j._id === i)))
+      })
+      return labels
     }
   },
   methods: {
@@ -63,6 +78,15 @@ export default {
       padding-right: 20px;
       font-size: $font-size-smaller;
       line-height: $line-height-smaller;
+    }
+
+    .labels {
+      & > * {
+        margin-bottom: 4px;
+        &:not(:last-child) {
+          margin-right: 4px;
+        }
+      }
     }
 
     .options {

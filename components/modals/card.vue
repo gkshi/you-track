@@ -8,9 +8,9 @@
             placeholder="Enter a title for this card..."
             @change="update")
 
-        //- section
+        section
           div Labels:
-          div labels
+          card-label-bar(:board="board" :card="card")
 
         section
           div Description:
@@ -20,6 +20,10 @@
               placeholder="Add a more detailed description..."
               @change="update"
               textarea)
+
+        section
+          // div Files:
+          div(style="height: 300px;")
   </template>
 
 <script>
@@ -27,6 +31,12 @@ import { mapState } from 'vuex'
 
 export default {
   name: 'card-modal',
+  props: {
+    board: {
+      type: Object,
+      default: () => ({})
+    }
+  },
   data () {
     return {
       card: this.$models.create('card')
@@ -41,6 +51,12 @@ export default {
     activeCard: {
       handler () {
         this.card.update(this.activeCard)
+      },
+      deep: true
+    },
+    card: {
+      handler () {
+        this.$emit('update', this.card)
       },
       deep: true
     }

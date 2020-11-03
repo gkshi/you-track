@@ -99,8 +99,10 @@ module.exports = {
     '~/components', // shortcut to { path: '~/components' }
     { path: '~/components/card/', prefix: 'card' },
     { path: '~/components/column/', prefix: 'column' },
+    { path: '~/components/color-picker/', prefix: 'color-picker' },
     { path: '~/components/header/', prefix: 'header' },
     { path: '~/components/icons/', prefix: 'icon' },
+    { path: '~/components/label/', prefix: 'label' },
     { path: '~/components/modals/', prefix: 'modal' },
     { path: '~/components/settings/', prefix: 'setting' },
     { path: '~/components/search/', prefix: 'search' },
@@ -114,6 +116,9 @@ module.exports = {
     nameCasing: 'kebab-case',
     modal: {
       icon: () => import('@/components/icons/cross')
+    },
+    checkbox: {
+      icon: () => import('@/components/icons/check')
     }
   },
   /*

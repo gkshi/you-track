@@ -13,6 +13,11 @@ export default {
     type: String
   },
 
+  // Label list
+  labels: {
+    type: Array
+  },
+
   // Column parent ID
   column: {
     type: String,

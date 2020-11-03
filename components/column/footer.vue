@@ -4,7 +4,7 @@
       v-if="!isOpened"
       type="ghost"
       size="large"
-      @click.prevent="toggle") + Add card
+      @click.prevent="toggle") + Add a card
 
     add-form(
       v-else
@@ -12,7 +12,7 @@
       exception="add-button"
       placeholder="Enter a title for new card..."
       @submit="createCard"
-      @close="close") Add card
+      @close="close") Add a card
 </template>
 
 <script>

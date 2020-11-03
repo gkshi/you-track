@@ -1,10 +1,14 @@
 <template lang="pug">
-  form.add-form-component(@submit.prevent="$emit('submit', value)" v-outside="tryToClose")
+  form.add-form-component(
+    @submit.prevent="$emit('submit', value)"
+    v-outside="tryToSubmit"
+  )
     common-input(
       ref="field"
       :value="value"
       :placeholder="placeholder"
-      @input="$emit('input', $event)")
+      @input="$emit('input', $event)"
+      @keyup.esc="close")
     .buttons.flex.a-center
       common-button(size="small" native="submit" :disabled="!value")
         slot
@@ -42,6 +46,12 @@ export default {
       } else {
         this.close()
       }
+    },
+    tryToSubmit () {
+      if (this.value.length) {
+        this.$emit('submit', this.value)
+      }
+      this.close()
     },
     close () {
       this.$emit('close')

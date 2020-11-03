@@ -6,3 +6,5 @@ $transition-page: $transition-default;
 $transition-link: color $duration $function;
 $transition-button: $transition-default;
 $transition-card: box-shadow $duration $function;
+$transition-label: background $duration $function, color $duration $function;
+$transition-modal: all .15s ease;

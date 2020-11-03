@@ -25,6 +25,12 @@ export default {
     hidden: true
   },
 
+  // Label list
+  labels: {
+    type: Array,
+    hidden: true
+  },
+
   // Column order in board
   order: {
     type: Array

@@ -1,0 +1,17 @@
+$checkbox-size: 20px;
+
+div[class*="common-checkbox-component"] {
+  input {
+    width: $checkbox-size;
+    height: $checkbox-size;
+  }
+  .box {
+    width: $checkbox-size;
+    height: $checkbox-size;
+    border-radius: 50%;
+    border: none;
+    color: $color-text-white;
+    background: rgba($color-dark, .12);
+    margin: 0;
+  }
+}
