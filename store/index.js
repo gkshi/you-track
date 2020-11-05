@@ -12,6 +12,7 @@ export const state = () => ({
   modals: [],
   activeBoard: {},
   activeCard: {},
+  boardColumns: [],
 
   // information messages, network status, api errors
   messages: []
@@ -35,6 +36,12 @@ export const actions = {
   changeActiveBoard ({ commit }, board) {
     const copy = { ...board }
     // TODO: временное решение
+    if (copy.columns) {
+      commit('BOARD_COLUMNS_UPDATE', copy.columns.map(i => ({
+        _id: i._id,
+        title: i.title
+      })))
+    }
     delete copy.columns
     // delete copy.labels
     commit('ACTIVE_BOARD_UPDATE', copy)
@@ -93,6 +100,10 @@ export const mutations = {
     state.activeCard = card
   },
 
+  BOARD_COLUMNS_UPDATE (state, columns) {
+    state.boardColumns = columns
+  },
+
   MESSAGES_ADD (state, message) {
     state.messages.push(message)
   },
@@ -104,5 +115,8 @@ export const mutations = {
 export const getters = {
   activeBoard: state => {
     return state.activeBoard
+  },
+  column: state => id => {
+    return state.boardColumns ? state.boardColumns.find(i => i._id === id) : undefined
   }
 }

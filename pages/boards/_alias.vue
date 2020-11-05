@@ -25,6 +25,7 @@
           @close="toggleColumnCreation") Add list
 
     modal-card(:board="board" @update="onCardUpdate")
+    modal-file()
     modal-column-remove(:data="activeColumn" @submit="removeColumn")
 </template>
 

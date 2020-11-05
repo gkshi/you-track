@@ -18,6 +18,12 @@ export default {
     type: Array
   },
 
+  // file list
+  files: {
+    type: Array,
+    hidden: true
+  },
+
   // Column parent ID
   column: {
     type: String,

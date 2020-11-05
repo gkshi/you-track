@@ -111,6 +111,18 @@ export default {
     return this.do('DELETE', `/labels/${payload.board}/${payload.label}`)
   },
 
+  getFiles (card) {
+    return this.do('GET', '/files', { card })
+  },
+  uploadFile (payload) {
+    return this.do('POST', `/files/${payload.card}`, payload.data, {
+      'Content-Type': 'multipart/form-data'
+    })
+    // return this.do('POST', '/files', payload, {
+    //   'Content-Type': 'multipart/form-data'
+    // })
+  },
+
   // search
   search (query) {
     return this.do('GET', '/search', { query })

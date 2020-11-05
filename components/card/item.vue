@@ -39,8 +39,8 @@ export default {
     }
   },
   methods: {
-    open () {
-      this.$store.dispatch('changeActiveCard', this.data._id)
+    async open () {
+      await this.$store.dispatch('changeActiveCard', this.data._id)
       this.openModal('card')
     },
     async remove () {
@@ -75,18 +75,27 @@ export default {
     }
 
     .title {
+      margin: 0;
       padding-right: 20px;
       font-size: $font-size-smaller;
       line-height: $line-height-smaller;
     }
 
     .labels {
+      margin-top: 8px;
+
       & > * {
         margin-bottom: 4px;
         &:not(:last-child) {
           margin-right: 4px;
         }
       }
+    }
+
+    .description {
+      margin-top: 6px;
+      max-height: 16px;
+      overflow: hidden;
     }
 
     .options {

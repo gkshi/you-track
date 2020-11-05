@@ -1,4 +1,6 @@
 const express = require('express')
+const multer = require('multer')
+const upload = multer()
 const router = express.Router()
 const webPush = require('web-push')
 const CronJob = require('cron').CronJob
@@ -475,8 +477,39 @@ router.delete('/labels/:board/:label', async (request, response) => {
     return
   }
   response.status(500).send({
-    error: 'not updated'
+    error: 'not done'
   })
+})
+
+router.get('/files', async (request, response) => {
+  const files = await _get('files', {
+    card: ObjectId(request.query.card)
+  })
+  response.send(files || [])
+  // response.status(500).send({
+  //   error: 'not uploaded'
+  // })
+})
+/**
+ * upload file
+ */
+router.post('/files/:card', upload.any(), async (request, response) => {
+  let result = null
+  for (const file of request.files) {
+    const res = await _add('files', {
+      title: file.originalname,
+      card: ObjectId(request.params.card),
+      type: file.mimetype, // data:image/png;base64,
+      source: file.buffer.toString('base64')
+    })
+    result = res
+  }
+  if (result) {
+    response.send(result)
+  }
+  // response.status(500).send({
+  //   error: 'not uploaded'
+  // })
 })
 
 /**

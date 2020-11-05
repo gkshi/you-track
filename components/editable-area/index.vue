@@ -80,21 +80,27 @@ export default {
 <style lang="scss" scoped>
   .editable-area-component {
     cursor: text;
-    line-height: $line-height-default;
+    // line-height: $line-height-default;
+    margin-left: -2px;
+    margin-right: -2px;
+
     input,
     textarea {
       width: 100%;
       height: 100%;
       border-radius: 3px;
-      // border: 2px solid #edeef0;
+      border: 2px solid #edeef0;
       background: $color-bg;
       line-height: $line-height-default;
       outline: none;
     }
+
     .preview {
       height: 100%;
       cursor: text;
+      border: 2px solid transparent;
     }
+
     .placeholder {
       color: $color-text-light;
     }
@@ -106,9 +112,16 @@ export default {
     }
 
     &.editable-area-type-light {
+      .preview {
+        border-radius: $border-radius-small;
+        &:hover {
+          background: $color-bg;
+        }
+      }
       input,
       textarea {
         background: $color-content-bg;
+        border-radius: $border-radius-small;
       }
     }
   }

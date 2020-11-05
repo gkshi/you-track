@@ -91,6 +91,13 @@ export const actions = {
     return API.removeLabel(payload)
   },
 
+  getFiles (context, card) {
+    return API.getFiles(card)
+  },
+  uploadFile (context, payload) {
+    return API.uploadFile(payload)
+  },
+
   // search
   search (context, query = '') {
     return API.search(query)
