@@ -158,6 +158,7 @@ export default {
   $padding: 10px;
   .column-component {
     height: 100%;
+
     .column-original {
       position: relative;
       max-height: 100%;
@@ -167,11 +168,13 @@ export default {
       // box-shadow: $box-shadow-deep;
       cursor: default;
     }
+
     .header {
       font-weight: $font-weight-semibold;
       padding: 0 $padding 0 20px;
       color: $color-text-light;
       cursor: pointer;
+
       .menu {
         opacity: 0;
         visibility: hidden;
@@ -179,7 +182,19 @@ export default {
       & > *:not(:last-child) {
         margin-right: 24px;
       }
+
+      ::v-deep input {
+        font-weight: $font-weight-semibold;
+        padding-top: 1px;
+        padding-bottom: 1px;
+      }
+      ::v-deep .preview {
+        &:hover {
+          background: darken($color-bg, 2%) !important;
+        }
+      }
     }
+
     .drag-hint {
       margin-bottom: 1px;
       font-weight: $font-weight-normal;

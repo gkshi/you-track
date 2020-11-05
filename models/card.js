@@ -18,9 +18,21 @@ export default {
     type: Array
   },
 
+  // file list
+  files: {
+    type: Array,
+    hidden: true
+  },
+
   // Column parent ID
   column: {
     type: String,
     required: true
+  },
+
+  // Board ID
+  board: {
+    type: String,
+    hidden: true
   }
 }

@@ -1,4 +1,6 @@
 const express = require('express')
+const multer = require('multer')
+const upload = multer()
 const router = express.Router()
 const webPush = require('web-push')
 const CronJob = require('cron').CronJob
@@ -133,9 +135,12 @@ router.get('/boards', async (request, response) => {
   const boards = await _get('boards')
 
   // set card number in each board
-  // for (const item of array) {
-  //   await delayedLog(item);
-  // }
+  for (const board of boards) {
+    const cards = await _get('cards', {
+      board: board._id
+    })
+    board.cards = cards.length
+  }
   // boards.forEach(board => {
   //   const cardNumber = await _get('cards', {
   //     board: board._id
@@ -188,6 +193,20 @@ router.get('/boards/:alias', async (request, response) => {
 router.post('/boards', async (request, response) => {
   const defaultLabelSet = appConfig.defaultLabelSet()
 
+  // Check alias unique
+  const existing = await _getOne('boards', {
+    alias: request.body.alias
+  })
+  if (existing) {
+    response.send({
+      errors: {
+        alias: 'Alias must be unique'
+      }
+    })
+    return
+  }
+
+  // Create a board
   const board = await _add('boards', {
     title: request.body.title,
     alias: request.body.alias,
@@ -313,7 +332,8 @@ router.post('/cards', async (request, response) => {
   // Create card
   const card = await _add('cards', {
     ...request.body,
-    column: ObjectId(request.body.column)
+    column: ObjectId(request.body.column),
+    board: ObjectId(request.body.board)
   })
 
   // Update column order
@@ -475,8 +495,46 @@ router.delete('/labels/:board/:label', async (request, response) => {
     return
   }
   response.status(500).send({
-    error: 'not updated'
+    error: 'not done'
   })
+})
+
+router.get('/files', async (request, response) => {
+  const files = await _get('files', {
+    card: ObjectId(request.query.card)
+  })
+  response.send(files || [])
+  // response.status(500).send({
+  //   error: 'not uploaded'
+  // })
+})
+/**
+ * upload file
+ */
+router.post('/files/:card', upload.any(), async (request, response) => {
+  let result = null
+  for (const file of request.files) {
+    const res = await _add('files', {
+      title: file.originalname,
+      card: ObjectId(request.params.card),
+      type: file.mimetype, // data:image/png;base64,
+      source: file.buffer.toString('base64')
+    })
+    result = res
+  }
+  if (result) {
+    response.send(result)
+  }
+  // response.status(500).send({
+  //   error: 'not uploaded'
+  // })
+})
+/**
+ * delete file
+ */
+router.delete('/files/:id', async (request, response) => {
+  const res = await _remove('files', request.params.id)
+  response.send(res)
 })
 
 /**

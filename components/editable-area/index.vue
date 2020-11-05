@@ -1,5 +1,5 @@
 <template lang="pug">
-  .editable-area-component(@click="changeMode('edit')" :class="`editable-area-type-${type}`")
+  .editable-area-component(@click="onClick" :class="`editable-area-type-${type}`")
     template(v-if="mode === 'edit'")
       textarea.non-draggable(
         v-if="textarea"
@@ -64,6 +64,11 @@ export default {
         this.$el.querySelector(target).select()
       })
     },
+    onClick () {
+      if (window.getSelection().type !== 'Range') {
+        this.changeMode('edit')
+      }
+    },
     onEnterPress (e) {
       this.update(e)
     },
@@ -80,21 +85,28 @@ export default {
 <style lang="scss" scoped>
   .editable-area-component {
     cursor: text;
-    line-height: $line-height-default;
+    // line-height: $line-height-default;
+    margin-left: -2px;
+    margin-right: -2px;
+
     input,
     textarea {
       width: 100%;
       height: 100%;
-      border-radius: 3px;
-      // border: 2px solid #edeef0;
+      border: 2px solid #edeef0;
+      border-radius: $border-radius-small;
       background: $color-bg;
       line-height: $line-height-default;
       outline: none;
     }
+
     .preview {
       height: 100%;
       cursor: text;
+      border: 2px solid transparent;
+      border-radius: $border-radius-small;
     }
+
     .placeholder {
       color: $color-text-light;
     }
@@ -106,9 +118,16 @@ export default {
     }
 
     &.editable-area-type-light {
+      .preview {
+        border-radius: $border-radius-small;
+        &:hover {
+          background: $color-bg;
+        }
+      }
       input,
       textarea {
         background: $color-content-bg;
+        border-radius: $border-radius-small;
       }
     }
   }

@@ -97,9 +97,10 @@ module.exports = {
   */
   components: [
     '~/components', // shortcut to { path: '~/components' }
-    { path: '~/components/card/', prefix: 'card' },
+    { path: '~/components/card', prefix: 'card' },
     { path: '~/components/column/', prefix: 'column' },
     { path: '~/components/color-picker/', prefix: 'color-picker' },
+    { path: '~/components/file/', prefix: 'file' },
     { path: '~/components/header/', prefix: 'header' },
     { path: '~/components/icons/', prefix: 'icon' },
     { path: '~/components/label/', prefix: 'label' },

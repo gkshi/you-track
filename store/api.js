@@ -45,8 +45,11 @@ export const actions = {
   },
 
   // card
-  createCard (context, data) {
-    return API.createCard(data)
+  createCard (context, payload) {
+    const board = String(payload.board)
+    delete payload.board
+    payload.board = board
+    return API.createCard(payload)
   },
   getCard (context, id) {
     return API.getCard(id)
@@ -89,6 +92,16 @@ export const actions = {
    */
   removeLabel (context, payload) {
     return API.removeLabel(payload)
+  },
+
+  getFiles (context, card) {
+    return API.getFiles(card)
+  },
+  uploadFile (context, payload) {
+    return API.uploadFile(payload)
+  },
+  removeFile (context, id) {
+    return API.removeFile(id)
   },
 
   // search

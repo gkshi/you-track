@@ -25,6 +25,11 @@ export default {
     hidden: true
   },
 
+  cards: {
+    type: Number,
+    hidden: true
+  },
+
   // Label list
   labels: {
     type: Array,

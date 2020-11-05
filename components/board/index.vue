@@ -3,7 +3,10 @@
     nuxt-link(:to="`/boards/${board.alias}`")
       .title {{ board.title }}
       .description {{ board.description }}
-      .counters {{ board.order.length }} lists
+      .counters.flex.a-center
+        div {{ board.order.length }} lists
+        div ,&nbsp;
+        div {{ board.cards }} cards
 
     context-menu.menu
       nuxt-link(:to="`/boards/${board.alias}`") Open board

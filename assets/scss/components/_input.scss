@@ -28,6 +28,24 @@ $input-padding-alt: 8px 17px 8px;
     }
   }
 
+  // error
+
+  &.common-input-error {
+    input,
+    textarea {
+      border-color: $color-warning;
+    }
+  }
+
+  .common-input-error {
+    margin: 4px 0 10px 2px;
+    font-size: $font-size-extrasmall;
+    line-height: $line-height-extrasmall;
+    color: $color-warning;
+  }
+
+  // types
+
   &.common-input-type-white {
     input {
       background: $color-white;
