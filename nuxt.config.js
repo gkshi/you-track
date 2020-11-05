@@ -80,7 +80,8 @@ module.exports = {
   buildModules: [
     // Doc: https://github.com/nuxt-community/eslint-module
     '@nuxtjs/eslint-module',
-    '@nuxtjs/style-resources'
+    '@nuxtjs/style-resources',
+    ['@nuxtjs/dotenv', { filename: process.env.NODE_ENV === 'production' ? '.env.prod' : '.env' }]
   ],
   /*
   ** Nuxt.js modules
@@ -88,8 +89,6 @@ module.exports = {
   modules: [
     // Doc: https://axios.nuxtjs.org/usage
     '@nuxtjs/axios',
-    // Doc: https://github.com/nuxt-community/dotenv-module
-    '@nuxtjs/dotenv',
     '@nuxt/components'
   ],
   /*
