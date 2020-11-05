@@ -1,4 +1,6 @@
-require('dotenv').config()
+require('dotenv').config({
+  path: process.env.NODE_ENV === 'production' ? '.env.prod' : '.env'
+})
 
 module.exports = {
   ssr: false,
@@ -80,8 +82,8 @@ module.exports = {
   buildModules: [
     // Doc: https://github.com/nuxt-community/eslint-module
     '@nuxtjs/eslint-module',
-    '@nuxtjs/style-resources',
-    ['@nuxtjs/dotenv', { filename: process.env.NODE_ENV === 'production' ? '.env.prod' : '.env' }]
+    '@nuxtjs/dotenv',
+    '@nuxtjs/style-resources'
   ],
   /*
   ** Nuxt.js modules
