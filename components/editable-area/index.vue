@@ -1,5 +1,5 @@
 <template lang="pug">
-  .editable-area-component(@click="changeMode('edit')" :class="`editable-area-type-${type}`")
+  .editable-area-component(@click="onClick" :class="`editable-area-type-${type}`")
     template(v-if="mode === 'edit'")
       textarea.non-draggable(
         v-if="textarea"
@@ -64,6 +64,11 @@ export default {
         this.$el.querySelector(target).select()
       })
     },
+    onClick () {
+      if (window.getSelection().type !== 'Range') {
+        this.changeMode('edit')
+      }
+    },
     onEnterPress (e) {
       this.update(e)
     },
@@ -88,8 +93,8 @@ export default {
     textarea {
       width: 100%;
       height: 100%;
-      border-radius: 3px;
       border: 2px solid #edeef0;
+      border-radius: $border-radius-small;
       background: $color-bg;
       line-height: $line-height-default;
       outline: none;
@@ -99,6 +104,7 @@ export default {
       height: 100%;
       cursor: text;
       border: 2px solid transparent;
+      border-radius: $border-radius-small;
     }
 
     .placeholder {

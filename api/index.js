@@ -118,9 +118,9 @@ export default {
     return this.do('POST', `/files/${payload.card}`, payload.data, {
       'Content-Type': 'multipart/form-data'
     })
-    // return this.do('POST', '/files', payload, {
-    //   'Content-Type': 'multipart/form-data'
-    // })
+  },
+  removeFile (id) {
+    return this.do('DELETE', `/files/${id}`)
   },
 
   // search

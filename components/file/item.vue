@@ -1,19 +1,17 @@
 <template lang="pug">
-  .file-component.flex(
-    :class="{ loading: data.loading }"
-    @click="open")
+  .file-component.flex(:class="{ loading: data.loading }")
     .preview.shrink
       img(v-if="preview" :src="preview")
       span(v-else) no preview
 
-    .grow
+    .info.grow
       template(v-if="data.loading")
         div Uploading...
 
-      template(v-else)
-        .title {{ data.title || 'no title' }}
-        // div
-          a.download(:href="preview" :download="data.title") Download
+      .flex.column.a-start(v-else)
+        .title(@click="open") {{ data.title || 'no title' }}
+        .actions
+          a(href="#" @click.prevent="remove") Remove
 </template>
 
 <script>
@@ -30,6 +28,13 @@ export default {
   methods: {
     open () {
       this.$root.$emit('open-file-modal', this.data)
+    },
+    async remove () {
+      console.log('remove', this.data)
+      const res = await this.$store.dispatch('api/removeFile', this.data._id)
+      if (!res.errors) {
+        this.$emit('remove', this.data._id)
+      }
     }
   }
 }
@@ -67,19 +72,44 @@ export default {
       }
     }
 
-    .grow {
+    .info {
       width: calc(100% - 76px);
+      font-size: $font-size-small;
+      line-height: $line-height-small;
+
+      .actions {
+        position: relative;
+        z-index: 2;
+
+        a {
+          color: $color-primary;
+          text-decoration: none;
+          &:hover {
+            text-decoration: underline;
+          }
+        }
+      }
+    }
+
+    .actions {
+      margin-top: 4px;
+      font-size: $font-size-extrasmall;
+      line-height: $line-height-extrasmall;
     }
 
     .title {
       overflow: hidden;
       text-overflow: ellipsis;
-    }
 
-    .download {
-      font-size: $font-size-extrasmall;
-      line-height: $line-height-extrasmall;
-      text-decoration: none;
+      &:after {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        z-index: 1;
+      }
     }
 
     &.loading {

@@ -10,7 +10,11 @@
           file-upload(@change="onUploaderChange")
 
         .files
-          file-item(v-for="(file, i) in files" :data="file" :key="i")
+          file-item(
+            v-for="(file, i) in files"
+            :data="file"
+            :key="i"
+            @remove="onFileRemove")
 </template>
 
 <script>
@@ -72,7 +76,6 @@ export default {
     async onUploaderChange (files) {
       let i = 1
       for (const file of files) {
-        console.log('file', file)
         const base64 = await fileToBase64(file)
         const entity = this.$models.create('file', {
           _id: i,
@@ -86,6 +89,11 @@ export default {
         this.files.push(uploaded)
         i++
       }
+    },
+
+    onFileRemove (id) {
+      console.log('onFileRemove', id)
+      this.files = this.files.filter(i => i._id !== id)
     }
   }
 }

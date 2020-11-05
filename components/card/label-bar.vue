@@ -82,13 +82,21 @@ export default {
       }
     }
   },
+  mounted () {
+    document.addEventListener('keyup', this.onKeyUp)
+  },
+  beforeDestroy () {
+    document.removeEventListener('keyup', this.onKeyUp)
+  },
   methods: {
     toggle () {
       this.isOpened = !this.isOpened
     },
+
     close () {
       this.isOpened = false
     },
+
     toggleLabel (id) {
       if (this.isEditing) {
         this.closePopup()
@@ -107,6 +115,7 @@ export default {
         this.card.labels = [...this.card.labels, label._id]
       }
     },
+
     async createLabel () {
       this.isLoading = true
       const label = await this.$store.dispatch('api/createLabel', {
@@ -124,6 +133,7 @@ export default {
       this.isLoading = false
       this.closePopup()
     },
+
     async updateLabel () {
       this.isLoading = true
 
@@ -150,6 +160,7 @@ export default {
       this.isLoading = false
       this.closePopup()
     },
+
     async removeLabel () {
       this.isLoading = true
 
@@ -172,17 +183,26 @@ export default {
       this.isLoading = false
       this.closePopup()
     },
+
     closePopup () {
       this.isCreating = false
       this.isEditing = false
     },
+
     onLabelEdit (id) {
       this.activeLabel = { ...this.board.labels.find(i => i._id === id) }
       this.isEditing = true
     },
+
     onLabelCreate () {
       this.activeLabel = this.$models.create('label')
       this.isCreating = true
+    },
+
+    onKeyUp (e) {
+      if (e.key === 'Enter' && (this.isEditing || this.isCreating)) {
+        this.isEditing ? this.updateLabel() : this.createLabel()
+      }
     }
   }
 }

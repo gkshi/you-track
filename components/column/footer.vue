@@ -16,6 +16,8 @@
 </template>
 
 <script>
+import { mapState } from 'vuex'
+
 export default {
   name: 'column-footer-component',
   props: {
@@ -30,6 +32,11 @@ export default {
       isOpened: false,
       newCard: this.$models.create('card')
     }
+  },
+  computed: {
+    ...mapState({
+      board: state => state.activeBoard
+    })
   },
   watch: {
     isOpened () {
@@ -56,7 +63,8 @@ export default {
     },
     createCard () {
       this.newCard.update({
-        column: this.columnId
+        column: this.columnId,
+        board: this.board._id
       })
       this.$store.dispatch('api/createCard', this.newCard).then(res => {
         this.$emit('create', res)

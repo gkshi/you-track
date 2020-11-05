@@ -135,9 +135,12 @@ router.get('/boards', async (request, response) => {
   const boards = await _get('boards')
 
   // set card number in each board
-  // for (const item of array) {
-  //   await delayedLog(item);
-  // }
+  for (const board of boards) {
+    const cards = await _get('cards', {
+      board: board._id
+    })
+    board.cards = cards.length
+  }
   // boards.forEach(board => {
   //   const cardNumber = await _get('cards', {
   //     board: board._id
@@ -190,6 +193,20 @@ router.get('/boards/:alias', async (request, response) => {
 router.post('/boards', async (request, response) => {
   const defaultLabelSet = appConfig.defaultLabelSet()
 
+  // Check alias unique
+  const existing = await _getOne('boards', {
+    alias: request.body.alias
+  })
+  if (existing) {
+    response.send({
+      errors: {
+        alias: 'Alias must be unique'
+      }
+    })
+    return
+  }
+
+  // Create a board
   const board = await _add('boards', {
     title: request.body.title,
     alias: request.body.alias,
@@ -315,7 +332,8 @@ router.post('/cards', async (request, response) => {
   // Create card
   const card = await _add('cards', {
     ...request.body,
-    column: ObjectId(request.body.column)
+    column: ObjectId(request.body.column),
+    board: ObjectId(request.body.board)
   })
 
   // Update column order
@@ -510,6 +528,13 @@ router.post('/files/:card', upload.any(), async (request, response) => {
   // response.status(500).send({
   //   error: 'not uploaded'
   // })
+})
+/**
+ * delete file
+ */
+router.delete('/files/:id', async (request, response) => {
+  const res = await _remove('files', request.params.id)
+  response.send(res)
 })
 
 /**

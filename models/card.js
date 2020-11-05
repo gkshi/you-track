@@ -28,5 +28,11 @@ export default {
   column: {
     type: String,
     required: true
+  },
+
+  // Board ID
+  board: {
+    type: String,
+    hidden: true
   }
 }

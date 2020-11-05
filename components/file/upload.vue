@@ -1,8 +1,14 @@
 <template lang="pug">
   .file-upload-component
-    label
-      .label Click to upload a file or paste it (Cmd + V)
+    label(ref="label")
+      .label.flex.center
+        icon-attachment.icon
+        div Drop files here
+        div
+          strong &nbsp;or paste it&nbsp;
+        div or select from your computer
       input(
+        ref="input"
         type="file"
         accept="image/*"
         @change="$emit('change', $event.target.files)")
@@ -10,7 +16,23 @@
 
 <script>
 export default {
-  //
+  mounted () {
+    document.addEventListener('dragover', this.onDragover)
+    this.$refs.label.addEventListener('drop', this.onDrop)
+  },
+  beforeDestroy () {
+    document.removeEventListener('dragover', this.onDragover)
+    this.$refs.label.removeEventListener('drop', this.onDrop)
+  },
+  methods: {
+    onDragover (e) {
+      e.preventDefault()
+    },
+    onDrop (e) {
+      e.preventDefault()
+      this.$emit('change', e.dataTransfer.files)
+    }
+  }
 }
 </script>
 
@@ -19,16 +41,21 @@ export default {
     cursor: pointer;
 
     label {
+      display: block;
       cursor: pointer;
     }
 
     .label {
       padding: 16px 0;
-      background: $color-white;
+      background: $color-bg;
       border: 1px dashed darken($color-bg, 10%);
       color: $color-text-regular;
       border-radius: $border-radius-small;
       text-align: center;
+
+      .icon {
+        margin-right: 8px;
+      }
     }
 
     input {
