@@ -16,16 +16,16 @@ jobs:
     steps:
     - uses: actions/checkout@master
 
-    - name: Copy file via scp
+    - name: Copying files via scp
       uses: appleboy/scp-action@master
       with:
         host: ${{ secrets.DIGITAL_OCEAN_HOST }}
         username: ${{ secrets.DIGITAL_OCEAN_USERNAME }}
         port: ${{ secrets.DIGITAL_OCEAN_PORT }}
         key: ${{ secrets.DIGITAL_OCEAN_SSHKEY }}
+        passphrase: ""
         source: "."
         target: "/var/www/html/vue/app"
-        overwrite: 1
 
     - name: Executing remote  command
       uses: appleboy/ssh-action@master
@@ -34,4 +34,5 @@ jobs:
         username: ${{ secrets.DIGITAL_OCEAN_USERNAME }}
         port: ${{ secrets.DIGITAL_OCEAN_PORT }}
         key: ${{ secrets.DIGITAL_OCEAN_SSHKEY }}
+        passphrase: ""
         script: /var/www/deploy.sh
