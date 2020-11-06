@@ -29,7 +29,7 @@ jobs:
           username: ${{ secrets.DIGITAL_OCEAN_USERNAME }}
           port: ${{ secrets.DIGITAL_OCEAN_PORT }}
           key: ${{ secrets.DIGITAL_OCEAN_SSHKEY }}
-          passphrase: ""
+          passphrase: ${{ secrets.DIGITAL_OCEAN_PASSPHRASE }}
           source: "."
           target: "/var/www/html/vue/app"
           overwrite: true
@@ -41,5 +41,5 @@ jobs:
           username: ${{ secrets.DIGITAL_OCEAN_USERNAME }}
           port: ${{ secrets.DIGITAL_OCEAN_PORT }}
           key: ${{ secrets.DIGITAL_OCEAN_SSHKEY }}
-          passphrase: ""
+          passphrase: ${{ secrets.DIGITAL_OCEAN_PASSPHRASE }}
           script: /var/www/deploy.sh
