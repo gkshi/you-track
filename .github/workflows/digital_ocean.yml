@@ -14,25 +14,34 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@master
+      - name: Fetching repository gkshi/youtrack
+        uses: actions/checkout@v1
+        with:
+          ssh-key: ${{ secrets.DIGITAL_OCEAN_SSHKEY }}
 
-    - name: Copying files via scp
-      uses: appleboy/scp-action@master
-      with:
-        host: ${{ secrets.DIGITAL_OCEAN_HOST }}
-        username: ${{ secrets.DIGITAL_OCEAN_USERNAME }}
-        port: ${{ secrets.DIGITAL_OCEAN_PORT }}
-        key: ${{ secrets.DIGITAL_OCEAN_SSHKEY }}
-        passphrase: ""
-        source: "."
-        target: "/var/www/html/vue/app"
+      - name: Cloning repo files via scp
+        uses: appleboy/scp-action@master
+        env:
+          HOST: ${{ secrets.DIGITAL_OCEAN_HOST }}
+          USERNAME: ${{ secrets.DIGITAL_OCEAN_USERNAME }}
+          PORT: ${{ secrets.DIGITAL_OCEAN_PORT }}
+          KEY: ${{ secrets.DIGITAL_OCEAN_SSHKEY }}
+        with:
+          host: ${{ secrets.DIGITAL_OCEAN_HOST }}
+          username: ${{ secrets.DIGITAL_OCEAN_USERNAME }}
+          port: ${{ secrets.DIGITAL_OCEAN_PORT }}
+          key: ${{ secrets.DIGITAL_OCEAN_SSHKEY }}
+          passphrase: ""
+          source: "."
+          target: "/var/www/html/vue/app"
+          overwrite: true
 
-    - name: Executing remote  command
-      uses: appleboy/ssh-action@master
-      with:
-        host: ${{ secrets.DIGITAL_OCEAN_HOST }}
-        username: ${{ secrets.DIGITAL_OCEAN_USERNAME }}
-        port: ${{ secrets.DIGITAL_OCEAN_PORT }}
-        key: ${{ secrets.DIGITAL_OCEAN_SSHKEY }}
-        passphrase: ""
-        script: /var/www/deploy.sh
+      - name: Executing remote  command
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.DIGITAL_OCEAN_HOST }}
+          username: ${{ secrets.DIGITAL_OCEAN_USERNAME }}
+          port: ${{ secrets.DIGITAL_OCEAN_PORT }}
+          key: ${{ secrets.DIGITAL_OCEAN_SSHKEY }}
+          passphrase: ""
+          script: /var/www/deploy.sh
