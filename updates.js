@@ -1,5 +1,11 @@
 export default [
   {
+    title: 'v1.3.0 release',
+    content: `* Now you can upload images into a card
+* Board deletion critical bug fixed
+* Some minor design changes added`
+  },
+  {
     title: 'v1.2.0 release',
     content: `* Card labels added
 * File uploading feature in progress

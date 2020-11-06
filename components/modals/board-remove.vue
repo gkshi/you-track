@@ -10,12 +10,6 @@
 <script>
 export default {
   name: 'remove-board-modal',
-  props: {
-    data: {
-      type: Object,
-      default: () => ({})
-    }
-  },
   data () {
     return {
       id: 'board_remove'

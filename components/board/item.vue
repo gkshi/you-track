@@ -12,8 +12,6 @@
       nuxt-link(:to="`/boards/${board.alias}`") Open board
       a(href="#" @click.prevent="edit") Edit board
       a(href="#" @click.prevent="requestRemoving") Delete board
-
-    modal-board-remove(@submit="remove")
 </template>
 
 <script>
@@ -26,7 +24,7 @@ export default {
   },
   data () {
     return {
-      board: this.$models.create('board', this.data)
+      board: this.$models.create('board')
     }
   },
   watch: {
@@ -34,7 +32,8 @@ export default {
       handler () {
         this.board.update(this.data)
       },
-      deep: true
+      deep: true,
+      immediate: true
     }
   },
   methods: {
@@ -43,14 +42,8 @@ export default {
       this.openModal('board_edit')
     },
     requestRemoving () {
+      this.$emit('remove', this.data._id)
       this.openModal('board_remove')
-    },
-    async remove () {
-      const res = await this.$store.dispatch('api/removeBoard', this.board._id)
-      if (res) {
-        this.$emit('remove', this.data)
-        this.closeModal('board_remove')
-      }
     }
   }
 }

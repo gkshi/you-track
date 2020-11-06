@@ -3,7 +3,7 @@
     .h2(slot="title") Warning!
     div All cards in the list will be deleted.
     .buttons(slot="buttons")
-      common-button(@click="$emit('submit')") Delete
+      common-button(type="warning" @click="$emit('submit')") Delete
       common-button(type="light" @click="closeModal(id)") Cancel
 </template>
 

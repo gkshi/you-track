@@ -9,14 +9,14 @@
             common-loader(:show="isLoading")
 
           template(v-else)
-            .no-boards(v-if="!boards.length") No created boards yet.
-            .boards(v-else)
-              v-board(
+            .boards
+              board-item(
                 v-for="board in boards"
                 :data="board"
                 :key="board._id"
                 @update="onBoardUpdate"
-                @remove="onBoardRemove")
+                @remove="onBoardRequestRemoving(board._id)")
+            .no-boards(v-if="!boards.length") No created boards yet.
             div
               common-button(@click="openModal('board_create')") Create a board
 
@@ -27,22 +27,20 @@
 
     modal-board-create(@success="onBoardCreate")
     modal-board-edit(@update="onBoardUpdate")
+    modal-board-remove(@submit="removeBoard")
 </template>
 
 <script>
 import newsList from '@/updates'
-import vBoard from '@/components/board'
 
 export default {
-  components: {
-    vBoard
-  },
   data () {
     return {
       newsList,
 
       isLoading: false,
-      boards: []
+      boards: [],
+      activeBoard: null
     }
   },
   created () {
@@ -58,6 +56,14 @@ export default {
       this.boards = [...boards]
       this.isLoading = false
     },
+    async removeBoard () {
+      console.log('removeBoard', this.activeBoard)
+      const res = await this.$store.dispatch('api/removeBoard', this.activeBoard)
+      if (res) {
+        this.closeModal('board_remove')
+        this.onBoardRemove()
+      }
+    },
     onBoardUpdate (data) {
       const target = this.boards.find(i => i._id === data._id)
       if (target) {
@@ -67,8 +73,12 @@ export default {
     onBoardCreate (board) {
       this.boards.push(board)
     },
-    onBoardRemove (board) {
-      this.boards = this.boards.filter(i => i._id !== board._id)
+    onBoardRequestRemoving (id) {
+      this.activeBoard = id
+    },
+    onBoardRemove () {
+      console.log('onBoardRemove', this.activeBoard)
+      this.boards = this.boards.filter(i => i._id !== this.activeBoard)
     }
   }
 }
