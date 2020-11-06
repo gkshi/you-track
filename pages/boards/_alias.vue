@@ -24,6 +24,8 @@
           @submit="createColumn"
           @close="toggleColumnCreation") Add list
 
+    voice-bar
+
     modal-card(:board="board" @update="onCardUpdate")
     modal-file
     modal-column-remove(:data="activeColumn" @submit="removeColumn")
