@@ -98,6 +98,7 @@ export default {
     }
 
     .title {
+      width: 100%;
       overflow: hidden;
       text-overflow: ellipsis;
 

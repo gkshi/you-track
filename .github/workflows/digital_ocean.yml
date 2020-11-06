@@ -36,7 +36,7 @@ jobs:
           target: "/var/www/html/vue/app"
           overwrite: true
 
-      - name: Executing remote  command
+      - name: Building and starting app
         uses: appleboy/ssh-action@master
         with:
           host: ${{ secrets.DIGITAL_OCEAN_HOST }}

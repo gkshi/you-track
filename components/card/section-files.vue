@@ -111,7 +111,7 @@ export default {
 
     .files {
       display: grid;
-      grid-gap: 10px;
+      grid-gap: 8px;
       grid-template-columns: repeat(3, 1fr);
     }
   }

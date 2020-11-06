@@ -1,5 +1,9 @@
 export default [
   {
+    title: 'v1.3.1 build',
+    content: '* File uploader: minor bugfixes added'
+  },
+  {
     title: 'v1.3.0 release',
     content: `* Now you can upload images into a card
 * Board deletion critical bug fixed
