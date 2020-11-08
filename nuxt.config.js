@@ -109,7 +109,8 @@ module.exports = {
     { path: '~/components/modals/', prefix: 'modal' },
     { path: '~/components/settings/', prefix: 'setting' },
     { path: '~/components/search/', prefix: 'search' },
-    { path: '~/components/user/', prefix: 'user' }
+    { path: '~/components/user/', prefix: 'user' },
+    { path: '~/components/voice/', prefix: 'voice' }
   ],
   /*
   ** Vue-common-components options

@@ -57,7 +57,6 @@ export default {
       this.isLoading = false
     },
     async removeBoard () {
-      console.log('removeBoard', this.activeBoard)
       const res = await this.$store.dispatch('api/removeBoard', this.activeBoard)
       if (res) {
         this.closeModal('board_remove')
@@ -77,7 +76,6 @@ export default {
       this.activeBoard = id
     },
     onBoardRemove () {
-      console.log('onBoardRemove', this.activeBoard)
       this.boards = this.boards.filter(i => i._id !== this.activeBoard)
     }
   }

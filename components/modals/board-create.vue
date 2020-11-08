@@ -7,20 +7,20 @@
         v-model="board.title"
         placeholder="Title"
         @input="fillInAlias"
-        autocomplete="false"
+        :autocomplete="false"
         autofocus)
 
       common-input(
         v-model="board.alias"
         :error="errors.alias"
         @input="manualAliasSetting = true"
-        autocomplete="false"
+        :autocomplete="false"
         placeholder="Alias")
 
       common-textarea(
         v-model="board.description"
         placeholder="Description (optional)"
-        autocomplete="false")
+        :autocomplete="false")
 
       .buttons(slot="buttons")
         common-button(native="submit" :disabled="isLoading || !board.title || !board.alias") Create

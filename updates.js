@@ -1,5 +1,10 @@
 export default [
   {
+    title: 'v1.3.2 build',
+    content: `* Minor bugfixes added
+* Light code refactoring done`
+  },
+  {
     title: 'v1.3.1 build',
     content: '* File uploader: minor bugfixes added'
   },
