@@ -92,7 +92,6 @@ export default {
     },
 
     onFileRemove (id) {
-      console.log('onFileRemove', id)
       this.files = this.files.filter(i => i._id !== id)
     }
   }

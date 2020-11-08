@@ -30,7 +30,6 @@ export default {
       this.$root.$emit('open-file-modal', this.data)
     },
     async remove () {
-      console.log('remove', this.data)
       const res = await this.$store.dispatch('api/removeFile', this.data._id)
       if (!res.errors) {
         this.$emit('remove', this.data._id)

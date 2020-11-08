@@ -10,9 +10,6 @@
         div (soon)
         // setting-push-notifications-new.setting-block(@change="onPushStatusChange")
         // setting-eye-care.setting-block(:disabled="!isPushActive")
-
-      section
-        div v1.3.1
 </template>
 
 <script>

@@ -1,13 +1,12 @@
 <template lang="pug">
-  .voice-bar-component
-    div voice bar
-    div {{ isAvailable }}
-
-    div(v-if="isReady")
-      a(href="#" @click.prevent="startRecording") start
-      a(href="#" @click.prevent="stopRecording") stop
-    div(v-else)
-      div not ready
+  transition
+    .voice-bar-component(v-if="isAvailable")
+      div voice bar
+      div(v-if="isReady")
+        a(href="#" @click.prevent="startRecording") start
+        a(href="#" @click.prevent="stopRecording") stop
+      div(v-else)
+        div not ready
 </template>
 
 <script>
@@ -90,5 +89,12 @@ export default {
     z-index: 100;
     padding: 10px;
     background: #ccc;
+    transition: $transition-default;
+
+    &.v-enter,
+    &.v-leave-active {
+      opacity: 0;
+      transform: scale(.8);
+    }
   }
 </style>

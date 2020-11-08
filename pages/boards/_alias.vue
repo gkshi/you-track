@@ -24,7 +24,7 @@
           @submit="createColumn"
           @close="toggleColumnCreation") Add list
 
-    voice-bar
+    // voice-bar
 
     modal-card(:board="board" @update="onCardUpdate")
     modal-file
@@ -132,6 +132,11 @@ export default {
         this.board.columns.push(res)
         this.columnTitle = ''
         this.scrollBoardToRight()
+
+        this.$store.dispatch('updateBoardColumns', {
+          action: 'add',
+          data: res
+        })
       })
     },
     onColumnUpdate (column) {
@@ -144,6 +149,10 @@ export default {
     },
     async removeColumn (id = this.activeColumn._id) {
       await this.$store.dispatch('api/removeColumn', id)
+      this.$store.dispatch('updateBoardColumns', {
+        action: 'remove',
+        data: id
+      })
       this.board.columns = this.board.columns.filter(i => i._id !== id)
       // TODO: this.activeColumn.reset()
       this.activeColumn = this.$models.create('column')

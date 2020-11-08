@@ -67,6 +67,22 @@ export const actions = {
     })
   },
 
+  updateBoardColumns ({ state, commit }, payload) {
+    switch (payload.action) {
+    case 'add':
+      commit('BOARD_COLUMNS_UPDATE', [...state.boardColumns, {
+        _id: payload.data._id,
+        title: payload.data.title
+      }])
+      break
+    case 'remove':
+      commit('BOARD_COLUMNS_UPDATE', state.boardColumns.filter(i => i._id !== payload.data))
+      break
+    default:
+      break
+    }
+  },
+
   showMessage ({ commit }, data) {
     const message = this.app.$models.create('message', data)
     commit('MESSAGES_ADD', message)
