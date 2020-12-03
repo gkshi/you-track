@@ -5,13 +5,21 @@ div[class*="common-checkbox-component"] {
     width: $checkbox-size;
     height: $checkbox-size;
   }
+
   .box {
-    width: $checkbox-size;
-    height: $checkbox-size;
-    border-radius: 50%;
-    border: none;
-    color: $color-text-white;
-    background: rgba($color-dark, .12);
-    margin: 0;
+    border-radius: $border-radius-button;
+    border-color: darken($color-bg, 4%);
+  }
+
+  &[type="simple"] {
+    .box {
+      width: $checkbox-size;
+      height: $checkbox-size;
+      border-radius: 50%;
+      border: none;
+      color: $color-text-white;
+      background: rgba($color-dark, .12);
+      margin: 0;
+    }
   }
 }

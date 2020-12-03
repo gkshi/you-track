@@ -4,6 +4,15 @@ import pushMethods from './push'
 const API_BASE_URL = '/api'
 const SUCCESS_STATUSES = [200, 201, 204]
 
+axios.interceptors.response.use(
+  res => {
+    return res
+  },
+  error => {
+    return Promise.reject(error.response)
+  }
+)
+
 export default {
 
   /**
@@ -29,10 +38,10 @@ export default {
         if (SUCCESS_STATUSES.includes(res.status)) {
           resolve(res.data)
         } else {
-          reject(res)
+          reject(res.data || res)
         }
-      }).catch(err => {
-        reject(err)
+      }).catch(response => {
+        reject(response)
       })
     })
   },
@@ -57,8 +66,8 @@ export default {
   getBoards () {
     return this.do('GET', '/boards')
   },
-  getBoard (alias) {
-    return this.do('GET', `/boards/${alias}`)
+  getBoard (payload) {
+    return this.do('POST', `/boards/${payload.alias}`, payload.payload)
   },
   createBoard (data) {
     return this.do('POST', '/boards', data)

@@ -22,8 +22,13 @@
         placeholder="Description (optional)"
         :autocomplete="false")
 
+      common-checkbox(v-model="board.isPrivate") Private board
+      transition
+        .passcode(v-show="board.isPrivate")
+          common-input(ref="passcode" v-model="board.passcode") Passcode
+
       .buttons(slot="buttons")
-        common-button(native="submit" :disabled="isLoading || !board.title || !board.alias") Create
+        common-button(native="submit" :disabled="!isReady") Create
         common-button(type="light" @click="closeModal(id)") Cancel
 </template>
 
@@ -38,11 +43,29 @@ export default {
       manualAliasSetting: false
     }
   },
+
+  computed: {
+    isReady () {
+      const basicRequirements = !this.isLoading && this.board.title && this.board.alias
+      if (this.board.isPrivate) {
+        return basicRequirements && this.board.passcode.length
+      }
+      return basicRequirements
+    }
+  },
+
   watch: {
     'board.alias' () {
       this.errors = {}
+    },
+
+    'board.isPrivate' (to) {
+      if (to) {
+        this.$refs.passcode.select()
+      }
     }
   },
+
   methods: {
     fillInAlias () {
       if (!this.manualAliasSetting) {
@@ -85,6 +108,22 @@ export default {
       &:not(:last-child) {
         margin-bottom: 8px;
       }
+    }
+
+    .passcode {
+      transition: $transition-default;
+      height: 59px;
+      margin: 0;
+
+      &.v-enter,
+      &.v-leave-active {
+        height: 0px;
+        opacity: 0;
+      }
+    }
+
+    .buttons {
+      margin-top: 30px;
     }
   }
 </style>

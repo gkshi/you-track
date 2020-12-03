@@ -4,7 +4,7 @@
       v-for="color in colors"
       :style="`background-color: ${color}`"
       @click="$emit('change', color)")
-      common-checkbox(v-show="color === value" :checked="true")
+      common-checkbox(v-show="color === value" type="simple" :checked="true")
 </template>
 
 <script>

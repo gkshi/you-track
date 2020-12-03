@@ -1,19 +1,27 @@
 export default [
   {
-    title: 'v1.3.2 build',
+    title: 'v1.4.0 release',
+    content: '* Now you can create private boards with passcode'
+  },
+
+  {
+    title: 'v1.3.2',
     content: `* Minor bugfixes added
 * Light code refactoring done`
   },
+
   {
-    title: 'v1.3.1 build',
+    title: 'v1.3.1',
     content: '* File uploader: minor bugfixes added'
   },
+
   {
     title: 'v1.3.0 release',
     content: `* Now you can upload images into a card
 * Board deletion critical bug fixed
 * Some minor design changes added`
   },
+
   {
     title: 'v1.2.0 release',
     content: `* Card labels added
@@ -21,6 +29,7 @@ export default [
 * Web Push notifications in progress
 * Minor bugfixes`
   },
+
   {
     title: 'v1.1.0 release',
     content: `* Global search by boards and cards added
@@ -31,6 +40,7 @@ export default [
 * Minor design changes
 * Minor bugfixes`
   },
+
   {
     title: 'v1.0.0 release',
     content: `* New modern interface

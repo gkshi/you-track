@@ -41,6 +41,17 @@ export default {
     type: Array
   },
 
+  // Is board private
+  isPrivate: {
+    type: Boolean,
+    default: false
+  },
+
+  passcode: {
+    type: String,
+    default: ''
+  },
+
   lastModified: {
     type: String,
     hidden: true

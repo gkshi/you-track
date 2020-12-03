@@ -1,37 +1,40 @@
 <template lang="pug">
   .page.board(:class="{ loading: isLoading }")
-    .scroll-parent.flex.a-start(ref="scrollParent")
-      .columns.flex.a-start.shrink(ref="columnParent")
-        column-item.column(
-          v-for="column in board.columns"
-          :data="column"
-          :key="column._id"
-          @update="onColumnUpdate"
-          @remove-request="requestColumnRemove"
-          @remove="removeColumn")
-      .column.non-draggable.shrink
-        common-button.ghost-block(
-          v-if="!columnCreationOpened"
-          type="ghost"
-          size="large"
-          @click="toggleColumnCreation")
-          span + Add another list
-        add-form(
-          v-else
-          v-model="columnTitle"
-          placeholder="Enter a title for new list..."
-          exception="add-column-link"
-          @submit="createColumn"
-          @close="toggleColumnCreation") Add list
+    template(v-show="hasAccess")
+      .scroll-parent.flex.a-start(ref="scrollParent")
+        .columns.flex.a-start.shrink(ref="columnParent")
+          column-item.column(
+            v-for="column in board.columns"
+            :data="column"
+            :key="column._id"
+            @update="onColumnUpdate"
+            @remove-request="requestColumnRemove"
+            @remove="removeColumn")
+        .column.non-draggable.shrink
+          common-button.ghost-block(
+            v-if="!columnCreationOpened"
+            type="ghost"
+            size="large"
+            @click="toggleColumnCreation")
+            span + Add another list
+          add-form(
+            v-else
+            v-model="columnTitle"
+            placeholder="Enter a title for new list..."
+            exception="add-column-link"
+            @submit="createColumn"
+            @close="toggleColumnCreation") Add list
 
-    // voice-bar
+      // voice-bar
 
+    modal-board-passcode(:board="board.alias" @success="onBoardAccess")
     modal-card(:board="board" @update="onCardUpdate")
     modal-file
     modal-column-remove(:data="activeColumn" @submit="removeColumn")
 </template>
 
 <script>
+import Cookie from 'js-cookie'
 import { mapState } from 'vuex'
 import { Sortable, AutoScroll } from 'sortablejs/modular/sortable.core.esm.js'
 
@@ -41,16 +44,33 @@ export default {
   async asyncData ({ route, store, error }) {
     // Убираем из хранилища активную доску
     store.dispatch('changeActiveBoard', {})
-    const res = await store.dispatch('api/getBoard', route.params.alias).catch(() => null)
+
+    // Запрашиваем текущую доску
+    let hasAccess = true
+    const passcode = Cookie.get(`youtrack-board-${route.params.alias}-passcode`)
+
+    const res = await store.dispatch('api/getBoard', {
+      alias: route.params.alias,
+      payload: { passcode }
+    }).catch(res => {
+      hasAccess = false
+      if (passcode) {
+        Cookie.remove(`youtrack-board-${route.params.alias}-passcode`)
+      }
+      return res.data
+    })
+
     if (!res) {
       return error({ statusCode: 404, message: 'Not found' })
     }
-    return { response: res }
+    return { response: res, hasAccess }
   },
+
   data () {
     return {
       response: {},
       board: {},
+      hasAccess: true,
 
       // sortable
       sortable: null,
@@ -63,29 +83,39 @@ export default {
       activeColumn: this.$models.create('column')
     }
   },
+
   computed: {
     ...mapState({
       activeBoardInStore: state => state.activeBoard
     }),
+
     isLoading () {
       return !this.activeBoardInStore._id
     }
   },
+
   watch: {
     '$route.query' () {
       this.checkQuery()
     },
+
     columnCreationOpened () {
       this.columnTitle = ''
     }
   },
+
   created () {
     this.$store.dispatch('changeActiveBoard', this.response)
   },
-  mounted () {
-    this.$root.$on('remove-label', this.onLabelRemove)
 
+  mounted () {
     this.board = this.$models.create('board', this.response)
+
+    if (!this.hasAccess) {
+      this.openModal('board_passcode')
+    }
+
+    this.$root.$on('remove-label', this.onLabelRemove)
 
     // this.board.update(this.response)
     this.initSortable()
@@ -98,11 +128,13 @@ export default {
 
     this.checkQuery()
   },
+
   beforeDestroy () {
     this.$root.$off('remove-label')
     this.$store.dispatch('changeActiveBoard', {})
     window.removeEventListener('resize', this.watchColumnHeight)
   },
+
   methods: {
     checkQuery () {
       // Open card modal trigger
@@ -234,6 +266,9 @@ export default {
           card.labels = card.labels.filter(i => i !== label)
         })
       })
+    },
+    onBoardAccess (board) {
+      this.board = this.$models.create('board', board)
     }
   },
   head () {

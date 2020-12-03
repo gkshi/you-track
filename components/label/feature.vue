@@ -3,7 +3,7 @@
     .intro.flex.a-center(@click="$emit('click', $event)")
       // select
       div
-        common-checkbox(:checked="selected")
+        common-checkbox(type="simple" :checked="selected")
         // input(type="checkbox" :checked="selected")
 
       // title

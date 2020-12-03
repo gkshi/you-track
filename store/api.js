@@ -20,8 +20,14 @@ export const actions = {
   getBoards () {
     return API.getBoards()
   },
-  getBoard (context, alias) {
-    return API.getBoard(alias)
+  getBoard (context, payload) {
+    if (typeof payload === 'string') {
+      payload = {
+        alias: payload,
+        payload: {}
+      }
+    }
+    return API.getBoard(payload)
   },
   createBoard (context, data) {
     return API.createBoard(data)

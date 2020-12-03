@@ -153,13 +153,38 @@ router.get('/boards', async (request, response) => {
  * Get board
  * @param alias <string>
  */
-router.get('/boards/:alias', async (request, response) => {
+router.post('/boards/:alias', async (request, response) => {
   // find board at first
   const board = await _getOne('boards', {
     alias: request.params.alias
   })
+
   if (!board) {
     return response.status(404).send()
+  }
+
+  if (board.isPrivate) {
+    const publicBoard = {
+      _id: board._id,
+      title: board.title,
+      alias: board.alias,
+      columns: [],
+      labels: [],
+      order: [],
+      isPrivate: true,
+      lastModified: board.lastModified
+    }
+
+    if (!request.body.passcode) {
+      response.status(401).send(publicBoard)
+      return
+    }
+
+    console.log('request.body.passcode', request.body.passcode)
+    if (request.body.passcode !== board.passcode) {
+      response.status(401).send(publicBoard)
+      return
+    }
   }
 
   // then find board columns
@@ -206,15 +231,22 @@ router.post('/boards', async (request, response) => {
     return
   }
 
-  // Create a board
-  const board = await _add('boards', {
+  const data = {
     title: request.body.title,
     alias: request.body.alias,
     description: request.body.description,
     columns: [],
     order: [],
-    labels: defaultLabelSet
-  })
+    labels: defaultLabelSet,
+    isPrivate: request.body.isPrivate
+  }
+
+  if (data.isPrivate) {
+    data.passcode = request.body.passcode
+  }
+
+  // Create a board
+  const board = await _add('boards', data)
   response.send(board)
 })
 /**
